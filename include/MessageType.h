@@ -2,12 +2,12 @@
 #define MESSAGE_TYPE_H
 
 enum class MsgType {
-    register = 0,
-    sign_in,
-    sign_in_req,
+    sign_in = 0,
+    sign_in_res,
     sign_up,
-    sign_up_req,
+    sign_up_res,
     sign_out,
     
 };
+
 #endif
