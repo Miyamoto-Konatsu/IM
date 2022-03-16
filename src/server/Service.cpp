@@ -12,6 +12,10 @@ Service::Service() {
         std::bind(&Service::SignIn, this, _1, _2, _3);
     handler_map_[MsgType::sign_out] =
         std::bind(&Service::SignOut, this, _1, _2, _3);
+    handler_map_[MsgType::chat_send] =
+        std::bind(&Service::Chat, this, _1, _2, _3);
+    handler_map_[MsgType::add_friend] =
+        std::bind(&Service::AddFriend, this, _1, _2, _3);
 }
 
 Service *Service::GetInstance() {
@@ -55,6 +59,7 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         LOG_DEBUG << "Invalid user id or password is wrong";
         response["msg_type"] = MsgType::sign_in_res;
         conn->send(response.dump());
+        return;
     }
 
     if (user.GetState() == string("online")) {
@@ -63,6 +68,7 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
 
         response["msg_type"] = MsgType::sign_in_res;
         conn->send(response.dump());
+        return;
     }
 
     //登录成功
@@ -74,17 +80,23 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     response["state"] = user.GetState();
 
     //获取朋友列表
-    /*  vector<User> friends = this->friend_model_.GetFriend(user.GetUserId());
-     vector<string> friends_json;
-     for (const auto &my_friend : friends) {
-         nlohmann::json f;
-         f["user_id"] = my_friend.GetUserId();
-         f["nickname"] = my_friend.GetNickname();
-         f["state"] = my_friend.GetState();
-         friends_json.push_back(f.dump());
-     }
-     response["friends"] = friends_json; */
+    unique_ptr<vector<User>> friends =
+        this->friend_model_.GetFriend(user.GetUserId());
+    vector<string> friends_json;
+    for (const auto &my_friend : *friends) {
+        nlohmann::json f;
+        f["user_id"] = my_friend.GetUserId();
+        f["nickname"] = my_friend.GetNickname();
+        f["state"] = my_friend.GetState();
+        friends_json.push_back(f.dump());
+    }
+    response["friends"] = friends_json;
+
     LOG_DEBUG << user.GetNickname() << " sign in success";
+
+    //保存用户的连接
+    user_2_conn_[user.GetUserId()] = conn;
+
     conn->send(response.dump());
     //获取历史消息
 }
@@ -102,6 +114,58 @@ void Service::SignOut(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         LOG_DEBUG << "The account is offline, so nothing occurs";
         return;
     }
+    user_2_conn_.erase(user.GetUserId());
+
     user.SetState("offline");
     this->user_model_.UpdateState(user);
+}
+
+void Service::Chat(const TcpConnectionPtr &conn, const nlohmann::json &msg,
+                   Timestamp time) {
+    int user_id = msg["user_id"].get<int>();
+    int friend_id = msg["friend_id"].get<int>();
+    LOG_DEBUG << user_id << " send message to " << friend_id;
+    //朋友在线
+    if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
+        LOG_DEBUG << friend_id << "online , send message";
+        user_2_conn_[friend_id]->send(msg.dump());
+        return;
+    }
+    // this->user_model_.UpdateState(user);
+}
+
+void Service::HandleClientException(const TcpConnectionPtr &conn) {
+
+    User user;
+    for (const auto &p : user_2_conn_) {
+        if (p.second.get() == conn.get()) {
+            user.SetUserId(p.first);
+            user_2_conn_.erase(user.GetUserId());
+            user.SetState("offline");
+            this->user_model_.UpdateState(user);
+            break;
+        }
+    }
+}
+
+void Service::AddFriend(const TcpConnectionPtr &conn, const nlohmann::json &msg,
+                        Timestamp time) {
+    int user_id = msg["user_id"];
+    int friend_id = msg["friend_id"];
+
+    nlohmann::json response;
+    response["msg_type"] = MsgType::add_friend_res;
+    response["user_id"] = user_id;
+    response["friend_id"] = friend_id;
+    bool insert_res = this->friend_model_.Insert(user_id, friend_id);
+    if (!insert_res) {
+        LOG_DEBUG << user_id << " add " << friend_id << " failed";
+        response["err_msg"] = "Add friend failed, please check friend_id. Or "
+                              "you two are alreadly friends ";
+        conn->send(response.dump());
+        return;
+    }
+
+    response["msg"] = "Friend added successfully";
+    conn->send(response.dump());
 }

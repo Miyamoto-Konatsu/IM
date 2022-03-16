@@ -7,7 +7,10 @@ enum class MsgType {
     sign_up,
     sign_up_res,
     sign_out,
-    
+    chat_send,
+    chat_recv,
+    add_friend,
+    add_friend_res,
 };
 
 #endif

@@ -21,6 +21,9 @@ target("client")
     add_includedirs("helper")
     add_includedirs("include")
     add_files("src/client/*.cpp")
+    add_links("pthread")
+    add_cxflags("-g -Wall")
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
