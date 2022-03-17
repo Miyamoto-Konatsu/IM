@@ -26,7 +26,7 @@ using MsgHandler = function<bool(const json &)>;
 
 unordered_map<MsgType, MsgHandler> handler_map_;
 
-bool AddFriend(int fd);
+bool Insert(int fd);
 
 bool Register(int fd) {
     char nickname[50], password[20];
@@ -90,6 +90,17 @@ bool SignIn(int fd) {
         FRIENDS.emplace_back(f_js.at("user_id"), f_js.at("nickname"), "guess",
                              f_js.at("state"));
     }
+
+    //历史消息
+    if (response.contains("offlinemsg")) {
+        vector<string> message_json = response.at("offlinemsg");
+        cout << "未读消息" << endl;
+        for (const auto &message : message_json) {
+            json msg = json::parse(message);
+            cout << msg.at("user_id") << ": ";
+            cout << msg.at("msg") << endl;
+        }
+    }
     return true;
 }
 
@@ -102,16 +113,20 @@ bool SignOut(int fd) {
         cout << "Sign out failed" << endl;
     }
     cout << "Sign out success" << endl;
+
+    //登出后重置
     USER_ID = -1;
+    FRIENDS.clear();
 }
 
 bool SendMsg(int fd) {
     int friend_id;
-    char message[50] = {0};
+    char message[1024] = {0};
     cout << "Input friend id please:";
     cin >> friend_id;
+    cin.get();
     cout << "Input message please:";
-    cin >> message;
+    cin.getline(message, 1024);
     bool is_friend = false;
     for (const auto &f : FRIENDS) {
         if (f.GetUserId() == friend_id) {
@@ -144,8 +159,7 @@ bool RecvFromServer(int fd) {
             exit(-1);
         }
         json response = json::parse(buf);
-        thread t(handler_map_[response["msg_type"]], std::move(response));
-        t.detach();
+        handler_map_[response["msg_type"]](response);
     }
 }
 
@@ -160,7 +174,7 @@ bool HandleChatMsg(const json &response) {
     return true;
 }
 
-bool HandleAddFriendMsg(const json &response) {
+bool HandleInsertMsg(const json &response) {
     if (response.contains("err_msg")) {
         cout << response["user_id"] << endl;
         cout << response["friend_id"] << endl;
@@ -189,7 +203,7 @@ int Client(int client_fd) {
             SignOut(client_fd);
             return true;
         case 3:
-            AddFriend(client_fd);
+            Insert(client_fd);
         case 4:
             ShowFriends();
         default:
@@ -198,7 +212,7 @@ int Client(int client_fd) {
     }
 }
 
-bool AddFriend(int fd) {
+bool Insert(int fd) {
     int friend_id;
     cout << "Input friend id please:";
     cin >> friend_id;
@@ -215,7 +229,7 @@ bool AddFriend(int fd) {
 
 void InitHandlerMap() {
     handler_map_[MsgType::chat_send] = MsgHandler(&HandleChatMsg);
-    handler_map_[MsgType::add_friend_res] = MsgHandler(&HandleAddFriendMsg);
+    handler_map_[MsgType::add_friend_res] = MsgHandler(&HandleInsertMsg);
 }
 
 int main(int argc, char *argv[]) {

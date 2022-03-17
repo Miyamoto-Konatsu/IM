@@ -92,13 +92,20 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     }
     response["friends"] = friends_json;
 
+    //获取历史消息
+    unique_ptr<vector<string>> messages =
+        this->offline_message_model_.Query(user.GetUserId());
+    if (!messages->empty()) {
+        response["offlinemsg"] = *messages;
+        this->offline_message_model_.Delete(user.GetUserId());
+    }
+
     LOG_DEBUG << user.GetNickname() << " sign in success";
 
     //保存用户的连接
     user_2_conn_[user.GetUserId()] = conn;
 
     conn->send(response.dump());
-    //获取历史消息
 }
 
 void Service::SignOut(const TcpConnectionPtr &conn, const nlohmann::json &msg,
@@ -125,12 +132,17 @@ void Service::Chat(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     int user_id = msg["user_id"].get<int>();
     int friend_id = msg["friend_id"].get<int>();
     LOG_DEBUG << user_id << " send message to " << friend_id;
+
     //朋友在线
     if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
-        LOG_DEBUG << friend_id << "online , send message";
+        LOG_DEBUG << friend_id << " online , send message";
         user_2_conn_[friend_id]->send(msg.dump());
         return;
     }
+    //朋友不在线
+    LOG_DEBUG << friend_id << " offline , send message to database";
+
+    this->offline_message_model_.Insert(friend_id, msg.dump());
     // this->user_model_.UpdateState(user);
 }
 

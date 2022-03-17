@@ -3,6 +3,7 @@
 #include "MessageType.h"
 #include "json.hpp"
 #include "server/model/FriendModel.h"
+#include "server/model/OfflineMessageModel.h"
 #include "server/model/UserModel.h"
 #include <functional>
 #include <muduo/base/Logging.h>
@@ -35,11 +36,12 @@ class Service {
 
   private:
     Service();
-    
+
     unordered_map<MsgType, MsgHandler> handler_map_;
     unordered_map<int, TcpConnectionPtr> user_2_conn_;
 
     UserModel user_model_;
     FriendModel friend_model_;
+    OfflineMessageModel offline_message_model_;
 };
 #endif
