@@ -1,5 +1,7 @@
 #include "server/model/UserModel.h"
+#include "server/db/ConnectionPool.h"
 #include <muduo/base/Logging.h>
+
 using namespace muduo;
 
 bool UserModel::Insert(User &user) {
@@ -9,8 +11,8 @@ bool UserModel::Insert(User &user) {
             "insert into user(nickname, password, state) values ( "
             "'%s','%s','offline')",
             user.GetNickname().c_str(), user.GetPassword().c_str());
-    MySQLDB mysql;
-    if (!mysql.ExecSql(sql)) {
+    auto mysql = ConnectionPool::GetInstance()->GetConnction();
+    if (!mysql->ExecSql(sql)) {
         LOG_DEBUG << "Insertion failed";
         return false;
     }
@@ -18,11 +20,11 @@ bool UserModel::Insert(User &user) {
     sprintf(search,
             "select id, nickname, state from user where nickname = '%s'",
             user.GetNickname().c_str());
-    if (!mysql.ExecSql(search)) {
+    if (!mysql->ExecSql(search)) {
         LOG_DEBUG << "Query failed\n";
         return false;
     }
-    MYSQL *mysql_ptr = mysql.GetMysqlPtr();
+    MYSQL *mysql_ptr = mysql->GetMysqlPtr();
     MYSQL_RES *result = mysql_use_result(mysql_ptr);
     MYSQL_ROW row = mysql_fetch_row(result);
     user.SetUserId(atoi(row[0]));
@@ -32,14 +34,13 @@ bool UserModel::Insert(User &user) {
 
 bool UserModel::QueryUser(int user_id, User &user) {
     char sql[100] = {0};
-    sprintf(sql, "select * from user where id = '%d'",
-            user_id);
-    MySQLDB mysql;
-    if (!mysql.ExecSql(sql)) {
+    sprintf(sql, "select * from user where id = '%d'", user_id);
+    auto mysql = ConnectionPool::GetInstance()->GetConnction();
+    if (!mysql->ExecSql(sql)) {
         LOG_DEBUG << "Query failed";
         return false;
     }
-    MYSQL *mysql_ptr = mysql.GetMysqlPtr();
+    MYSQL *mysql_ptr = mysql->GetMysqlPtr();
     MYSQL_RES *result = mysql_store_result(mysql_ptr);
 
     if (result != nullptr) {
@@ -60,8 +61,8 @@ bool UserModel::UpdateState(const User &user) {
     char sql[100] = {0};
     sprintf(sql, "update user set state = '%s' where id = '%d'",
             user.GetState().c_str(), user.GetUserId());
-    MySQLDB mysql;
-    if (!mysql.ExecSql(sql)) {
+    auto mysql = ConnectionPool::GetInstance()->GetConnction();
+    if (!mysql->ExecSql(sql)) {
         LOG_DEBUG << "Update failed";
         return false;
     }

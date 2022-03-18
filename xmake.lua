@@ -24,6 +24,16 @@ target("client")
     add_links("pthread")
     add_cxflags("-g -Wall")
 
+target("conncetion_pool")
+    set_kind("binary")
+    add_includedirs("helper")
+    add_includedirs("include")
+    add_files("src/server/db/*.cpp")
+    add_files("test/connection_pool/*.cpp")
+    add_links("pthread")
+    add_links("mysqlclient")
+    add_cxflags("-g -Wall")
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
