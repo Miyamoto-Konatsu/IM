@@ -12,6 +12,7 @@ target("main")
     add_links("muduo_net");
     add_links("muduo_base");
     add_links("pthread")
+    add_links("hiredis")
 
     add_links("mysqlclient")
     add_cxflags("-g -Wall")
@@ -34,6 +35,18 @@ target("conncetion_pool")
     add_links("mysqlclient")
     add_cxflags("-g -Wall")
 
+target("redis")
+    set_kind("binary")
+    add_includedirs("helper")
+    add_includedirs("include")
+    add_files("src/server/db/*.cpp")
+    add_files("test/Redis/*.cpp")
+    add_linkdirs("/usr/local/lib")
+
+    add_links("pthread")
+    add_links("mysqlclient")
+    add_links("hiredis")
+    add_cxflags("-g -Wall")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

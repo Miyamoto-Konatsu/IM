@@ -2,6 +2,7 @@
 #define CHATSERVICE_H
 #include "MessageType.h"
 #include "json.hpp"
+#include "server/db/Redis.h"
 #include "server/model/FriendModel.h"
 #include "server/model/OfflineMessageModel.h"
 #include "server/model/UserModel.h"
@@ -11,7 +12,7 @@
 #include <muduo/net/EventLoop.h>
 #include <muduo/net/TcpConnection.h>
 #include <muduo/net/TcpServer.h>
-
+#include <mutex>
 using namespace std;
 using namespace muduo;
 using namespace muduo::net;
@@ -33,13 +34,14 @@ class Service {
     void HandleClientException(const TcpConnectionPtr &);
 
     MsgHandler GetHandler(MsgType);
+    void SubscribeCallback(int, const string &);
 
   private:
     Service();
-
+    mutex mtx_;
     unordered_map<MsgType, MsgHandler> handler_map_;
     unordered_map<int, TcpConnectionPtr> user_2_conn_;
-
+    Redis redis_;
     UserModel user_model_;
     FriendModel friend_model_;
     OfflineMessageModel offline_message_model_;
