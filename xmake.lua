@@ -4,7 +4,7 @@ target("main")
     add_files("src/server/*.cpp")
     add_files("src/server/model/*.cpp")
     add_files("src/server/db/*.cpp")
-
+    add_files("src/common/*.cpp")
     add_includedirs("helper")
     add_includedirs("include")
     
@@ -22,6 +22,7 @@ target("client")
     add_includedirs("helper")
     add_includedirs("include")
     add_files("src/client/*.cpp")
+    add_files("src/common/*.cpp")
     add_links("pthread")
     add_cxflags("-g -Wall")
 

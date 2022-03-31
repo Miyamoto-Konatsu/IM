@@ -1,4 +1,5 @@
 #include "server/Service.h"
+#include "Common.h"
 #include "MessageType.h"
 #include "unordered_map"
 using namespace std;
@@ -42,10 +43,12 @@ void Service::Register(const TcpConnectionPtr &conn, const nlohmann::json &msg,
 
     if (insert_res) {
         response["user_id"] = new_user.GetUserId();
-        conn->send(response.dump());
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
     } else {
         response["err_msg"] = "Register failed";
-        conn->send(response.dump());
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
     }
 }
 
@@ -61,7 +64,7 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     if (!query_res || user.GetPassword() != password) {
         response["err_msg"] = "Invalid user id or password is wrong";
         LOG_DEBUG << "Invalid user id or password is wrong";
-        conn->send(response.dump());
+        conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
         return;
     }
 
@@ -71,7 +74,7 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         if (redis_.IsOnline(user.GetUserId())) {
             response["err_msg"] = "The user is online, sign in failed";
             LOG_DEBUG << "The user is online, sign in failed";
-            conn->send(response.dump());
+            conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
             return;
         }
     }
@@ -118,7 +121,7 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         redis_.SignIn(user.GetUserId());
     }
 
-    conn->send(response.dump());
+    conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
 }
 
 void Service::SignOut(const TcpConnectionPtr &conn, const nlohmann::json &msg,
@@ -156,7 +159,8 @@ void Service::Chat(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     //朋友在线
     if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
         LOG_DEBUG << friend_id << " online , send message";
-        user_2_conn_[friend_id]->send(msg.dump());
+        user_2_conn_[friend_id]->send(GeneratePacket(msg.dump()),
+                                      PacketLength(msg.dump()));
         return;
     }
     //朋友在线,在别的服务器登录
@@ -203,7 +207,8 @@ void Service::AddFriend(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         LOG_DEBUG << user_id << " add " << friend_id << " failed";
         response["err_msg"] = "Add friend failed, please check friend_id. Or "
                               "you two are alreadly friends ";
-        conn->send(response.dump());
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
         return;
     }
     User new_friend;
@@ -214,13 +219,14 @@ void Service::AddFriend(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         response["state"] = redis_.IsOnline(friend_id) ? "online" : "offline";
     }
     response["msg"] = "Friend added successfully";
-    conn->send(response.dump());
+    conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
 }
 
 void Service::SubscribeCallback(int user_id, const string &message) {
     lock_guard<mutex> lock(mtx_);
     if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
-        user_2_conn_[user_id]->send(message);
+        user_2_conn_[user_id]->send(GeneratePacket(message),
+                                    PacketLength(message));
         return;
     }
     this->offline_message_model_.Insert(user_id, message);

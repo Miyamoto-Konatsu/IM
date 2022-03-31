@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
     InetAddress inet_addr("127.0.0.1", atoi(argv[1]));
     Server server(loop, inet_addr, "Server");
     server.start();
+    
     loop->loop();
     return 0;
 }
