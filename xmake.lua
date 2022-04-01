@@ -48,7 +48,25 @@ target("redis")
     add_links("mysqlclient")
     add_links("hiredis")
     add_cxflags("-g -Wall")
---
+
+target("group")
+    set_kind("binary")
+    add_includedirs("helper")
+    add_includedirs("include")
+    add_files("src/server/db/*.cpp")
+    add_files("test/GroupModelTest/*.cpp")
+    add_files("src/server/model/*.cpp")
+
+    add_linkdirs("/usr/local/lib")
+
+    add_links("mysqlclient")
+    add_links("hiredis")    
+    add_links("muduo_net")
+    add_links("muduo_base")
+    add_links("pthread")
+
+    add_cxflags("-g -Wall")
+    
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
 -- ## FAQ

@@ -30,4 +30,18 @@ class User {
     std::string password_;
     string state_;
 };
+
+class GroupUser : public User {
+  public:
+    GroupUser() = default;
+    void SetRole(const string &role) {
+        if (role != "creator" && role != "normal")
+            throw "role error";
+        this->role_ = role;
+    }
+    const string &GetRole() const { return this->role_; }
+
+  private:
+    string role_;
+};
 #endif
