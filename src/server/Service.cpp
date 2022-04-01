@@ -64,7 +64,8 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
     if (!query_res || user.GetPassword() != password) {
         response["err_msg"] = "Invalid user id or password is wrong";
         LOG_DEBUG << "Invalid user id or password is wrong";
-        conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
         return;
     }
 
@@ -74,7 +75,8 @@ void Service::SignIn(const TcpConnectionPtr &conn, const nlohmann::json &msg,
         if (redis_.IsOnline(user.GetUserId())) {
             response["err_msg"] = "The user is online, sign in failed";
             LOG_DEBUG << "The user is online, sign in failed";
-            conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
+            conn->send(GeneratePacket(response.dump()),
+                       PacketLength(response.dump()));
             return;
         }
     }
