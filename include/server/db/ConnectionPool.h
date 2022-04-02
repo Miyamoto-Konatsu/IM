@@ -6,15 +6,15 @@
 #include <condition_variable>
 #include <functional>
 #include <iostream>
-#include <list>
+#include <queue>
 #include <mutex>
 #include <mysql/mysql.h>
 #include <string>
 #include <thread>
 using namespace std;
 
-const int MAX_CONNECTION = 50;
-const int MIN_CONNECTION = 10;
+const int MAX_CONNECTION = 128;
+const int MIN_CONNECTION = 8;
 const int MAX_LIVE_TIME = 60; //一个连接在60s内未使用则释放
 
 using retconnfunc = function<void(MySQLDB *)>;
@@ -26,11 +26,10 @@ class ConnectionPool {
         return &pool;
     }
 
-    ~ConnectionPool();
-
     unique_ptr<MySQLDB, retconnfunc> GetConnction();
 
   private:
+    ~ConnectionPool();
     void ReturnConnection(MySQLDB *);
     void ReleaseConnection();
     ConnectionPool();
@@ -41,7 +40,7 @@ class ConnectionPool {
 
     atomic<bool> pool_alive_;
     thread release_thread_;
-    list<MySQLDB *> pool_;
+    queue<MySQLDB *> pool_;
 
     const int min_connection_;
     const int max_connection_;

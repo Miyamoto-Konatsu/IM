@@ -8,7 +8,7 @@ ConnectionPool::ConnectionPool()
     lock_guard<mutex> lg(mtx_);
     for (int i = 0; i < min_connection_; ++i) {
         MySQLDB *mysql = new MySQLDB;
-        pool_.push_back(mysql);
+        pool_.push(mysql);
     }
 }
 
@@ -16,7 +16,7 @@ unique_ptr<MySQLDB, retconnfunc> ConnectionPool::GetConnction() {
     unique_lock<mutex> lock(mtx_);
     if (!pool_.empty()) {
         MySQLDB *mysql = pool_.front();
-        pool_.pop_front();
+        pool_.pop();
         return unique_ptr<MySQLDB, retconnfunc>(
             mysql, std::bind(&ConnectionPool::ReturnConnection, this, _1));
     }
@@ -31,19 +31,18 @@ unique_ptr<MySQLDB, retconnfunc> ConnectionPool::GetConnction() {
     if (cv_.wait_for(lock, chrono::seconds(2),
                      [this]() { return !pool_.empty(); })) {
         MySQLDB *mysql = pool_.front();
-        pool_.pop_front();
+        pool_.pop();
         return unique_ptr<MySQLDB, retconnfunc>(
             mysql, std::bind(&ConnectionPool::ReturnConnection, this, _1));
     }
-    // 超时
-    // cout << "超时" << endl;
     return nullptr;
 }
 
 void ConnectionPool::ReturnConnection(MySQLDB *mysql) {
     if (mysql != nullptr) {
+        cout << "return conn" << endl;
         unique_lock<mutex> lock(mtx_);
-        pool_.push_back(mysql);
+        pool_.push(mysql);
         mysql->ResetLastTime();
         cv_.notify_one();
     }
@@ -55,25 +54,34 @@ ConnectionPool::~ConnectionPool() {
     unique_lock<mutex> lock(mtx_);
     while (!pool_.empty()) {
         MySQLDB *mysql = pool_.front();
+        pool_.pop();
         delete mysql;
-        pool_.pop_front();
+        --now_conn_count_;
     }
 }
 
 void ConnectionPool::ReleaseConnection() {
     while (pool_alive_) {
-        this_thread::sleep_for(chrono::seconds(MAX_LIVE_TIME / 10));
-        lock_guard<mutex> lg(mtx_);
-        time_t now = time(nullptr);
-        for (auto iter = pool_.begin();
-             iter != pool_.end() && now_conn_count_ >= min_connection_;
-             ++iter) {
-            if (difftime(now, (*iter)->GetLastTime()) >= MAX_LIVE_TIME) {
-                MySQLDB *mysql = *iter;
-                delete mysql;
-                --now_conn_count_;
-                iter = pool_.erase(iter);
+        int sleep_time = MAX_LIVE_TIME;
+        {
+            lock_guard<mutex> lg(mtx_);
+            time_t now = time(nullptr);
+            //连接池中有未使用的连接，而且使用+未使用的连接数大于最小连接数时
+            //可以释放池中中超时的连接
+            while (!pool_.empty() && now_conn_count_ > min_connection_) {
+                MySQLDB *mysql = pool_.front();
+                if (difftime(now, mysql->GetLastTime()) >= MAX_LIVE_TIME) {
+                    pool_.pop();
+                    delete mysql;
+                    --now_conn_count_;
+                } else {
+                    //未超时,第一个未未超时的连接在等待剩余存活时间之后就会超时
+                    //所以我们等待这么久
+                    sleep_time = difftime(now, mysql->GetLastTime());
+                    break;
+                }
             }
         }
+        this_thread::sleep_for(chrono::seconds(sleep_time));
     }
 }
