@@ -20,6 +20,12 @@ Service::Service() {
         std::bind(&Service::Chat, this, _1, _2, _3);
     handler_map_[MsgType::add_friend] =
         std::bind(&Service::AddFriend, this, _1, _2, _3);
+    handler_map_[MsgType::create_group] =
+        std::bind(&Service::CreateGroup, this, _1, _2, _3);
+    handler_map_[MsgType::join_in_group] =
+        std::bind(&Service::JoinInGroup, this, _1, _2, _3);
+    handler_map_[MsgType::query_group] =
+        std::bind(&Service::QueryGroup, this, _1, _2, _3);
 }
 
 Service *Service::GetInstance() {
@@ -232,4 +238,144 @@ void Service::SubscribeCallback(int user_id, const string &message) {
         return;
     }
     this->offline_message_model_.Insert(user_id, message);
+}
+
+void Service::CreateGroup(const TcpConnectionPtr &conn,
+                          const nlohmann::json &msg, Timestamp time) {
+    int user_id = msg["user_id"];
+    string group_name = msg["group_name"];
+    string group_desc = msg["group_desc"];
+    Group group(group_name, group_desc);
+
+    nlohmann::json response;
+    response["msg_type"] = MsgType::create_group_res;
+
+    bool insert_res = this->group_model_.InsertGroup(group);
+    if (!insert_res) {
+        LOG_DEBUG << user_id << " create group failed";
+        response["err_msg"] =
+            "Create group failed. Change the group name may work.";
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
+        return;
+    }
+    insert_res = this->group_model_.InsertGroupUser(group.GetGroupId(), user_id,
+                                                    "creator");
+    if (!insert_res) {
+        LOG_DEBUG << user_id << " create group failed";
+        response["err_msg"] =
+            "Create group failed. Change the group name may work";
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
+        return;
+    }
+    response["group_id"] = group.GetGroupId();
+    response["msg"] = "Create group successfully";
+    conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
+}
+
+void Service::JoinInGroup(const TcpConnectionPtr &conn,
+                          const nlohmann::json &msg, Timestamp time) {
+    int user_id = msg["user_id"];
+    int group_id = msg["group_id"];
+
+    nlohmann::json response;
+    response["msg_type"] = MsgType::join_in_group_res;
+    response["group_id"] = group_id;
+    bool insert_res = this->group_model_.InsertGroupUser(group_id, user_id);
+    if (!insert_res) {
+        LOG_DEBUG << user_id << " join in group failed";
+        response["err_msg"] =
+            "Join in group failed. Change the group id may work";
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
+        return;
+    }
+
+    auto users_ptr = this->group_model_.QueryGroupUser(group_id);
+    if (!users_ptr) {
+        LOG_DEBUG << user_id << " join in group failed";
+        response["err_msg"] =
+            "Join in group failed. Change the group id may work";
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
+        return;
+    }
+
+    //告诉群里其他人新用户加入
+    {
+        lock_guard<mutex> lock(mtx_);
+        //朋友在线
+        nlohmann::json new_group_user;
+        new_group_user["group_id"] = group_id;
+        new_group_user["user_id"] = user_id;
+        new_group_user["msg_type"] = MsgType::new_group_user;
+        // id_role.first 是群友的id
+        for (auto &id_role : *users_ptr) {
+            if (user_2_conn_.find(id_role.first) != user_2_conn_.end()) {
+                LOG_DEBUG << id_role.first << " online , send message";
+                user_2_conn_[id_role.first]->send(
+                    GeneratePacket(new_group_user.dump()),
+                    PacketLength(new_group_user.dump()));
+            }
+            //朋友在线,在别的服务器登录
+            else if (redis_.IsOnline(id_role.first)) {
+                LOG_DEBUG
+                    << id_role.first
+                    << " online, but login in other server , send message";
+                redis_.Publish(id_role.first, new_group_user.dump());
+            }
+        }
+    }
+
+    //把群成员返回给加入者
+    vector<string> group_users_string;
+    nlohmann::json group_user_json;
+    for (const auto &id_role : *users_ptr) {
+        group_user_json["user_id"] = id_role.first;
+        // group_user_json["nickname"] = group_user.GetNickname();
+        // group_user_json["role"] = group_user.GetRole();
+        group_users_string.push_back(group_user_json.dump());
+    }
+    response["group_user"] = group_users_string;
+    response["msg"] = "Join in group successfully";
+    conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
+}
+
+void Service::QueryGroup(const TcpConnectionPtr &conn,
+                         const nlohmann::json &msg, Timestamp time) {
+    int user_id = msg["user_id"];
+
+    nlohmann::json response;
+    response["msg_type"] = MsgType::query_group_res;
+
+    auto groups_ptr = this->group_model_.QueryGroup(user_id);
+    if (!groups_ptr) {
+        LOG_DEBUG << user_id << " query group failed";
+        response["err_msg"] = "Query group failed";
+        conn->send(GeneratePacket(response.dump()),
+                   PacketLength(response.dump()));
+        return;
+    }
+    response["msg"] = "Query group successfully";
+    vector<string> groups_string;
+    for (auto &group : *groups_ptr) {
+        nlohmann::json group_json;
+        group_json["group_id"] = group.GetGroupId();
+        group_json["group_name"] = group.GetGroupName();
+        group_json["group_desc"] = group.GetGroupDesc();
+
+        nlohmann::json group_user_json;
+        vector<string> group_users_string;
+        for (const auto &group_user : group.GetGroupUser()) {
+            group_user_json["user_id"] = group_user.GetUserId();
+            group_user_json["nickname"] = group_user.GetNickname();
+            group_user_json["role"] = group_user.GetRole();
+            group_users_string.push_back(group_user_json.dump());
+        }
+        group_json["group_user"] = group_users_string;
+        groups_string.push_back(group_json.dump());
+    }
+    response["groups"] = groups_string;
+    conn->send(GeneratePacket(response.dump()), PacketLength(response.dump()));
 }

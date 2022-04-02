@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include "server/db/Redis.h"
 #include "server/model/FriendModel.h"
+#include "server/model/GroupModel.h"
 #include "server/model/OfflineMessageModel.h"
 #include "server/model/UserModel.h"
 #include <functional>
@@ -31,6 +32,13 @@ class Service {
     void Chat(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
     void AddFriend(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
 
+    void CreateGroup(const TcpConnectionPtr &, const nlohmann::json &,
+                     Timestamp);
+    void JoinInGroup(const TcpConnectionPtr &, const nlohmann::json &,
+                     Timestamp);
+    void ChatGroup(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
+    void QueryGroup(const TcpConnectionPtr &, const nlohmann::json &,
+                    Timestamp);
     void HandleClientException(const TcpConnectionPtr &);
 
     MsgHandler GetHandler(MsgType);
@@ -45,5 +53,6 @@ class Service {
     UserModel user_model_;
     FriendModel friend_model_;
     OfflineMessageModel offline_message_model_;
+    GroupModel group_model_;
 };
 #endif

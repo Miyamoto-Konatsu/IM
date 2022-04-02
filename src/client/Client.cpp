@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "MessageType.h"
 #include "json.hpp"
+#include "server/model/Group.h"
 #include "server/model/User.h"
 #include <arpa/inet.h>
 #include <condition_variable>
@@ -24,12 +25,27 @@ mutex MUTEX;
 json response;
 int USER_ID = -1;
 vector<User> FRIENDS;
+vector<Group> GROUPS;
 
-bool HandleChatMsg(const json &response);
-void ShowFriends();
 using MsgHandler = function<bool(const json &)>;
 
 unordered_map<MsgType, MsgHandler> handler_map_;
+
+bool HandleChatMsg(const json &response);
+void ShowFriends();
+bool QueryGroup(int);
+bool Send(int fd, json &request) {
+    char *packet = GeneratePacket(request.dump());
+    if (nullptr == packet)
+        return false;
+    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+        cout << "Create group failed" << endl;
+        free(packet);
+        return false;
+    }
+    free(packet);
+    return true;
+}
 
 bool AddFriend(int fd);
 
@@ -124,6 +140,7 @@ bool SignIn(int fd) {
             cout << msg.at("msg") << endl;
         }
     }
+    QueryGroup(fd);
     return true;
 }
 
@@ -185,13 +202,84 @@ bool SendMsg(int fd) {
     return true;
 }
 
+bool SendGroupMsg(int fd) {
+    int group_id;
+    char message[1024] = {0};
+    cout << "Input group id please:";
+    cin >> group_id;
+    cin.get();
+    cout << "Input message please:";
+    cin.getline(message, 1024);
+    bool in_group = false;
+    int group_index = 0;
+    for (int i = 0; i < GROUPS.size(); ++i) {
+        if (GROUPS[i].GetGroupId() == group_id) {
+            in_group = true;
+            group_index = i;
+            break;
+        }
+    }
+    if (!in_group) {
+        cout << group_id << " is not your group, please join in it first"
+             << endl;
+        return false;
+    }
+
+    json request;
+    request["msg_type"] = MsgType::chat_send;
+    request["user_id"] = USER_ID;
+
+    request["msg"] = message;
+
+    for (const auto &group_user : GROUPS[group_index].GetGroupUser()) {
+        request["friend_id"] = group_user.GetUserId();
+        if (!Send(fd, request))
+            return false;
+    }
+
+    return true;
+}
+
+bool CreateGroup(int fd) {
+    char group_name[60] = {0};
+    char group_desc[500] = {0};
+    cout << "Input group name please:";
+    cin.get();
+    cin.getline(group_name, 50);
+    cout << "Input group desc please:";
+    cin.getline(group_desc, 50);
+    json request;
+    request["msg_type"] = MsgType::create_group;
+    request["user_id"] = USER_ID;
+    request["group_name"] = string(group_name);
+    request["group_desc"] = string(group_desc);
+    return Send(fd, request);
+}
+
+bool QueryGroup(int fd) {
+    json request;
+    request["msg_type"] = MsgType::query_group;
+    request["user_id"] = USER_ID;
+    return Send(fd, request);
+}
+bool JoinInGroup(int fd) {
+    int group_id;
+    cout << "Input group id please:";
+    cin >> group_id;
+    json request;
+    request["msg_type"] = MsgType::join_in_group;
+    request["user_id"] = USER_ID;
+    request["group_id"] = group_id;
+    return Send(fd, request);
+}
+
 void RecvFromServer(int fd, bool *running) {
     while (*running) {
         char data_length_buf[4] = {0};
         while (true) {
             auto size = recv(fd, data_length_buf, 4, MSG_PEEK);
             if (size == 4) {
-                auto size = recv(fd, data_length_buf, 4, 0);
+                recv(fd, data_length_buf, 4, 0);
                 break;
             }
             if (size == -1)
@@ -205,7 +293,7 @@ void RecvFromServer(int fd, bool *running) {
         while (true) {
             auto size = recv(fd, data_buf, data_length, MSG_PEEK);
             if (size == data_length) {
-                auto size = recv(fd, data_buf, data_length, 0);
+                recv(fd, data_buf, data_length, 0);
                 break;
             }
             if (size == -1) {
@@ -252,12 +340,91 @@ bool HandleAddFriendMsg(const json &response) {
     return true;
 }
 
+bool HandleCreateGroupMsg(const json &response) {
+    if (response.contains("err_msg")) {
+        cout << response["err_msg"] << endl;
+        return false;
+    }
+    cout << response["group_id"] << endl;
+    cout << response["msg"] << endl;
+    /* FRIENDS.emplace_back(stoi(response["friend_id"].dump()),
+                         response["nickname"], "", response["state"]); */
+    return true;
+}
+
+bool HandleJoinGroupMsg(const json &response) {
+    if (response.contains("err_msg")) {
+        cout << response["err_msg"] << endl;
+        return false;
+    }
+    Group group;
+    group.SetGroupId(response["group_id"]);
+
+    vector<string> group_users_string = response["group_user"];
+
+    for (auto &group_user_string : group_users_string) {
+        GroupUser group_user;
+        json group_user_json = json::parse(group_user_string.c_str());
+        group_user.SetUserId(group_user_json["user_id"]);
+        // group_user.SetNickname(group_user_json["nickname"]);
+        // group_user.SetRole(group_user_json["role"]);
+        group.GetGroupUser().push_back(group_user);
+    }
+    GROUPS.push_back(group);
+    return true;
+}
+
+bool HandleNewGroupUserMsg(const json &response) {
+    GroupUser group_user;
+    group_user.SetUserId(response["user_id"]);
+    int group_id = response["group_id"];
+    cout << group_user.GetUserId() << "加入群组" << group_id << endl;
+    for (auto &group : GROUPS) {
+        if (group.GetGroupId() == group_id) {
+            group.GetGroupUser().push_back(group_user);
+            return true;
+        }
+    }
+    return false;
+}
+bool HandleQueryGroupMsg(const json &response) {
+    if (response.contains("err_msg")) {
+        cout << response["err_msg"] << endl;
+        return false;
+    }
+    cout << response["msg"] << endl;
+    vector<string> groups_string = response["groups"];
+
+    GROUPS.clear();
+    for (auto &group_string : groups_string) {
+        Group group;
+        json group_json = json::parse(group_string.c_str());
+        group.SetGroupId(group_json["group_id"]);
+        group.SetGroupName(group_json["group_name"]);
+        group.SetGroupDesc(group_json["group_desc"]);
+
+        vector<string> group_users_string = group_json["group_user"];
+
+        for (auto &group_user_string : group_users_string) {
+            GroupUser group_user;
+            json group_user_json = json::parse(group_user_string.c_str());
+            group_user.SetUserId(group_user_json["user_id"]);
+            group_user.SetNickname(group_user_json["nickname"]);
+            group_user.SetRole(group_user_json["role"]);
+            group.GetGroupUser().push_back(group_user);
+        }
+        GROUPS.push_back(group);
+    }
+    return true;
+}
 int Client(int client_fd) {
     while (true) {
         cout << "1 : Send message" << endl;
         cout << "2 : Sign out" << endl;
         cout << "3 : Add friend" << endl;
         cout << "4 : Show friends" << endl;
+        cout << "5 : Create Group" << endl;
+        cout << "6 : Join in Group" << endl;
         string input;
         cin >> input;
         switch (atoi(input.c_str())) {
@@ -269,8 +436,22 @@ int Client(int client_fd) {
             return true;
         case 3:
             AddFriend(client_fd);
+            break;
         case 4:
             ShowFriends();
+            break;
+        case 5:
+            CreateGroup(client_fd);
+            break;
+        case 6:
+            JoinInGroup(client_fd);
+            break;
+        case 7:
+            SendGroupMsg(client_fd);
+            break;
+        case 8:
+            QueryGroup(client_fd);
+            break;
         default:
             break;
         }
@@ -300,6 +481,10 @@ bool AddFriend(int fd) {
 void InitHandlerMap() {
     handler_map_[MsgType::chat_send] = MsgHandler(&HandleChatMsg);
     handler_map_[MsgType::add_friend_res] = MsgHandler(&HandleAddFriendMsg);
+    handler_map_[MsgType::create_group_res] = MsgHandler(&HandleCreateGroupMsg);
+    handler_map_[MsgType::join_in_group_res] = MsgHandler(&HandleJoinGroupMsg);
+    handler_map_[MsgType::query_group_res] = MsgHandler(&HandleQueryGroupMsg);
+    handler_map_[MsgType::new_group_user] = MsgHandler(&HandleNewGroupUserMsg);
 }
 
 int main(int argc, char *argv[]) {
