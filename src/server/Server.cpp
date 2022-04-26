@@ -46,11 +46,11 @@ void Server::onMessage(const TcpConnectionPtr &conn, Buffer *buf,
         const int32_t len =
             muduo::net::sockets::networkToHost32(be32); //转换成主机字节序
         if (len > MAX_DATA_LENGTH ||
-            len < 0) //如果消息超过64K，或者长度小于0，不合法，干掉它。
+            len < 0) //如果消息超过4K，或者长度小于0，不合法，干掉它。
         {
             LOG_ERROR << "Invalid length " << len;
             Service::GetInstance()->HandleClientException(conn);
-            conn->shutdown(); // FIXME: disable reading
+            conn->shutdown(); 
             break;
         } else if (
             buf->readableBytes() >=
