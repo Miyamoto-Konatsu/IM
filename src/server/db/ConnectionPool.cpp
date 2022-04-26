@@ -40,7 +40,6 @@ unique_ptr<MySQLDB, retconnfunc> ConnectionPool::GetConnction() {
 
 void ConnectionPool::ReturnConnection(MySQLDB *mysql) {
     if (mysql != nullptr) {
-        cout << "return conn" << endl;
         unique_lock<mutex> lock(mtx_);
         pool_.push(mysql);
         mysql->ResetLastTime();
@@ -75,9 +74,9 @@ void ConnectionPool::ReleaseConnection() {
                     delete mysql;
                     --now_conn_count_;
                 } else {
-                    //未超时,第一个未未超时的连接在等待剩余存活时间之后就会超时
-                    //所以我们等待这么久
-                    sleep_time = difftime(now, mysql->GetLastTime());
+                    //未超时,第一个未超时的连接在等待剩余存活时间之后就会超时
+                    //所以我们等待这么久加1秒，多加一秒可能因为有过期时间很接近的多个连接
+                    sleep_time = difftime(now, mysql->GetLastTime()) + 1;
                     break;
                 }
             }

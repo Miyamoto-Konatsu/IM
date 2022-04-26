@@ -17,7 +17,7 @@ class Redis {
     bool Publish(int, const string &);
     bool Subscribe(int);
     bool Unsubscribe(int);
-    void SetSubscribeCallback(subscribe_callback);
+    void SetSubscribeCallback(subscribe_callback&&);
 
     bool SignIn(int);
 
@@ -27,7 +27,7 @@ class Redis {
 
   private:
     void RedisConnect(redisContext **);
-    void MessageHandler(subscribe_callback);
+    void MessageHandler(subscribe_callback&&);
     redisContext *publish_context_;
     redisContext *subscribe_context_;
 
