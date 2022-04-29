@@ -9,37 +9,34 @@
 #include "server/model/UserModel.h"
 #include <functional>
 #include <muduo/base/Logging.h>
-#include <muduo/base/Timestamp.h>
-#include <muduo/net/EventLoop.h>
+//#include <muduo/base/.h>
+#include "server/myserver/MyServer.h"
+/* #include <muduo/net/EventLoop.h>
 #include <muduo/net/TcpConnection.h>
-#include <muduo/net/TcpServer.h>
-#include <mutex>
+#include <muduo/net/TcpServer.h>*/
+#include <mutex> 
 using namespace std;
-using namespace muduo;
-using namespace muduo::net;
+/* using namespace muduo;
+using namespace muduo::net; */
 
-using MsgHandler = std::function<void(const TcpConnectionPtr &,
-                                      const nlohmann::json &, Timestamp)>;
+using MsgHandler = std::function<void(Connection *, const nlohmann::json &)>;
 
 class Service {
 
   public:
     static Service *GetInstance();
 
-    void Register(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
-    void SignIn(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
-    void SignOut(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
-    void Chat(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
-    void AddFriend(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
+    void Register(Connection *, const nlohmann::json &);
+    void SignIn(Connection *, const nlohmann::json & );
+    void SignOut(Connection *, const nlohmann::json & );
+    void Chat(Connection *, const nlohmann::json &);
+    void AddFriend(Connection *, const nlohmann::json & );
 
-    void CreateGroup(const TcpConnectionPtr &, const nlohmann::json &,
-                     Timestamp);
-    void JoinInGroup(const TcpConnectionPtr &, const nlohmann::json &,
-                     Timestamp);
-    void ChatGroup(const TcpConnectionPtr &, const nlohmann::json &, Timestamp);
-    void QueryGroup(const TcpConnectionPtr &, const nlohmann::json &,
-                    Timestamp);
-    void HandleClientException(const TcpConnectionPtr &);
+    void CreateGroup(Connection *, const nlohmann::json & );
+    void JoinInGroup(Connection *, const nlohmann::json &);
+    void ChatGroup(Connection *, const nlohmann::json & );
+    void QueryGroup(Connection *, const nlohmann::json &);
+    void HandleClientException(Connection *);
 
     MsgHandler GetHandler(MsgType);
     void SubscribeCallback(int, const string &);
@@ -48,7 +45,7 @@ class Service {
     Service();
     mutex mtx_;
     unordered_map<MsgType, MsgHandler> handler_map_;
-    unordered_map<int, TcpConnectionPtr> user_2_conn_;
+    unordered_map<int, Connection *> user_2_conn_;
     Redis redis_;
     UserModel user_model_;
     FriendModel friend_model_;

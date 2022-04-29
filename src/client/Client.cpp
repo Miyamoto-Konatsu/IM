@@ -285,9 +285,9 @@ void RecvFromServer(int fd, bool *running) {
             if (size == -1)
                 exit(-1);
         }
-        int32_t be32 = *(int32_t *)(data_length_buf); // SIGBUS   //转化成32位
-        const int32_t data_length =
-            muduo::net::sockets::networkToHost32(be32); //转换成主机字节序
+        int32_t data_length = *(int32_t *)(data_length_buf); // SIGBUS   //转化成32位
+       /*  const int32_t data_length =
+            muduo::net::sockets::networkToHost32(be32);  *///转换成主机字节序
         char *data_buf = (char *)(malloc(data_length));
         memset(data_buf, 0, data_length);
         while (true) {
