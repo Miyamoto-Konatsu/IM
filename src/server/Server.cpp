@@ -14,7 +14,8 @@
         std::bind(&Server::onMessage, this, std::placeholders::_1,
                   std::placeholders::_2, std::placeholders::_3));
 } */
-Server::Server() {
+Server::Server(const char *ip, const char *port)
+    : server_(ip, port) {
     server_.SetConnectionCallback(
         std::bind(&Server::onConnection, this, std::placeholders::_1));
     server_.SetMessageCallback(std::bind(&Server::onMessage, this,
@@ -23,7 +24,6 @@ Server::Server() {
 }
 
 void Server::start() {
-    server_.Init();
     server_.Start();
 }
 

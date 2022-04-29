@@ -26,7 +26,7 @@ using namespace muduo::net; */
 }; */
 class Server {
   public:
-    Server();
+    Server(const char *ip = "127.0.0.1", const char *port = "6000");
 
     void start();
 

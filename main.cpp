@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    Server server;
+    Server server("127.0.0.1", argv[1]);
     server.start();
     return 0;
 }

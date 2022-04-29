@@ -22,10 +22,15 @@ using namespace std;
 class MyServer {
     typedef int *pipe_type_ptr;
     typedef int pipe_type;
+    typedef unordered_map<pipe_type, shared_ptr<Connection>> umap_fd2conn;
     friend class Connection;
 
   public:
-    void Init(const char *ip = "127.0.0.1", const char *port = "6000") {
+    MyServer(const char *ip = "127.0.0.1", const char *port = "6000") {
+        Init(ip, port);
+    }
+
+    void Init(const char *ip, const char *port) {
         InitEpoll(ip, port);
         InitPipe();
         InitWorker();
@@ -43,8 +48,17 @@ class MyServer {
                     int client_fd = accept(
                         listen_fd_, (sockaddr *)&client_sockeraddr, &clientlen);
                     SetNonBlocking(client_fd);
-                    write(pipes[round_][1], &client_fd, sizeof client_fd);
-                    round_ = (round_ + 1) % worker_number_;
+                    int conn_count = INT_MAX;
+                    for (int worker_id = 0; worker_id < worker_number_;
+                         ++worker_id) {
+                        if (fd2conns_[worker_id].size() < conn_count) {
+                            conn_count = fd2conns_[worker_id].size();
+                            round_ = worker_id;
+                        }
+                    }
+                    int ret =
+                        write(pipes[round_][1], &client_fd, sizeof client_fd);
+                    // round_ = (round_ + 1) % worker_number_;
                 }
             }
         }
@@ -59,7 +73,7 @@ class MyServer {
     }
 
   private:
-    void InitEpoll(const char *ip = "127.0.0.1", const char *port = "6000") {
+    void InitEpoll(const char *ip, const char *port) {
         listen_fd_ = socket(AF_INET, SOCK_STREAM, 0);
         struct sockaddr_in sa;
         memset(&sa, 0, sizeof(sa));
@@ -78,7 +92,7 @@ class MyServer {
         epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, listen_fd_, &ep_event);
         events_.resize(8);
     }
-    
+
     void InitPipe() {
         for (int i = 0; i < worker_number_; ++i) {
             pipe_type_ptr ptr = new pipe_type(2);
@@ -90,6 +104,8 @@ class MyServer {
     }
 
     void InitWorker() {
+        fd2conns_.reserve(4);
+        fd2conns_.resize(4);
         for (int i = 0; i < worker_number_; ++i) {
             works.push_back(thread(&MyServer::Worker, this, i));
         }
@@ -102,7 +118,7 @@ class MyServer {
 
     void Worker(int worker_id) {
         vector<struct epoll_event> events(4096);
-        unordered_map<int, shared_ptr<Connection>> fd2conn;
+        umap_fd2conn &fd2conn = fd2conns_[worker_id];
         int epoll_fd = epoll_create(1);
         int pipe_fd = pipes[worker_id][0];
         Epoll_Add(pipe_fd, EPOLLIN | EPOLLERR, epoll_fd);
@@ -175,6 +191,7 @@ class MyServer {
     vector<thread> works;
     MessageCallback message_callback;
     ConnectionCallback connection_callback;
+    vector<umap_fd2conn> fd2conns_;
 };
 
 #endif
