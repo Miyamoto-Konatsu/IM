@@ -2,11 +2,23 @@
 #include "Common.h"
 #include "MessageType.h"
 #include "server/myserver/MyServer.h"
+#include "sha256.hpp"
 #include "unordered_map"
 using namespace std;
 /* using namespace muduo;
 using namespace muduo::net; */
 using namespace std::placeholders;
+void Send(Connection *conn, const nlohmann::json &response) {
+    try {
+        uint32_t packet_length;
+        auto res = GeneratePacket(response.dump(), packet_length);
+        if (res == nullptr)
+            return;
+        conn->Send(res.get(), packet_length);
+    } catch (const exception &e) {
+        LOG_DEBUG << e.what();
+    }
+}
 
 Service::Service() {
     redis_.SetSubscribeCallback(
@@ -39,7 +51,7 @@ MsgHandler Service::GetHandler(MsgType msg_type) {
 void Service::Register(Connection *conn, const nlohmann::json &msg) {
     muduo::string nickname = msg["nickname"];
     muduo::string password = msg["password"];
-    User new_user(nickname, password);
+    User new_user(nickname, EncryptPassword(password));
     bool insert_res = this->user_model_.Insert(new_user);
 
     nlohmann::json response;
@@ -47,12 +59,10 @@ void Service::Register(Connection *conn, const nlohmann::json &msg) {
 
     if (insert_res) {
         response["user_id"] = new_user.GetUserId();
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
     } else {
         response["err_msg"] = "Register failed";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
     }
 }
 
@@ -64,11 +74,10 @@ void Service::SignIn(Connection *conn, const nlohmann::json &msg) {
     nlohmann::json response;
     response["msg_type"] = MsgType::sign_in_res;
 
-    if (!query_res || user.GetPassword() != password) {
+    if (!query_res || !CheckPassword(password, user.GetPassword())) {
         response["err_msg"] = "Invalid user id or password is wrong";
         LOG_DEBUG << "Invalid user id or password is wrong";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
 
@@ -78,8 +87,7 @@ void Service::SignIn(Connection *conn, const nlohmann::json &msg) {
         if (redis_.IsOnline(user.GetUserId())) {
             response["err_msg"] = "The user is online, sign in failed";
             LOG_DEBUG << "The user is online, sign in failed";
-            conn->Send(GeneratePacket(response.dump()).get(),
-                       PacketLength(response.dump()));
+            Send(conn, response);
             return;
         }
     }
@@ -126,8 +134,7 @@ void Service::SignIn(Connection *conn, const nlohmann::json &msg) {
         redis_.SignIn(user.GetUserId());
     }
 
-    conn->Send(GeneratePacket(response.dump()).get(),
-               PacketLength(response.dump()));
+    Send(conn, response);
 }
 
 void Service::SignOut(Connection *conn, const nlohmann::json &msg) {
@@ -163,8 +170,7 @@ void Service::Chat(Connection *conn, const nlohmann::json &msg) {
     //朋友在线
     if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
         LOG_DEBUG << friend_id << " online , Send message";
-        user_2_conn_[friend_id]->Send(GeneratePacket(msg.dump()).get(),
-                                      PacketLength(msg.dump()));
+        Send(user_2_conn_[friend_id], msg);
         return;
     }
     //朋友在线,在别的服务器登录
@@ -210,8 +216,7 @@ void Service::AddFriend(Connection *conn, const nlohmann::json &msg) {
         LOG_DEBUG << user_id << " add " << friend_id << " failed";
         response["err_msg"] = "Add friend failed, please check friend_id. Or "
                               "you two are alreadly friends ";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
     User new_friend;
@@ -222,15 +227,13 @@ void Service::AddFriend(Connection *conn, const nlohmann::json &msg) {
         response["state"] = redis_.IsOnline(friend_id) ? "online" : "offline";
     }
     response["msg"] = "Friend added successfully";
-    conn->Send(GeneratePacket(response.dump()).get(),
-               PacketLength(response.dump()));
+    Send(conn, response);
 }
 
 void Service::SubscribeCallback(int user_id, const string &message) {
     lock_guard<mutex> lock(mtx_);
     if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
-        user_2_conn_[user_id]->Send(GeneratePacket(message).get(),
-                                    PacketLength(message));
+        Send(user_2_conn_[user_id], message);
         return;
     }
     this->offline_message_model_.Insert(user_id, message);
@@ -250,8 +253,7 @@ void Service::CreateGroup(Connection *conn, const nlohmann::json &msg) {
         LOG_DEBUG << user_id << " create group failed";
         response["err_msg"] =
             "Create group failed. Change the group name may work.";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
     insert_res = this->group_model_.InsertGroupUser(group.GetGroupId(), user_id,
@@ -260,14 +262,12 @@ void Service::CreateGroup(Connection *conn, const nlohmann::json &msg) {
         LOG_DEBUG << user_id << " create group failed";
         response["err_msg"] =
             "Create group failed. Change the group name may work";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
     response["group_id"] = group.GetGroupId();
     response["msg"] = "Create group successfully";
-    conn->Send(GeneratePacket(response.dump()).get(),
-               PacketLength(response.dump()));
+    Send(conn, response);
 }
 
 void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
@@ -282,8 +282,7 @@ void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
         LOG_DEBUG << user_id << " join in group failed";
         response["err_msg"] =
             "Join in group failed. Change the group id may work";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
 
@@ -292,8 +291,7 @@ void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
         LOG_DEBUG << user_id << " join in group failed";
         response["err_msg"] =
             "Join in group failed. Change the group id may work";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
 
@@ -301,24 +299,22 @@ void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
     {
         lock_guard<mutex> lock(mtx_);
         //朋友在线
-        nlohmann::json new_group_user;
-        new_group_user["group_id"] = group_id;
-        new_group_user["user_id"] = user_id;
-        new_group_user["msg_type"] = MsgType::new_group_user;
+        nlohmann::json response;
+        response["group_id"] = group_id;
+        response["user_id"] = user_id;
+        response["msg_type"] = MsgType::new_group_user;
         // id_role.first 是群友的id
         for (auto &id_role : *users_ptr) {
             if (user_2_conn_.find(id_role.first) != user_2_conn_.end()) {
                 LOG_DEBUG << id_role.first << " online , Send message";
-                user_2_conn_[id_role.first]->Send(
-                    GeneratePacket(new_group_user.dump()).get(),
-                    PacketLength(new_group_user.dump()));
+                Send(user_2_conn_[id_role.first], response);
             }
             //朋友在线,在别的服务器登录
             else if (redis_.IsOnline(id_role.first)) {
                 LOG_DEBUG
                     << id_role.first
                     << " online, but login in other server , Send message";
-                redis_.Publish(id_role.first, new_group_user.dump());
+                redis_.Publish(id_role.first, response.dump());
             }
         }
     }
@@ -334,8 +330,7 @@ void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
     }
     response["group_user"] = group_users_string;
     response["msg"] = "Join in group successfully";
-    conn->Send(GeneratePacket(response.dump()).get(),
-               PacketLength(response.dump()));
+    Send(conn, response);
 }
 
 void Service::QueryGroup(Connection *conn, const nlohmann::json &msg) {
@@ -348,8 +343,7 @@ void Service::QueryGroup(Connection *conn, const nlohmann::json &msg) {
     if (!groups_ptr) {
         LOG_DEBUG << user_id << " query group failed";
         response["err_msg"] = "Query group failed";
-        conn->Send(GeneratePacket(response.dump()).get(),
-                   PacketLength(response.dump()));
+        Send(conn, response);
         return;
     }
     response["msg"] = "Query group successfully";
@@ -372,6 +366,5 @@ void Service::QueryGroup(Connection *conn, const nlohmann::json &msg) {
         groups_string.push_back(group_json.dump());
     }
     response["groups"] = groups_string;
-    conn->Send(GeneratePacket(response.dump()).get(),
-               PacketLength(response.dump()));
+    Send(conn, response);
 }

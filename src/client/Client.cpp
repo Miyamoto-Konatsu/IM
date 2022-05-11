@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "MessageType.h"
+#include "aes128.hpp"
 #include "json.hpp"
 #include "server/model/Group.h"
 #include "server/model/User.h"
@@ -20,6 +21,7 @@
 #include <vector>
 using namespace std;
 using json = nlohmann::json;
+
 condition_variable CV;
 mutex MUTEX;
 json response;
@@ -35,15 +37,14 @@ bool HandleChatMsg(const json &response);
 void ShowFriends();
 bool QueryGroup(int);
 bool Send(int fd, json &request) {
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "Create group failed" << endl;
-        free(packet);
         return false;
     }
-    free(packet);
     return true;
 }
 
@@ -59,15 +60,16 @@ bool Register(int fd) {
     request["msg_type"] = MsgType::sign_up;
     request["nickname"] = string(nickname);
     request["password"] = string(password);
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "Register failed" << endl;
-        free(packet);
+
         return false;
     }
-    free(packet);
+
     /* char buf[1024] = {0};
     if (-1 == recv(fd, buf, 1024, 0)) {
         return false;
@@ -96,15 +98,14 @@ bool SignIn(int fd) {
     request["msg_type"] = MsgType::sign_in;
     request["user_id"] = user_id;
     request["password"] = string(password);
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "Sign in failed" << endl;
-        free(packet);
         return false;
     }
-    free(packet);
 
     /* char buf[1024] = {0};
 
@@ -149,20 +150,20 @@ bool SignOut(int fd) {
     json request;
     request["msg_type"] = MsgType::sign_out;
     request["user_id"] = USER_ID;
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "Sign out failed" << endl;
-        free(packet);
         return false;
     }
-    free(packet);
     cout << "Sign out success" << endl;
 
     //登出后重置
     USER_ID = -1;
     FRIENDS.clear();
+    return true;
 }
 
 bool SendMsg(int fd) {
@@ -190,15 +191,14 @@ bool SendMsg(int fd) {
     request["user_id"] = USER_ID;
     request["friend_id"] = friend_id;
     request["msg"] = message;
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "SendMsg failed" << endl;
-        free(packet);
         return false;
     }
-    free(packet);
     return true;
 }
 
@@ -285,9 +285,10 @@ void RecvFromServer(int fd, bool *running) {
             if (size == -1)
                 exit(-1);
         }
-        int32_t data_length = *(int32_t *)(data_length_buf); // SIGBUS   //转化成32位
-       /*  const int32_t data_length =
-            muduo::net::sockets::networkToHost32(be32);  *///转换成主机字节序
+        int32_t data_length =
+            *(int32_t *)(data_length_buf); // SIGBUS   //转化成32位
+                                           /*  const int32_t data_length =
+                                                muduo::net::sockets::networkToHost32(be32);  *///转换成主机字节序
         char *data_buf = (char *)(malloc(data_length));
         memset(data_buf, 0, data_length);
         while (true) {
@@ -301,7 +302,12 @@ void RecvFromServer(int fd, bool *running) {
                 exit(-1);
             }
         }
-        response = json::parse(data_buf);
+
+        string encrypt(data_length + 1, '\000');
+        memcpy(&encrypt[0], data_buf, data_length);
+        auto s = DecryptPacket(move(encrypt));
+        response = json::parse(s);
+        free(data_buf);
         if (response.contains("msg_type") == false)
             continue;
         else if (response["msg_type"] == MsgType::sign_in_res ||
@@ -425,6 +431,7 @@ int Client(int client_fd) {
         cout << "4 : Show friends" << endl;
         cout << "5 : Create Group" << endl;
         cout << "6 : Join in Group" << endl;
+        cout << "6 : Send group message" << endl;
         string input;
         cin >> input;
         switch (atoi(input.c_str())) {
@@ -466,15 +473,14 @@ bool AddFriend(int fd) {
     request["msg_type"] = MsgType::add_friend;
     request["user_id"] = USER_ID;
     request["friend_id"] = friend_id;
-    char *packet = GeneratePacket(request.dump());
+    uint32_t packet_length;
+    auto packet = GeneratePacket(request.dump(), packet_length);
     if (nullptr == packet)
         return false;
-    if (-1 == send(fd, packet, PacketLength(request.dump()), 0)) {
+    if (-1 == send(fd, packet.get(), packet_length, 0)) {
         cout << "Sign in failed" << endl;
-        free(packet);
         return false;
     }
-    free(packet);
     return true;
 }
 
@@ -494,7 +500,7 @@ int main(int argc, char *argv[]) {
      } */
     int client_fd = socket(AF_INET, SOCK_STREAM, 0);
     char ip[] = "127.0.0.1";
-    char port[] = "6000";
+    char *port = argv[1];
     sockaddr_in sa;
     memset(&sa, 0, sizeof(sa));
     sa.sin_family = AF_INET;

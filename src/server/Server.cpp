@@ -68,7 +68,7 @@ void Server::onMessage(Connection *conn, Buffer *buf) {
                 PACKET_HEADER_LENGTH) //如果缓冲区可读的数据是否>=len+head，说明是一条完整的消息，取走
         {                             // len是头部规定的体部长度
             buf->Retrieve(PACKET_HEADER_LENGTH); //取头部
-            muduo::string msg(buf->Peek(len));   //取包体
+            muduo::string msg(DecryptPacket(buf->Peek(len)));   //取包体
             //取出包体后就可以处理回调了 /* muduo::string
             nlohmann::json msg_json = nlohmann::json::parse(msg.c_str());
             MsgType msg_type = msg_json["msg_type"].get<MsgType>();
@@ -76,7 +76,6 @@ void Server::onMessage(Connection *conn, Buffer *buf) {
             handler(conn, msg_json);
             buf->Retrieve(len); //然后把字节取走
         }
-
         else //未达到一条完整的消息
         {
             break;
