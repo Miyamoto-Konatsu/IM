@@ -17,7 +17,9 @@ enum class MsgType {
     join_in_group_res,
     query_group,
     query_group_res,
-    new_group_user
+    new_group_user,
+    get_msg_id,
+    get_msg_id_res,
 };
 
 #endif

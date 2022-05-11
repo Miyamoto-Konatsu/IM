@@ -18,6 +18,23 @@ target("main")
 
     add_links("mysqlclient")
     add_cxflags("-g -Wall")
+target("msgidserver")
+
+    set_kind("binary")
+    add_files("src/server/msgidserver/*.cpp")
+    add_files("src/common/*.cpp")
+    add_files("helper/*.cpp")
+    add_includedirs("helper")
+    add_includedirs("include")
+    
+    add_linkdirs("/usr/local/lib")
+    add_links("muduo_net");
+    add_links("muduo_base");
+    add_links("pthread")
+    add_links("hiredis")
+
+    add_links("mysqlclient")
+    add_cxflags("-g -Wall")
 
 target("client")
     set_kind("binary")
