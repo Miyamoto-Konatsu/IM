@@ -14,8 +14,8 @@
         std::bind(&Server::onMessage, this, std::placeholders::_1,
                   std::placeholders::_2, std::placeholders::_3));
 } */
-Server::Server(const char *ip, const char *port)
-    : server_(ip, port) {
+
+Server::Server(const char *ip, const char *port) : server_(ip, port) {
     server_.SetConnectionCallback(
         std::bind(&Server::onConnection, this, std::placeholders::_1));
     server_.SetMessageCallback(std::bind(&Server::onMessage, this,
@@ -23,11 +23,9 @@ Server::Server(const char *ip, const char *port)
                                          std::placeholders::_2));
 }
 
-void Server::start() {
-    server_.Start();
-}
+void Server::start() { server_.Start(); }
 
-void Server::onConnection(Connection *conn) {
+void Server::onConnection(gp::Connection *conn) {
     if (conn->Disconnected()) {
         // LOG_DEBUG << conn->peerAddress().toIpPort() << " closed";
         Service::GetInstance()->HandleClientException(conn);
@@ -35,7 +33,7 @@ void Server::onConnection(Connection *conn) {
     }
 }
 
-void Server::onMessage(Connection *conn, Buffer *buf) {
+void Server::onMessage(gp::Connection *conn, gp::Buffer *buf) {
     Service *service = Service::GetInstance();
     /* muduo::string msg(buf->retrieveAllAsString());
     try {
@@ -67,16 +65,15 @@ void Server::onMessage(Connection *conn, Buffer *buf) {
             len +
                 PACKET_HEADER_LENGTH) //如果缓冲区可读的数据是否>=len+head，说明是一条完整的消息，取走
         {                             // len是头部规定的体部长度
-            buf->Retrieve(PACKET_HEADER_LENGTH); //取头部
-            muduo::string msg(DecryptPacket(buf->Peek(len)));   //取包体
+            buf->Retrieve(PACKET_HEADER_LENGTH);              //取头部
+            muduo::string msg(DecryptPacket(buf->Peek(len))); //取包体
             //取出包体后就可以处理回调了 /* muduo::string
             nlohmann::json msg_json = nlohmann::json::parse(msg.c_str());
             MsgType msg_type = msg_json["msg_type"].get<MsgType>();
             MsgHandler handler = service->GetHandler(msg_type);
             handler(conn, msg_json);
             buf->Retrieve(len); //然后把字节取走
-        }
-        else //未达到一条完整的消息
+        } else                  //未达到一条完整的消息
         {
             break;
         }

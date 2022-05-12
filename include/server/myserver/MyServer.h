@@ -18,7 +18,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 using namespace std;
-
+namespace gp {
 class MyServer {
     typedef int *pipe_type_ptr;
     typedef int pipe_type;
@@ -193,5 +193,5 @@ class MyServer {
     ConnectionCallback connection_callback;
     vector<umap_fd2conn> fd2conns_;
 };
-
+} // namespace gp
 #endif

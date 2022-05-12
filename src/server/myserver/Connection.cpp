@@ -1,5 +1,6 @@
 #include "server/myserver/Connection.h"
 #include "server/myserver/MyServer.h"
+namespace gp {
 void Connection::Read() {
     try {
         int size = buffer_.Read(fd_);
@@ -30,3 +31,4 @@ void Connection::Send(const void *message, int len) {
         size_sent += size;
     }
 }
+} // namespace gp

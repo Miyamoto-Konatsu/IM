@@ -428,8 +428,14 @@ bool SendGroupMsg(int fd) {
 
     for (const auto &group_user : GROUPS[group_index].GetGroupUser()) {
         request["friend_id"] = group_user.GetUserId();
-        if (!Send(fd, request))
+        MsgIdGetter *msg_Id_getter = MsgIdGetter::GetInstance();
+        int msg_id = msg_Id_getter->GetMsgId(USER_ID);
+        if (msg_id == -1) {
+            LOG_INFO << message << "send error";
             return false;
+        }
+        request["msg_id"] = msg_id;
+        TrySend(client_fd, request, RetryTimes);
     }
 
     return true;
@@ -488,14 +494,25 @@ void RecvFromServer(int fd, bool *running) {
 将消息id加入MESSAGE_RECV，对消息进行去重
 */
 bool HandleChatMsg(const json &response) {
+    UserIdType user_id = response["user_id"].get<UserIdType>();
+    ;
+    MsgIdType msg_id = response["msg_id"].get<MsgIdType>();
+    json response_ack;
+    {
+        response_ack["user_id"] = user_id;
+        response_ack["friend_id"] = response["friend_id"].get<UserIdType>();
+        response_ack["msg_id"] = msg_id;
+        response_ack["msg_type"] = MsgType::chat_res;
 
-    lock_guard<mutex> lock(MESSAGE_RECVED_MUTEX);
-    if (MESSAGE_RECVED[response["user_id"].get<UserIdType>()].find(
-            response["msg_id"].get<MsgIdType>()) !=
-        MESSAGE_RECVED[response["user_id"].get<UserIdType>()].end()) {
-        UserIdType sender_id = response["user_id"].get<UserIdType>();
-        LOG_DEBUG << "recv duplicate message from" << sender_id;
-        return false;
+        lock_guard<mutex> lock(MESSAGE_RECVED_MUTEX);
+        if (MESSAGE_RECVED[user_id].find(msg_id) !=
+            MESSAGE_RECVED[user_id].end()) {
+            LOG_DEBUG << "Recv duplicate message from " << user_id;
+            Send(client_fd, response_ack);
+            return false;
+        }
+        MESSAGE_RECVED[user_id].insert(msg_id);
+        Send(client_fd, response_ack);
     }
 
     if (response.contains("err_msg")) {
@@ -505,14 +522,7 @@ bool HandleChatMsg(const json &response) {
     cout << response["user_id"] << endl;
     cout << response["friend_id"] << endl;
     cout << response["msg"] << endl;
-    MESSAGE_RECVED[response["user_id"].get<UserIdType>()].insert(
-        response["msg_id"].get<MsgIdType>());
-    json response_ack;
-    response_ack["user_id"] = response["user_id"].get<UserIdType>();
-    response_ack["friend_id"] = response["friend_id"].get<UserIdType>();
-    response_ack["msg_id"] = response["msg_id"].get<MsgIdType>();
-    response_ack["msg_type"] = MsgType::chat_res;
-    Send(client_fd, response_ack);
+
     return true;
 }
 
@@ -636,7 +646,8 @@ int Client(int client_fd) {
         cout << "4 : Show friends" << endl;
         cout << "5 : Create Group" << endl;
         cout << "6 : Join in Group" << endl;
-        cout << "6 : Send group message" << endl;
+        cout << "7 : Send group message" << endl;
+        cout << "8 : Query group" << endl;
         string input;
         cin >> input;
         switch (atoi(input.c_str())) {

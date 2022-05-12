@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 using namespace std;
-
+namespace gp {
 class TcpError : public exception {
   public:
     TcpError() : exception() {}
@@ -75,7 +75,8 @@ class Buffer {
         full_ = false;
     }
 
-    string Peek(int size = 4096) { // 返回buf的前size字节，但不释放size字节的空间
+    string
+    Peek(int size = 4096) { // 返回buf的前size字节，但不释放size字节的空间
         if (0 >= size)
             return string();
         size = SuitableSize(size);
@@ -98,9 +99,7 @@ class Buffer {
         return size;
     }
 
-    int SpaceRest() {
-        return BUFFER_SIZE - SpaceUsed();
-    }
+    int SpaceRest() { return BUFFER_SIZE - SpaceUsed(); }
 
     int SpaceUsed() {
         int size = (header_ + BUFFER_SIZE - tailer_) % BUFFER_SIZE;
@@ -134,9 +133,9 @@ class Connection {
     bool Disconnected() { return disconnected; }
 
   private:
-    
     Buffer buffer_;
     int fd_;
     bool disconnected = false;
     MyServer *server_;
 };
+} // namespace gp

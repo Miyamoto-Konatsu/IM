@@ -24,6 +24,7 @@ using namespace muduo::net; */
     EventLoop* loop_;
     TcpServer server_;
 }; */
+
 class Server {
   public:
     Server(const char *ip = "127.0.0.1", const char *port = "6000");
@@ -31,11 +32,11 @@ class Server {
     void start();
 
   private:
-    void onConnection(Connection *conn);
+    void onConnection(gp::Connection *conn);
 
-    void onMessage(Connection *conn, Buffer *buf);
+    void onMessage(gp::Connection *conn, gp::Buffer *buf);
 
-    MyServer server_;
+    gp::MyServer server_;
 };
 
 #endif

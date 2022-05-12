@@ -1,13 +1,16 @@
 #include "server/Service.h"
 #include "Common.h"
 #include "MessageType.h"
+#include "server/msgidserver/MsgCommon.h"
 #include "server/myserver/MyServer.h"
 #include "sha256.hpp"
 #include "unordered_map"
+#include <string>
 using namespace std;
 /* using namespace muduo;
 using namespace muduo::net; */
 using namespace std::placeholders;
+using gp::Connection;
 void Send(Connection *conn, const nlohmann::json &response) {
     try {
         uint32_t packet_length;
@@ -29,6 +32,7 @@ Service::Service() {
     handler_map_[MsgType::sign_out] =
         std::bind(&Service::SignOut, this, _1, _2);
     handler_map_[MsgType::chat] = std::bind(&Service::Chat, this, _1, _2);
+    handler_map_[MsgType::chat_res] = std::bind(&Service::ChatRes, this, _1, _2);
     handler_map_[MsgType::add_friend] =
         std::bind(&Service::AddFriend, this, _1, _2);
     handler_map_[MsgType::create_group] =
@@ -37,6 +41,8 @@ Service::Service() {
         std::bind(&Service::JoinInGroup, this, _1, _2);
     handler_map_[MsgType::query_group] =
         std::bind(&Service::QueryGroup, this, _1, _2);
+    thread timer(&Service::StartTimer, this);
+    timer.detach();
 }
 
 Service *Service::GetInstance() {
@@ -161,29 +167,88 @@ void Service::SignOut(Connection *conn, const nlohmann::json &msg) {
         this->user_model_.UpdateState(user); */
 }
 
-void Service::Chat(Connection *conn, const nlohmann::json &msg) {
-    int user_id = msg["user_id"].get<int>();
-    int friend_id = msg["friend_id"].get<int>();
-    LOG_DEBUG << user_id << " Send message to " << friend_id;
+void Service::AckCheck(const nlohmann::json &msg) {
+    UserIdType user_id = msg["user_id"].get<UserIdType>();
+    MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
+    //未收到ack
+    lock_guard<mutex> lock(message_ack_mutex_);
+    if (message_ack_[user_id].find(msg_id) == message_ack_[user_id].end()) {
+        SendMsg(msg);
+        return;
+    }
+    //收到ack
+    else {
+        string message(msg["msg"]);
+        LOG_DEBUG << "user_id:" << user_id << ", msg_content:" << message
+                  << "  被成功接受。";
+    }
+}
 
+void Service::ChatRes(Connection *conn, const nlohmann::json &msg) {
+    UserIdType user_id = msg["user_id"].get<UserIdType>();
+    MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
+    //收到ack
+    {
+        lock_guard<mutex> lock(message_ack_mutex_);
+        message_ack_[user_id].insert(msg_id);
+    }
+}
+
+void Service::AddAckCheckTimer(const nlohmann::json &msg) {
+    lock_guard<mutex> lock(timer_queue_mutex_);
+    Timestamp timer = addTime(Timestamp::now(), RetryInterval);
+    timer_queue_->addTimer(bind(&Service::AckCheck, this, msg), timer, 0);
+}
+
+/* void Service::AddResendTimer(const nlohmann::json &msg) {
+    lock_guard<mutex> lock(timer_queue_mutex_);
+    Timestamp timer = addTime(Timestamp::now(), RetryInterval);
+    timer_queue_->addTimer(bind(&Service::AckCheck, this, msg), timer, 0);
+} */
+
+bool Service::SendMsg(const nlohmann::json &msg) {
     lock_guard<mutex> lock(mtx_);
+    UserIdType user_id = msg["user_id"].get<UserIdType>();
+    UserIdType friend_id = msg["friend_id"].get<UserIdType>();
+    LOG_DEBUG << user_id << " Send message to " << friend_id;
     //朋友在线
     if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
         LOG_DEBUG << friend_id << " online , Send message";
         Send(user_2_conn_[friend_id], msg);
-        return;
+        AddAckCheckTimer(msg);
+        return true;
     }
     //朋友在线,在别的服务器登录
     if (redis_.IsOnline(friend_id)) {
         LOG_DEBUG << friend_id
                   << " online, but login in other server , Send message";
         redis_.Publish(friend_id, msg.dump());
-        return;
+        return true;
     }
     //不在线
     LOG_DEBUG << friend_id << " offline , Send message to database";
 
     this->offline_message_model_.Insert(friend_id, msg.dump());
+    return false;
+}
+
+void Service::Chat(Connection *conn, const nlohmann::json &msg) {
+    if (msg.contains("msg_id") == false)
+        return;
+    nlohmann::json response;
+    response["msg_type"] = MsgType::chat_res;
+    response["msg_id"] = msg["msg_id"].get<MsgIdType>();
+
+    Send(conn, response); //给发送者ack
+    {
+        lock_guard<mutex> lock(message_recv_mutex_);
+        UserIdType user_id = msg["user_id"].get<UserIdType>();
+        MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
+        if (message_recv_[user_id].find(msg_id) != message_recv_[user_id].end())
+            return;
+        bool recver_online = SendMsg(msg); //转发
+    }
+
     // this->user_model_.UpdateState(user);
 }
 
@@ -230,11 +295,12 @@ void Service::AddFriend(Connection *conn, const nlohmann::json &msg) {
     response["msg"] = "Friend added successfully";
     Send(conn, response);
 }
-
+//接受其他服务器转发的消息，并进行ack检查
 void Service::SubscribeCallback(int user_id, const string &message) {
     lock_guard<mutex> lock(mtx_);
     if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
         Send(user_2_conn_[user_id], message);
+        AddAckCheckTimer(message);
         return;
     }
     this->offline_message_model_.Insert(user_id, message);
