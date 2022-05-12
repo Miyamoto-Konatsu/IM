@@ -28,7 +28,7 @@ Service::Service() {
     handler_map_[MsgType::sign_in] = std::bind(&Service::SignIn, this, _1, _2);
     handler_map_[MsgType::sign_out] =
         std::bind(&Service::SignOut, this, _1, _2);
-    handler_map_[MsgType::chat_send] = std::bind(&Service::Chat, this, _1, _2);
+    handler_map_[MsgType::chat] = std::bind(&Service::Chat, this, _1, _2);
     handler_map_[MsgType::add_friend] =
         std::bind(&Service::AddFriend, this, _1, _2);
     handler_map_[MsgType::create_group] =
@@ -198,6 +198,7 @@ void Service::HandleClientException(Connection *conn) {
             redis_.Unsubscribe(user.GetUserId());
             user_2_conn_.erase(user.GetUserId());
             // this->user_model_.UpdateState(user);
+            LOG_DEBUG << p.first << " disconnected";
             break;
         }
     }

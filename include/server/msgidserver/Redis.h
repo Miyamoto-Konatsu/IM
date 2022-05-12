@@ -5,6 +5,7 @@
 #include <functional>
 #include <hiredis/hiredis.h>
 #include <iostream>
+#include "server/msgidserver/MsgCommon.h"
 using namespace std;
 
 class Redis {
@@ -12,13 +13,12 @@ class Redis {
     Redis();
     ~Redis();
 
-    int GetMsgId(int);
+    MsgIdType GetMsgId(int);
 
   private:
     void RedisConnect(redisContext **);
 
     redisContext *context_;
-    redisContext *subscribe_context_;
 };
 
 #endif

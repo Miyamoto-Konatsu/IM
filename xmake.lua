@@ -43,6 +43,10 @@ target("client")
     add_files("src/client/*.cpp")
     add_files("helper/*.cpp")
     add_files("src/common/*.cpp")
+   
+    add_linkdirs("/usr/local/lib")
+    add_links("muduo_net")
+    add_links("muduo_base")
     add_links("pthread")
     add_cxflags("-g -Wall")
 

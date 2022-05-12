@@ -5,6 +5,7 @@
 #include "server/msgidserver/Service.h"
 #include <muduo/base/Logging.h>
 using nlohmann::json;
+
 MsgIdServer::MsgIdServer(EventLoop *loop, const InetAddress &listenAddr,
                          const string &nameArg = "msg_id_server")
     : server_(loop, listenAddr, nameArg), loop_(loop) {
@@ -45,7 +46,7 @@ void MsgIdServer::OnMessage(const TcpConnectionPtr &conn, Buffer *buf,
                 nlohmann::json msg_json = nlohmann::json::parse(msg.c_str());
                 MsgType msg_type = msg_json["msg_type"].get<MsgType>();
                 MsgHandler handler = service->GetHandler(msg_type);
-                handler(msg_json); //处理
+                handler(conn,msg_json); //处理
             } catch (const nlohmann::json::parse_error e) {
                 LOG_ERROR << e.what();
             } catch (const std::invalid_argument &e) {

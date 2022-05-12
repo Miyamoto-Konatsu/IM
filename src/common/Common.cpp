@@ -22,7 +22,6 @@ string DecryptPacket(string &&old_packet_hex) {
     string old_packet_str;
     old_packet_str.reserve(old_packet_hex.size() / 2);
     old_packet_str.resize(old_packet_hex.size() / 2);
-    const auto *p = old_packet_str.c_str();
     hex2str(&old_packet_str[0], old_packet_hex.c_str(), old_packet_hex.size());
     auto packet = decrypt_aes128_str(old_packet_str, KEYWORD);
     return packet;

@@ -1,5 +1,5 @@
 #include "server/msgidserver/Redis.h"
-
+#include "server/msgidserver/MsgCommon.h"
 using namespace std;
 
 Redis::Redis() { RedisConnect(&this->context_); }
@@ -22,7 +22,7 @@ Redis::~Redis() {
     context_ = nullptr;
 }
 
-int Redis::GetMsgId(int user_id) {
+MsgIdType Redis::GetMsgId(int user_id) {
     redisReply *reply =
         (redisReply *)redisCommand(context_, "incr %d", user_id);
     if (reply == nullptr) {
@@ -32,9 +32,9 @@ int Redis::GetMsgId(int user_id) {
     if (reply == nullptr || reply->type != REDIS_REPLY_INTEGER ||
         reply->integer <= 0) {
         freeReplyObject(reply);
-        return 0;
+        return -1;
     }
-    int res_msg_id{reply->integer};
+    MsgIdType res_msg_id{reply->integer};
     freeReplyObject(reply);
     return res_msg_id;
 }

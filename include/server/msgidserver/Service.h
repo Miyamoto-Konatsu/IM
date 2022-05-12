@@ -8,13 +8,14 @@
 #include <mutex>
 #include <server/msgidserver/Redis.h>
 #include <unordered_map>
+#include "server/msgidserver/MsgCommon.h"
 using namespace std;
 using namespace std::placeholders;
 using namespace muduo;
 using namespace muduo::net;
 using json = nlohmann::json;
 
-using MsgHandler = std::function<int(json &js)>;
+using MsgHandler = std::function<void(const TcpConnectionPtr& ,json &)>;
 
 class MsgIdService {
   public:
@@ -25,7 +26,7 @@ class MsgIdService {
 
   private:
     MsgIdService();
-    int GetMsgId(json &);
+    void GetMsgId(const TcpConnectionPtr& conn, json &);
     DISABLE_COPY_AND_MOVE(MsgIdService);
 
     unordered_map<MsgType, MsgHandler> handler_map_;
