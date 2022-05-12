@@ -19,12 +19,12 @@ void Redis::RedisConnect(redisContext **context) {
     }
 }
 
-void Redis::SetSubscribeCallback(subscribe_callback sc) {
+void Redis::SetSubscribeCallback(subscribe_callback&& sc) {
     message_handler_ = thread(&Redis::MessageHandler, this, std::move(sc));
     message_handler_.detach();
 }
 
-void Redis::MessageHandler(subscribe_callback sc) {
+void Redis::MessageHandler(subscribe_callback&& sc) {
     while (true) {
         if (this->subscribe_context_ == nullptr) {
             RedisConnect(&this->subscribe_context_);

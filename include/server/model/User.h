@@ -7,7 +7,8 @@ class User {
     User() {}
     User(const std::string &nickname, const std::string &password,
          const std::string &state = "offline")
-        : nickname_(nickname), password_(password), state_(state) {}
+        : nickname_(nickname), password_(password), state_(state),
+          user_id_(-1) {}
 
     User(int user_id, const std::string &nickname,
          const std::string &password = "", const std::string &state = "offline")

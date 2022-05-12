@@ -7,8 +7,8 @@ enum class MsgType {
     sign_up,
     sign_up_res,
     sign_out,
-    chat_send,
-    chat_recv,
+    chat, //表示接受到别人消息
+    chat_res,// 服务器给发送者的ack，或接受者给服务器的ack
     add_friend,
     add_friend_res,
     create_group,
@@ -17,7 +17,9 @@ enum class MsgType {
     join_in_group_res,
     query_group,
     query_group_res,
-    new_group_user
+    new_group_user,
+    get_msg_id,
+    get_msg_id_res,
 };
 
 #endif

@@ -9,8 +9,6 @@
 #include <vector>
 using namespace std;
 class FriendModel {
-  private:
-    /* data */
   public:
     bool Insert(int user_id1, int user_id2);
     unique_ptr<vector<User>> GetFriend(int user_id);
