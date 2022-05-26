@@ -32,7 +32,8 @@ Service::Service() {
     handler_map_[MsgType::sign_out] =
         std::bind(&Service::SignOut, this, _1, _2);
     handler_map_[MsgType::chat] = std::bind(&Service::Chat, this, _1, _2);
-    handler_map_[MsgType::chat_res] = std::bind(&Service::ChatRes, this, _1, _2);
+    handler_map_[MsgType::chat_res] =
+        std::bind(&Service::ChatRes, this, _1, _2);
     handler_map_[MsgType::add_friend] =
         std::bind(&Service::AddFriend, this, _1, _2);
     handler_map_[MsgType::create_group] =
@@ -178,6 +179,7 @@ void Service::AckCheck(const nlohmann::json &msg) {
     }
     //收到ack
     else {
+        message_ack_[user_id].erase(msg_id);
         string message(msg["msg"]);
         LOG_DEBUG << "user_id:" << user_id << ", msg_content:" << message
                   << "  被成功接受。";
@@ -196,15 +198,9 @@ void Service::ChatRes(Connection *conn, const nlohmann::json &msg) {
 
 void Service::AddAckCheckTimer(const nlohmann::json &msg) {
     lock_guard<mutex> lock(timer_queue_mutex_);
-    Timestamp timer = addTime(Timestamp::now(), RetryInterval);
-    timer_queue_->addTimer(bind(&Service::AckCheck, this, msg), timer, 0);
+    gp::Timestamp timer = gp::Timestamp::Now().AddTime(RetryInterval);
+    timer_queue_->AddTimer(bind(&Service::AckCheck, this, msg), timer);
 }
-
-/* void Service::AddResendTimer(const nlohmann::json &msg) {
-    lock_guard<mutex> lock(timer_queue_mutex_);
-    Timestamp timer = addTime(Timestamp::now(), RetryInterval);
-    timer_queue_->addTimer(bind(&Service::AckCheck, this, msg), timer, 0);
-} */
 
 bool Service::SendMsg(const nlohmann::json &msg) {
     lock_guard<mutex> lock(mtx_);
@@ -240,16 +236,16 @@ void Service::Chat(Connection *conn, const nlohmann::json &msg) {
     response["msg_id"] = msg["msg_id"].get<MsgIdType>();
 
     Send(conn, response); //给发送者ack
+    
+    UserIdType user_id = msg["user_id"].get<UserIdType>();
+    MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
     {
         lock_guard<mutex> lock(message_recv_mutex_);
-        UserIdType user_id = msg["user_id"].get<UserIdType>();
-        MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
         if (message_recv_[user_id].find(msg_id) != message_recv_[user_id].end())
             return;
-        bool recver_online = SendMsg(msg); //转发
+        message_recv_[user_id].insert(msg_id);
     }
-
-    // this->user_model_.UpdateState(user);
+    SendMsg(msg); //转发
 }
 
 void Service::HandleClientException(Connection *conn) {
@@ -299,8 +295,9 @@ void Service::AddFriend(Connection *conn, const nlohmann::json &msg) {
 void Service::SubscribeCallback(int user_id, const string &message) {
     lock_guard<mutex> lock(mtx_);
     if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
-        Send(user_2_conn_[user_id], message);
-        AddAckCheckTimer(message);
+        nlohmann::json msg(nlohmann::json::parse(message));
+        Send(user_2_conn_[user_id], msg);
+        AddAckCheckTimer(msg);
         return;
     }
     this->offline_message_model_.Insert(user_id, message);
@@ -357,7 +354,7 @@ void Service::JoinInGroup(Connection *conn, const nlohmann::json &msg) {
     if (!users_ptr) {
         LOG_DEBUG << user_id << " join in group failed";
         response["err_msg"] =
-            "Join in group failed. Change the group id may work";
+            "Join in group failed. Changing the group id may work";
         Send(conn, response);
         return;
     }

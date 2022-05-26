@@ -9,7 +9,6 @@ class User {
          const std::string &state = "offline")
         : nickname_(nickname), password_(password), state_(state),
           user_id_(-1) {}
-
     User(int user_id, const std::string &nickname,
          const std::string &password = "", const std::string &state = "offline")
         : user_id_(user_id), nickname_(nickname), password_(password),
