@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "MessageType.h"
+#include "TimerHeap.h"
 #include "aes128.hpp"
 #include "json.hpp"
 #include "server/model/Group.h"
@@ -26,6 +27,7 @@
 #include <unistd.h>
 #include <unordered_map>
 #include <vector>
+
 #define MsgIdServerPort 6008
 #define RetryTimes 3
 #define RetryInterval 3
@@ -36,17 +38,17 @@ using json = nlohmann::json;
 using namespace muduo::net;
 using namespace muduo;
 
-TimerQueue *timer_queue;
-mutex timer_queue_mutex;
+gp::TimerHeap *timer_queue;
 
 condition_variable CV;
 mutex MUTEX;
 json response;
+User CUR_USER;
 int USER_ID = -1;
 vector<User> FRIENDS;
 vector<Group> GROUPS;
-unordered_map<MsgIdType, json>
-    MESSAGE_SENT; //成功发送出去的消息，不一定被服务器接受
+// unordered_map<MsgIdType, json> MESSAGE_SENT;
+// //成功发送出去的消息，不一定被服务器接受
 unordered_set<MsgIdType> MESSAGE_SUCCESS; //收到ack的消息
 mutex MESSAGE_SENT_MUTEX;                 //保护MESSAGE_SENT的互斥量
 mutex MESSAGE_SUCCESS_MUTEX;              //保护MESSAGE_SUCCESS的互斥量
@@ -100,6 +102,9 @@ void CheckMsgAck(json request) {
         string msg = request["msg"];
         LOG_DEBUG << "Message to " << msg_id
                   << " failed. Message content: " << msg;
+    } else {
+        // MESSAGE_SENT.erase(request["msg_id"].get<MsgIdType>());
+        LOG_DEBUG << "Message sent successfully ";
     }
 }
 
@@ -113,10 +118,10 @@ json Recv(int fd) {
             break;
         }
         if (size == 0) {
-            throw ConnectionError("msg id server disconnected");
+            throw ConnectionError("server disconnected");
         }
         if (size == -1 && errno != EAGAIN) {
-            throw ConnectionError("msg id server connetction error");
+            throw ConnectionError("server connetction error");
         }
     }
     int32_t data_length = *(int32_t *)(data_length_buf); // SIGBUS //转化成32位
@@ -159,15 +164,14 @@ void TrySend(int fd, json request, int retry_times) {
         cout << request["msg"] << endl;
         return;
     }
-    lock_guard<mutex> lock(timer_queue_mutex);
     if (Send(fd, request) == false) {
-        Timestamp now = Timestamp::now();
-        timer_queue->addTimer(std::bind(&TrySend, fd, request, retry_times - 1),
-                              addTime(now, ACKCheckInterval), 0);
+        auto now = gp::Timestamp::Now();
+        timer_queue->AddTimer(std::bind(&TrySend, fd, request, retry_times - 1),
+                              now.AddTime(ACKCheckInterval));
     } else { //发送成功后，等待一段时间之后会检查是否收到消息ACK，没收到会提示发送失败，收到
-        Timestamp now = Timestamp::now();
-        timer_queue->addTimer(std::bind(&CheckMsgAck, request),
-                              addTime(now, ACKCheckInterval), 0);
+        auto now = gp::Timestamp::Now();
+        timer_queue->AddTimer(std::bind(&CheckMsgAck, request),
+                              now.AddTime(ACKCheckInterval));
     }
 }
 
@@ -318,6 +322,8 @@ bool SignIn(int fd) {
     cout << response["user_id"] << endl;
     cout << response["nickname"] << endl;
     USER_ID = response["user_id"];
+    CUR_USER.SetUserId(USER_ID);
+    CUR_USER.SetNickname(response["nickname"]);
     vector<string> friend_json = response.at("friends");
     for (const auto &f : friend_json) {
         json f_js = json::parse(f);
@@ -389,6 +395,7 @@ bool SendMsg(int fd) {
     json request;
     request["msg_type"] = MsgType::chat;
     request["user_id"] = USER_ID;
+    request["nickname"] = CUR_USER.GetNickname();
     request["friend_id"] = friend_id;
     request["msg"] = message;
     request["msg_id"] = msg_id;
@@ -495,7 +502,6 @@ void RecvFromServer(int fd, bool *running) {
 */
 bool HandleChatMsg(const json &response) {
     UserIdType user_id = response["user_id"].get<UserIdType>();
-    ;
     MsgIdType msg_id = response["msg_id"].get<MsgIdType>();
     json response_ack;
     {
@@ -519,9 +525,9 @@ bool HandleChatMsg(const json &response) {
         cout << response["err_msg"] << endl;
         return false;
     }
-    cout << response["user_id"] << endl;
-    cout << response["friend_id"] << endl;
-    cout << response["msg"] << endl;
+    cout << "[Id:" << response["user_id"]
+         << "] [Nickname:" << response["nickname"] << "]" << endl;
+    cout <<"Message: " <<response["msg"] << endl;
 
     return true;
 }
@@ -709,10 +715,11 @@ void InitHandlerMap() {
     handler_map_[MsgType::query_group_res] = MsgHandler(&HandleQueryGroupMsg);
     handler_map_[MsgType::new_group_user] = MsgHandler(&HandleNewGroupUserMsg);
 }
+
 void loop_func() {
-    EventLoop *loop = new EventLoop;
-    timer_queue = new TimerQueue(loop);
-    loop->loop();
+    gp::EventLoop *loop = new gp::EventLoop;
+    timer_queue = new gp::TimerHeap(loop);
+    loop->Loop();
 }
 
 int main(int argc, char *argv[]) {

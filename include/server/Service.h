@@ -11,6 +11,7 @@
 #include <muduo/net/EventLoop.h>
 #include <muduo/base/Logging.h>
 #include <muduo/net/TimerQueue.h>
+#include "TimerHeap.h"
 //#include <muduo/base/.h>
 #include "Common.h"
 #include "server/msgidserver/MsgCommon.h"
@@ -60,26 +61,18 @@ class Service {
         @param msg  消息
         */
     void AddAckCheckTimer(const nlohmann::json &msg);
-    /*
-    检查
-
-    @param msg json 未收到ack
-    */
-    void AddResendTimer(const nlohmann::json &);
+    
 
   private:
     Service();
     void StartTimer() {
-   
-        EventLoop *loop = new EventLoop;
-        timer_queue_ = new TimerQueue(loop);
-        loop->loop();
+        gp::EventLoop *loop = new gp::EventLoop;
+        timer_queue_ = new gp::TimerHeap(loop);
+        loop->Loop();
     }
     /*
     接受者在线时转发消息，并加入ack check timer。
     不在线是把消息插入数据库。
-    发送成功之后，应该。。。
-
     @return true 接收者在线, false 接收者不在线
      */
     bool SendMsg(const nlohmann::json &);
@@ -89,19 +82,24 @@ class Service {
     @param msg json 需要检查是否收到ack的信息
      */
     void AckCheck(const nlohmann::json &msg);
+
     mutex mtx_;
     unordered_map<MsgType, MsgHandler> handler_map_;
     unordered_map<int, Connection *> user_2_conn_;
+
     Redis redis_;
     UserModel user_model_;
     FriendModel friend_model_;
     OfflineMessageModel offline_message_model_;
     GroupModel group_model_;
-    TimerQueue *timer_queue_;
+
+    gp::TimerHeap *timer_queue_;
     mutex timer_queue_mutex_;
+
     unordered_map<UserIdType, unordered_set<MsgIdType>>
         message_recv_; //服务器接受到的消息
     mutex message_recv_mutex_;
+
     unordered_map<UserIdType, unordered_set<MsgIdType>>
         message_ack_; //服务器转发的消息，以收到ack
     mutex message_ack_mutex_;
