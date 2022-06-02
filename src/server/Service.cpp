@@ -17,7 +17,8 @@ void Send(Connection *conn, const nlohmann::json &response) {
         auto res = GeneratePacket(response.dump(), packet_length);
         if (res == nullptr)
             return;
-        conn->Send(res.get(), packet_length);
+        // conn->Send(res.get(), packet_length);
+        conn->Send(res, packet_length);
     } catch (const exception &e) {
         LOG_DEBUG << e.what();
     }
@@ -236,7 +237,7 @@ void Service::Chat(Connection *conn, const nlohmann::json &msg) {
     response["msg_id"] = msg["msg_id"].get<MsgIdType>();
 
     Send(conn, response); //给发送者ack
-    
+
     UserIdType user_id = msg["user_id"].get<UserIdType>();
     MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
     {

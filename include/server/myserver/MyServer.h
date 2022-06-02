@@ -136,7 +136,7 @@ class MyServer {
                         continue;
                     Epoll_Add(client_fd, EPOLLIN | EPOLLERR, epoll_fd);
                     fd2conn[client_fd] =
-                        make_shared<Connection>(this, client_fd);
+                        make_shared<Connection>(this, client_fd, epoll_fd);
                     connection_callback(fd2conn[client_fd].get());
                 } else {
                     auto &conn = fd2conn[ready_fd];
@@ -146,6 +146,13 @@ class MyServer {
                         } catch (const exception &e) {
                             fd2conn.erase(ready_fd);
                             Close(ready_fd, epoll_fd);
+                        } catch (...) {
+                            fd2conn.erase(ready_fd);
+                            Close(ready_fd, epoll_fd);
+                        }
+                    } else if (events[i].events & EPOLLOUT) {
+                        try {
+                            conn->DoSend();
                         } catch (...) {
                             fd2conn.erase(ready_fd);
                             Close(ready_fd, epoll_fd);
@@ -166,7 +173,7 @@ class MyServer {
         ev.events = events;
         ev.data.fd = fd;
         if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &ev) == -1) {
-            perror("epoll_ctl");
+            perror("epoll_Add");
             exit(-1);
         }
     }
@@ -176,7 +183,20 @@ class MyServer {
             epoll_fd = epoll_fd_;
         struct epoll_event ev;
         ev.events = events;
+        ev.data.fd = fd;
         if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, &ev) == -1) {
+            perror("epoll_Del");
+            exit(-1);
+        }
+    }
+
+    void Epoll_Ctl(int fd, uint32_t events, int epoll_fd = -1) {
+        if (-1 == epoll_fd)
+            epoll_fd = epoll_fd_;
+        struct epoll_event ev;
+        ev.events = events;
+        ev.data.fd = fd;
+        if (epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &ev) == -1) {
             perror("epoll_ctl");
             exit(-1);
         }

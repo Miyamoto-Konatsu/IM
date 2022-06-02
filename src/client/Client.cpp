@@ -273,7 +273,6 @@ bool Register(int fd) {
         return false;
     } */
     unique_lock<mutex> lock(MUTEX);
-    cout << "wait" << endl;
 
     CV.wait(lock);
     // response = json::parse(buf);
@@ -432,8 +431,11 @@ bool SendGroupMsg(int fd) {
     request["user_id"] = USER_ID;
 
     request["msg"] = message;
+    request["nickname"] = CUR_USER.GetNickname();
 
     for (const auto &group_user : GROUPS[group_index].GetGroupUser()) {
+        if (group_user.GetUserId() == CUR_USER.GetUserId())
+            continue;
         request["friend_id"] = group_user.GetUserId();
         MsgIdGetter *msg_Id_getter = MsgIdGetter::GetInstance();
         int msg_id = msg_Id_getter->GetMsgId(USER_ID);
@@ -442,7 +444,7 @@ bool SendGroupMsg(int fd) {
             return false;
         }
         request["msg_id"] = msg_id;
-        TrySend(client_fd, request, RetryTimes);
+        TrySend(fd, request, RetryTimes);
     }
 
     return true;
@@ -527,7 +529,7 @@ bool HandleChatMsg(const json &response) {
     }
     cout << "[Id:" << response["user_id"]
          << "] [Nickname:" << response["nickname"] << "]" << endl;
-    cout <<"Message: " <<response["msg"] << endl;
+    cout << "Message: " << response["msg"] << endl;
 
     return true;
 }

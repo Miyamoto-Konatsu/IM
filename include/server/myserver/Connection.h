@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <iostream>
+
 #include <mutex>
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +32,17 @@ class TcpDisc : public exception {
     const char *what() { return "Tcp connection disconnects\n"; }
 };
 
+struct SendQueueNode {
+    SendQueueNode(shared_ptr<char> message, int len, int size_sent = 0)
+        : message_(message), len_(len), size_sent_(size_sent) {}
+    shared_ptr<char> message_;
+    int len_;
+    ssize_t size_sent_;
+};
+
 class Buffer {
+    friend class Connection;
+
   public:
     Buffer() = default;
     /*
@@ -112,10 +123,41 @@ class Buffer {
     void HeaderMove(int size) { header_ = (header_ + size) % BUFFER_SIZE; }
     void TailerMove(int size) { tailer_ = (tailer_ + size) % BUFFER_SIZE; }
 
+    void PushSendQueue(shared_ptr<char> message, int len) {
+        send_queue_.push(SendQueueNode(message, len));
+    }
+    bool SendQueueEmpty() const { return send_queue_.empty(); }
+
+    void AddSizeSent(ssize_t size) {
+        if (SendQueueEmpty()) {
+            return;
+        }
+        send_queue_.front().size_sent_ += size;
+        if (send_queue_.front().size_sent_ == send_queue_.front().len_) {
+            send_queue_.pop();
+            return;
+        }
+        if (send_queue_.front().size_sent_ > send_queue_.front().len_) {
+            throw logic_error("发送缓冲区溢出");
+        }
+    }
+
+    pair<const void *, int> SendQueueFront() {
+        if (SendQueueEmpty()) {
+            return pair<const void *, int>(nullptr, -1);
+        }
+        int len = send_queue_.front().len_ - send_queue_.front().size_sent_;
+        const void *message =
+            static_cast<const void *>(send_queue_.front().message_.get() +
+                                      send_queue_.front().size_sent_);
+        return pair<const void *, int>(message, len);
+    }
+
     char buffer_[BUFFER_SIZE];
     int header_ = 0;
     int tailer_ = 0;
     bool full_ = false;
+    queue<SendQueueNode> send_queue_;
 };
 class Connection;
 typedef std::function<void(Connection *, Buffer *)> MessageCallback;
@@ -125,17 +167,21 @@ class MyServer;
 
 class Connection {
   public:
-    Connection(MyServer *server, int fd) : server_(server), fd_(fd) {}
+    Connection(MyServer *server, int fd, int epoll_fd)
+        : server_(server), fd_(fd), epoll_fd_(epoll_fd) {}
     void Read();
 
     void Send(const void *message, int len);
-
+    void Send(shared_ptr<char> message, int len);
     bool Disconnected() { return disconnected; }
+    void DoSend();
 
   private:
     Buffer buffer_;
     int fd_;
+    int epoll_fd_;
     bool disconnected = false;
+    bool sending = false;
     MyServer *server_;
 };
 } // namespace gp
