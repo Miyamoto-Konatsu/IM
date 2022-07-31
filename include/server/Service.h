@@ -1,6 +1,7 @@
 #ifndef CHATSERVICE_H
 #define CHATSERVICE_H
 #include "MessageType.h"
+#include "TimerHeap.h"
 #include "json.hpp"
 #include "server/db/Redis.h"
 #include "server/model/FriendModel.h"
@@ -8,10 +9,9 @@
 #include "server/model/OfflineMessageModel.h"
 #include "server/model/UserModel.h"
 #include <functional>
-#include <muduo/net/EventLoop.h>
 #include <muduo/base/Logging.h>
+#include <muduo/net/EventLoop.h>
 #include <muduo/net/TimerQueue.h>
-#include "TimerHeap.h"
 //#include <muduo/base/.h>
 #include "Common.h"
 #include "server/msgidserver/MsgCommon.h"
@@ -61,7 +61,6 @@ class Service {
         @param msg  消息
         */
     void AddAckCheckTimer(const nlohmann::json &msg);
-    
 
   private:
     Service();

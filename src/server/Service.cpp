@@ -17,7 +17,6 @@ void Send(Connection *conn, const nlohmann::json &response) {
         auto res = GeneratePacket(response.dump(), packet_length);
         if (res == nullptr)
             return;
-        // conn->Send(res.get(), packet_length);
         conn->Send(res, packet_length);
     } catch (const exception &e) {
         LOG_DEBUG << e.what();
@@ -190,10 +189,16 @@ void Service::AckCheck(const nlohmann::json &msg) {
 void Service::ChatRes(Connection *conn, const nlohmann::json &msg) {
     UserIdType user_id = msg["user_id"].get<UserIdType>();
     MsgIdType msg_id = msg["msg_id"].get<MsgIdType>();
-    //收到ack
-    {
-        lock_guard<mutex> lock(message_ack_mutex_);
+    lock_guard<mutex> lock_conn(mtx_);
+    //消息发送者登录在本服务器
+    if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
+        lock_guard<mutex> lock_msg(message_ack_mutex_);
         message_ack_[user_id].insert(msg_id);
+    }
+    //登录在其他服务器时，把ack转发过去
+    else if (redis_.IsOnline(user_id)) {
+        LOG_DEBUG << user_id << " online, but login in other server , send ack";
+        redis_.Publish(user_id, msg.dump());
     }
 }
 
@@ -212,7 +217,7 @@ bool Service::SendMsg(const nlohmann::json &msg) {
     if (user_2_conn_.find(friend_id) != user_2_conn_.end()) {
         LOG_DEBUG << friend_id << " online , Send message";
         Send(user_2_conn_[friend_id], msg);
-        AddAckCheckTimer(msg);
+        //AddAckCheckTimer(msg);
         return true;
     }
     //朋友在线,在别的服务器登录
@@ -220,6 +225,7 @@ bool Service::SendMsg(const nlohmann::json &msg) {
         LOG_DEBUG << friend_id
                   << " online, but login in other server , Send message";
         redis_.Publish(friend_id, msg.dump());
+        //AddAckCheckTimer(msg);
         return true;
     }
     //不在线
@@ -246,7 +252,12 @@ void Service::Chat(Connection *conn, const nlohmann::json &msg) {
             return;
         message_recv_[user_id].insert(msg_id);
     }
-    SendMsg(msg); //转发
+    //接受者在线时则转发消息，检测ack
+    //接受者不在线时，将消息存入数据库，不检测ack
+    if (SendMsg(msg)) //转发
+    {
+        AddAckCheckTimer(msg);
+    }
 }
 
 void Service::HandleClientException(Connection *conn) {
@@ -259,6 +270,7 @@ void Service::HandleClientException(Connection *conn) {
             redis_.SignOut(user.GetUserId());
             redis_.Unsubscribe(user.GetUserId());
             user_2_conn_.erase(user.GetUserId());
+            
             // this->user_model_.UpdateState(user);
             LOG_DEBUG << p.first << " disconnected";
             break;
@@ -294,14 +306,26 @@ void Service::AddFriend(Connection *conn, const nlohmann::json &msg) {
 }
 //接受其他服务器转发的消息，并进行ack检查
 void Service::SubscribeCallback(int user_id, const string &message) {
-    lock_guard<mutex> lock(mtx_);
-    if (user_2_conn_.find(user_id) != user_2_conn_.end()) {
-        nlohmann::json msg(nlohmann::json::parse(message));
-        Send(user_2_conn_[user_id], msg);
-        AddAckCheckTimer(msg);
-        return;
+    nlohmann::json msg(nlohmann::json::parse(message));
+    Connection *conn = nullptr;
+    {
+        lock_guard<mutex> lock(mtx_);
+        auto iter = user_2_conn_.find(user_id);
+        if (iter != user_2_conn_.end()) {
+            conn = iter->second;
+        }
     }
-    this->offline_message_model_.Insert(user_id, message);
+    MsgType msg_type = msg["msg_type"];
+    switch (msg_type) {
+    case MsgType::chat_res:
+        ChatRes(conn, msg);
+        break;
+    case MsgType::chat:
+        SendMsg(msg);
+        break;
+    default:
+        break;
+    }
 }
 
 void Service::CreateGroup(Connection *conn, const nlohmann::json &msg) {
