@@ -8,12 +8,12 @@ include_directories("/root/code/lib/include")
 include_directories("/root/code/lib/include/google")
 link_directories("/root/code/lib/lib")
 
-set(Protoc_DIR "/root/code/lib/bin")
-
 # 查找 protobuf
 find_package(Protobuf REQUIRED HINTS "/root/code/lib")
 # 查找 gRPC
 find_package(gRPC REQUIRED)
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
 add_subdirectory(src/server)
 
