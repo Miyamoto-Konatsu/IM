@@ -16,11 +16,12 @@ using grpc::Status;
 
 class AuthClient {
 public:
-    AuthClient(std::shared_ptr<grpc::Channel> channel) : stub_(ServerRpc::auth::Auth::NewStub(channel)) {}
+    AuthClient(std::shared_ptr<grpc::Channel> channel) :
+        stub_(ServerRpc::auth::Auth::NewStub(channel)) {
+    }
 
     Status parseToken(const parseTokenReq *request, parseTokenResp *response) {
         ClientContext context;
-        
         return stub_->parseToken(&context, *request, response);
     }
 

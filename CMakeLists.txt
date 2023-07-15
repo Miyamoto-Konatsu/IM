@@ -15,6 +15,12 @@ find_package(gRPC REQUIRED)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
+# 获取配置文件的绝对路径
+set(config_file_path "${CMAKE_CURRENT_LIST_DIR}/config/config.yaml")
+
+# 定义一个宏，将文件路径作为宏的值传递给代码
+add_compile_definitions(CONFIG_FILE_PATH="${config_file_path}")
+
 add_subdirectory(src/server)
 
 

@@ -126,11 +126,9 @@ PROTOBUF_CONSTEXPR parseTokenResp::parseTokenResp(
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
-  , /*decltype(_impl_.platform_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
   , /*decltype(_impl_.expiretimeseconds_)*/ ::int64_t{0}
+
+  , /*decltype(_impl_.platformid_)*/ 0
 
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct parseTokenRespDefaultTypeInternal {
@@ -210,7 +208,7 @@ const ::uint32_t TableStruct_auth_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::ServerRpc::auth::parseTokenResp, _impl_.userid_),
-    PROTOBUF_FIELD_OFFSET(::ServerRpc::auth::parseTokenResp, _impl_.platform_),
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::auth::parseTokenResp, _impl_.platformid_),
     PROTOBUF_FIELD_OFFSET(::ServerRpc::auth::parseTokenResp, _impl_.expiretimeseconds_),
 };
 
@@ -239,22 +237,22 @@ const char descriptor_table_protodef_auth_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
     "erTokenResp\022\r\n\005token\030\002 \001(\t\022\031\n\021expireTime"
     "Seconds\030\003 \001(\003\"4\n\016forceLogoutReq\022\022\n\nplatf"
     "ormID\030\001 \001(\005\022\016\n\006userID\030\002 \001(\t\"\021\n\017forceLogo"
-    "utResp\"\036\n\rparseTokenReq\022\r\n\005token\030\001 \001(\t\"M"
-    "\n\016parseTokenResp\022\016\n\006userID\030\001 \001(\t\022\020\n\010plat"
-    "form\030\002 \001(\t\022\031\n\021expireTimeSeconds\030\004 \001(\0032\355\001"
-    "\n\004Auth\022H\n\tuserToken\022\034.ServerRpc.auth.use"
-    "rTokenReq\032\035.ServerRpc.auth.userTokenResp"
-    "\022N\n\013forceLogout\022\036.ServerRpc.auth.forceLo"
-    "goutReq\032\037.ServerRpc.auth.forceLogoutResp"
-    "\022K\n\nparseToken\022\035.ServerRpc.auth.parseTok"
-    "enReq\032\036.ServerRpc.auth.parseTokenRespb\006p"
-    "roto3"
+    "utResp\"\036\n\rparseTokenReq\022\r\n\005token\030\001 \001(\t\"O"
+    "\n\016parseTokenResp\022\016\n\006userID\030\001 \001(\t\022\022\n\nplat"
+    "formID\030\002 \001(\005\022\031\n\021expireTimeSeconds\030\004 \001(\0032"
+    "\355\001\n\004Auth\022H\n\tuserToken\022\034.ServerRpc.auth.u"
+    "serTokenReq\032\035.ServerRpc.auth.userTokenRe"
+    "sp\022N\n\013forceLogout\022\036.ServerRpc.auth.force"
+    "LogoutReq\032\037.ServerRpc.auth.forceLogoutRe"
+    "sp\022K\n\nparseToken\022\035.ServerRpc.auth.parseT"
+    "okenReq\032\036.ServerRpc.auth.parseTokenRespb"
+    "\006proto3"
 };
 static ::absl::once_flag descriptor_table_auth_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_auth_2eproto = {
     false,
     false,
-    605,
+    607,
     descriptor_table_protodef_auth_2eproto,
     "auth.proto",
     &descriptor_table_auth_2eproto_once,
@@ -1320,9 +1318,9 @@ parseTokenResp::parseTokenResp(const parseTokenResp& from)
   new (&_impl_) Impl_{
       decltype(_impl_.userid_) {}
 
-    , decltype(_impl_.platform_) {}
-
     , decltype(_impl_.expiretimeseconds_) {}
+
+    , decltype(_impl_.platformid_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -1334,14 +1332,9 @@ parseTokenResp::parseTokenResp(const parseTokenResp& from)
   if (!from._internal_userid().empty()) {
     _this->_impl_.userid_.Set(from._internal_userid(), _this->GetArenaForAllocation());
   }
-  _impl_.platform_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.platform_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_platform().empty()) {
-    _this->_impl_.platform_.Set(from._internal_platform(), _this->GetArenaForAllocation());
-  }
-  _this->_impl_.expiretimeseconds_ = from._impl_.expiretimeseconds_;
+  ::memcpy(&_impl_.expiretimeseconds_, &from._impl_.expiretimeseconds_,
+    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.platformid_) -
+    reinterpret_cast<char*>(&_impl_.expiretimeseconds_)) + sizeof(_impl_.platformid_));
   // @@protoc_insertion_point(copy_constructor:ServerRpc.auth.parseTokenResp)
 }
 
@@ -1350,19 +1343,15 @@ inline void parseTokenResp::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_{
       decltype(_impl_.userid_) {}
 
-    , decltype(_impl_.platform_) {}
-
     , decltype(_impl_.expiretimeseconds_) { ::int64_t{0} }
+
+    , decltype(_impl_.platformid_) { 0 }
 
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.userid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.userid_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.platform_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.platform_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -1378,7 +1367,6 @@ parseTokenResp::~parseTokenResp() {
 inline void parseTokenResp::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.userid_.Destroy();
-  _impl_.platform_.Destroy();
 }
 
 void parseTokenResp::SetCachedSize(int size) const {
@@ -1392,8 +1380,9 @@ void parseTokenResp::Clear() {
   (void) cached_has_bits;
 
   _impl_.userid_.ClearToEmpty();
-  _impl_.platform_.ClearToEmpty();
-  _impl_.expiretimeseconds_ = ::int64_t{0};
+  ::memset(&_impl_.expiretimeseconds_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.platformid_) -
+      reinterpret_cast<char*>(&_impl_.expiretimeseconds_)) + sizeof(_impl_.platformid_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1414,13 +1403,11 @@ const char* parseTokenResp::_InternalParse(const char* ptr, ::_pbi::ParseContext
           goto handle_unusual;
         }
         continue;
-      // string platform = 2;
+      // int32 platformID = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_platform();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+          _impl_.platformid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "ServerRpc.auth.parseTokenResp.platform"));
         } else {
           goto handle_unusual;
         }
@@ -1471,12 +1458,11 @@ failure:
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
-  // string platform = 2;
-  if (!this->_internal_platform().empty()) {
-    const std::string& _s = this->_internal_platform();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "ServerRpc.auth.parseTokenResp.platform");
-    target = stream->WriteStringMaybeAliased(2, _s, target);
+  // int32 platformID = 2;
+  if (this->_internal_platformid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+        2, this->_internal_platformid(), target);
   }
 
   // int64 expireTimeSeconds = 4;
@@ -1508,16 +1494,16 @@ failure:
                                     this->_internal_userid());
   }
 
-  // string platform = 2;
-  if (!this->_internal_platform().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-                                    this->_internal_platform());
-  }
-
   // int64 expireTimeSeconds = 4;
   if (this->_internal_expiretimeseconds() != 0) {
     total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
         this->_internal_expiretimeseconds());
+  }
+
+  // int32 platformID = 2;
+  if (this->_internal_platformid() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_platformid());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1541,11 +1527,11 @@ void parseTokenResp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (!from._internal_userid().empty()) {
     _this->_internal_set_userid(from._internal_userid());
   }
-  if (!from._internal_platform().empty()) {
-    _this->_internal_set_platform(from._internal_platform());
-  }
   if (from._internal_expiretimeseconds() != 0) {
     _this->_internal_set_expiretimeseconds(from._internal_expiretimeseconds());
+  }
+  if (from._internal_platformid() != 0) {
+    _this->_internal_set_platformid(from._internal_platformid());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1568,10 +1554,12 @@ void parseTokenResp::InternalSwap(parseTokenResp* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.userid_, lhs_arena,
                                        &other->_impl_.userid_, rhs_arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.platform_, lhs_arena,
-                                       &other->_impl_.platform_, rhs_arena);
-
-  swap(_impl_.expiretimeseconds_, other->_impl_.expiretimeseconds_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(parseTokenResp, _impl_.platformid_)
+      + sizeof(parseTokenResp::_impl_.platformid_)
+      - PROTOBUF_FIELD_OFFSET(parseTokenResp, _impl_.expiretimeseconds_)>(
+          reinterpret_cast<char*>(&_impl_.expiretimeseconds_),
+          reinterpret_cast<char*>(&other->_impl_.expiretimeseconds_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata parseTokenResp::GetMetadata() const {

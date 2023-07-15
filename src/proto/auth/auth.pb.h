@@ -1089,8 +1089,8 @@ class parseTokenResp final :
 
   enum : int {
     kUserIDFieldNumber = 1,
-    kPlatformFieldNumber = 2,
     kExpireTimeSecondsFieldNumber = 4,
+    kPlatformIDFieldNumber = 2,
   };
   // string userID = 1;
   void clear_userid() ;
@@ -1112,26 +1112,6 @@ class parseTokenResp final :
   std::string* _internal_mutable_userid();
 
   public:
-  // string platform = 2;
-  void clear_platform() ;
-  const std::string& platform() const;
-
-
-
-
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_platform(Arg_&& arg, Args_... args);
-  std::string* mutable_platform();
-  PROTOBUF_NODISCARD std::string* release_platform();
-  void set_allocated_platform(std::string* ptr);
-
-  private:
-  const std::string& _internal_platform() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_platform(
-      const std::string& value);
-  std::string* _internal_mutable_platform();
-
-  public:
   // int64 expireTimeSeconds = 4;
   void clear_expiretimeseconds() ;
   ::int64_t expiretimeseconds() const;
@@ -1140,6 +1120,16 @@ class parseTokenResp final :
   private:
   ::int64_t _internal_expiretimeseconds() const;
   void _internal_set_expiretimeseconds(::int64_t value);
+
+  public:
+  // int32 platformID = 2;
+  void clear_platformid() ;
+  ::int32_t platformid() const;
+  void set_platformid(::int32_t value);
+
+  private:
+  ::int32_t _internal_platformid() const;
+  void _internal_set_platformid(::int32_t value);
 
   public:
   // @@protoc_insertion_point(class_scope:ServerRpc.auth.parseTokenResp)
@@ -1151,8 +1141,8 @@ class parseTokenResp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr platform_;
     ::int64_t expiretimeseconds_;
+    ::int32_t platformid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1584,51 +1574,24 @@ inline void parseTokenResp::set_allocated_userid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.auth.parseTokenResp.userID)
 }
 
-// string platform = 2;
-inline void parseTokenResp::clear_platform() {
-  _impl_.platform_.ClearToEmpty();
+// int32 platformID = 2;
+inline void parseTokenResp::clear_platformid() {
+  _impl_.platformid_ = 0;
 }
-inline const std::string& parseTokenResp::platform() const {
-  // @@protoc_insertion_point(field_get:ServerRpc.auth.parseTokenResp.platform)
-  return _internal_platform();
+inline ::int32_t parseTokenResp::platformid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.auth.parseTokenResp.platformID)
+  return _internal_platformid();
 }
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void parseTokenResp::set_platform(Arg_&& arg,
-                                                     Args_... args) {
+inline void parseTokenResp::set_platformid(::int32_t value) {
+  _internal_set_platformid(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.auth.parseTokenResp.platformID)
+}
+inline ::int32_t parseTokenResp::_internal_platformid() const {
+  return _impl_.platformid_;
+}
+inline void parseTokenResp::_internal_set_platformid(::int32_t value) {
   ;
-  _impl_.platform_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServerRpc.auth.parseTokenResp.platform)
-}
-inline std::string* parseTokenResp::mutable_platform() {
-  std::string* _s = _internal_mutable_platform();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.auth.parseTokenResp.platform)
-  return _s;
-}
-inline const std::string& parseTokenResp::_internal_platform() const {
-  return _impl_.platform_.Get();
-}
-inline void parseTokenResp::_internal_set_platform(const std::string& value) {
-  ;
-
-
-  _impl_.platform_.Set(value, GetArenaForAllocation());
-}
-inline std::string* parseTokenResp::_internal_mutable_platform() {
-  ;
-  return _impl_.platform_.Mutable( GetArenaForAllocation());
-}
-inline std::string* parseTokenResp::release_platform() {
-  // @@protoc_insertion_point(field_release:ServerRpc.auth.parseTokenResp.platform)
-  return _impl_.platform_.Release();
-}
-inline void parseTokenResp::set_allocated_platform(std::string* value) {
-  _impl_.platform_.SetAllocated(value, GetArenaForAllocation());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        if (_impl_.platform_.IsDefault()) {
-          _impl_.platform_.Set("", GetArenaForAllocation());
-        }
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.auth.parseTokenResp.platform)
+  _impl_.platformid_ = value;
 }
 
 // int64 expireTimeSeconds = 4;
