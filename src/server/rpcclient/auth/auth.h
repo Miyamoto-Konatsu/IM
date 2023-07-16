@@ -12,7 +12,6 @@ using ServerRpc::auth::parseTokenResp;
 using ServerRpc::auth::parseTokenReq;
 using ServerRpc::auth::userTokenReq;
 using ServerRpc::auth::userTokenResp;
-using grpc::Status;
 
 class AuthClient {
 public:
