@@ -15,7 +15,8 @@ using grpc::ServerBuilder;
 using grpc::Server;
 
 MsgServiceImpl::MsgServiceImpl() {
-    std::unique_ptr<MqFactory> factory = std::make_unique<NewMsgMqFactory>();
+    std::unique_ptr<MqProducerFactory> factory =
+        std::make_unique<NewMsgMqProducerFactory>();
     producer = factory->getProducer();
 }
 
@@ -48,7 +49,7 @@ Status MsgServiceImpl::produce(const sendMsgReq *request) {
     if (code != RdKafka::ERR_NO_ERROR) {
         return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
     }
-    // code = f.get();
+    code = f.get();
     if (code != RdKafka::ERR_NO_ERROR) {
         return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
     }

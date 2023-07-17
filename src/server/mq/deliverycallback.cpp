@@ -20,7 +20,7 @@ void NewMsgDeliveryReportCb::dr_cb(RdKafka::Message &message) {
     //               << " [" << message_payload << "] at offset "
     //               << message.offset() << std::endl;
     // }
-    // std::promise<ErrorCode> *p =
-    //     reinterpret_cast<std::promise<ErrorCode> *>(message.msg_opaque());
-    // p->set_value(message.err());
+    std::promise<ErrorCode> *p =
+        reinterpret_cast<std::promise<ErrorCode> *>(message.msg_opaque());
+    p->set_value(message.err());
 }

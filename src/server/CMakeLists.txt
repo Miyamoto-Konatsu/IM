@@ -35,3 +35,4 @@ target_link_libraries(server_mq_lib PUBLIC rdkafka++ rdkafka pthread)
 
 add_subdirectory(rpc)
 add_subdirectory(rpcclient)
+add_subdirectory(transfer)
