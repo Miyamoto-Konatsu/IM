@@ -1,0 +1,15 @@
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+  db: 0
+
+kafka:
+  brokers: "127.0.0.1:9094"
+  user: "user"
+  password: "bitnami"
+  acks: "1"
+  timeout: "1000"
+  newMsgToRedis:
+    topic: "newMsgToRedis"
+    

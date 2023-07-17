@@ -1,0 +1,25 @@
+syntax="proto3";
+
+package ServerRpc.msg;
+
+message msg {
+    string fromUserID  = 1;
+    string toUserID = 2;
+    bytes content = 3;
+    int64 createTime = 4;
+    int64 seq = 5;
+    int32 platformID=6;
+    int32 msgType=7;
+}
+
+message sendMsgReq {
+    msg msg = 1;
+}
+
+message sendMsgResp {
+    int64 sendTime = 1;
+}
+
+service Msg {
+    rpc sendMsg(sendMsgReq) returns (sendMsgResp);
+}
