@@ -1,7 +1,7 @@
 #include "common.h"
 
 Cache::Cache() {
-    auto config = get_config();
+    auto config = getConfig();
     auto redis_config = config["redis"];
     auto host = redis_config["host"].as<std::string>();
     auto port = redis_config["port"].as<int>();

@@ -4,6 +4,6 @@
 #include "yaml-cpp/yaml.h"
 #include <string>
 
-YAML::Node get_config();
+YAML::Node getConfig();
 
 #endif

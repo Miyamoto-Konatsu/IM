@@ -9,4 +9,4 @@ add_executable(msgServer msg.cpp ${server_db_files} ${server_common_files})
 # 链接 gRPC 库
 target_link_libraries(msgServer msg_grpc_proto_lib)
 # 链接 redis ,yaml库
-target_link_libraries(msgServer cpp_redis yaml-cpp tacopie)
+target_link_libraries(msgServer cpp_redis yaml-cpp tacopie server_mq_lib)

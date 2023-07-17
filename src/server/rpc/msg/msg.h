@@ -5,6 +5,7 @@
 #include "msg.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/support/status.h>
+#include <memory>
 
 #include "producer.h"
 
@@ -18,10 +19,11 @@ class MsgServiceImpl : public Msg::Service {
 public:
     Status sendMsg(ServerContext *context, const sendMsgReq *request,
                    sendMsgResp *response) override;
+    MsgServiceImpl();
 
 private:
-    Status produce();
-    ProducerMQ producer;
+    Status produce(const sendMsgReq *request);
+    std::unique_ptr<ProducerMQ> producer;
 };
 
 #endif

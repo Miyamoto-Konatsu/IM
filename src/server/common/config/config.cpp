@@ -1,6 +1,6 @@
 #include "config.h"
 
-YAML::Node get_config() {
+YAML::Node getConfig() {
     static auto config = YAML::LoadFile(CONFIG_FILE_PATH);
     return config;
 }
