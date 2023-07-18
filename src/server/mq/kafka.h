@@ -17,16 +17,14 @@ public:
 };
 
 // 消费者工厂
-class MqPConsumerFactory {
+class MqConsumerFactory {
 public:
     virtual std::unique_ptr<ConsumerMQ> getConsumer() = 0;
 };
 
-class NewMsgMqConsumerFactory : public MqPConsumerFactory {
+class NewMsgMqConsumerFactory : public MqConsumerFactory {
 public:
     std::unique_ptr<ConsumerMQ> getConsumer() override;
 };
-
-
 
 #endif // KAFKA_MQ_H

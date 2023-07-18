@@ -15,10 +15,23 @@ ConsumerMQ::ConsumerMQ() {
     }
 }
 
+ConsumerMQ::ConsumerMQ(std::string groupid) {
+    auto conf = getKafkaConfig();
+    std::string errstr;
+    if (conf->set("group.id", getGroupId(groupid), errstr) != Conf::CONF_OK) {
+        std::cerr << "Failed to set kafka config: " << errstr << std::endl;
+        exit(1);
+    }
+    consumer = std::unique_ptr<KafkaConsumer>(
+        KafkaConsumer::create(conf.get(), errstr));
+    if (!consumer) {
+        std::cerr << "Failed to create consumer: " << errstr << std::endl;
+        exit(1);
+    }
+}
+
 ConsumerMQ::~ConsumerMQ() {
-    runnning = 0;
-    consumerThread.join();
-    consumer->close();
+    stop();
 }
 
 void ConsumerMQ::setTopic(const std::string &topicName) {
@@ -31,15 +44,20 @@ void ConsumerMQ::registerMsgCall(MsgCall &&call) {
 
 void ConsumerMQ::run() {
     consumerThread = std::thread([this]() {
+        consumer->subscribe({topic});
         while (runnning) {
             auto msgs = consumeBatch(100, 100);
-            if (msgs.size() > 0) { msgCall(std::move(msgs)); }
+            if (msgs.size() > 0) {
+                msgCall(std::move(msgs));
+            }
         }
     });
 }
 
 void ConsumerMQ::stop() {
     runnning = 0;
+    consumerThread.join();
+    consumer->close();
 }
 
 int64_t ConsumerMQ::now() {

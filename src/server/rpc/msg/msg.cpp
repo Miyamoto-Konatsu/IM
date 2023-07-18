@@ -41,11 +41,13 @@ Status MsgServiceImpl::sendMsg(ServerContext *context,
 
 Status MsgServiceImpl::produce(const sendMsgReq *request) {
     auto &msg = request->msg();
-    auto msgString = msg.SerializeAsString();
+    auto requestString = request->SerializeAsString();
     auto key = getSingleChatKey(msg.fromuserid(), msg.touserid());
     std::promise<ErrorCode> p;
     auto f = p.get_future();
-    auto code = producer->produce(msgString, key, &p);
+    std::cout << "from " << msg.fromuserid() << std::endl;
+
+    auto code = producer->produce(requestString, key, &p);
     if (code != RdKafka::ERR_NO_ERROR) {
         return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
     }

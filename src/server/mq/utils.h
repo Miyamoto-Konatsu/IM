@@ -13,4 +13,5 @@ std::unique_ptr<Conf> getKafkaConfig();
 
 std::string getTopic(const std::string &topicName);
 
+std::string getGroupId(const std::string &group);
 #endif

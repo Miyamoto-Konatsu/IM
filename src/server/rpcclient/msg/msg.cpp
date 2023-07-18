@@ -18,12 +18,12 @@ int main() {
 
     std::vector<std::thread> threads;
     auto now = std::chrono::system_clock::now();
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 100; ++i) {
         threads.push_back(std::thread([i]() {
             auto channel = grpc::CreateChannel(
                 "0.0.0.0:50051", grpc::InsecureChannelCredentials());
             auto msgClient = MsgClient(channel);
-            int j = 1;
+            int j = 100;
             using ServerRpc::msg::sendMsgResp;
             using ServerRpc::msg::sendMsgReq;
             while (j--) {

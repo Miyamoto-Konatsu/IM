@@ -20,14 +20,18 @@ public:
 
 public:
     ConsumerMQ();
+    ConsumerMQ(std::string groupid);
     ~ConsumerMQ();
+
+    ConsumerMQ(const ConsumerMQ &) = delete;
+    ConsumerMQ &operator=(const ConsumerMQ &) = delete;
 
     void setTopic(const std::string &topicName);
     void registerMsgCall(MsgCall &&call);
     void run();
-    void stop();
 
 private:
+    void stop();
     int64_t now();
     MsgVector consumeBatch(size_t batch_size, int batch_tmout);
 

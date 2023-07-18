@@ -13,7 +13,8 @@ std::unique_ptr<ProducerMQ> NewMsgMqProducerFactory::getProducer() {
 }
 
 std::unique_ptr<ConsumerMQ> NewMsgMqConsumerFactory::getConsumer() {
-    std::unique_ptr<ConsumerMQ> consumer = std::make_unique<ConsumerMQ>();
+    std::unique_ptr<ConsumerMQ> consumer =
+        std::make_unique<ConsumerMQ>("newMsgGroup");
     consumer->setTopic("newMsgToRedis");
     return consumer;
 }

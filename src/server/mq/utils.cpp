@@ -34,3 +34,11 @@ std::string getTopic(const std::string &topicName) {
     auto topicNode = kafkaConf[topicName];
     return topicNode["topic"].as<std::string>();
 }
+
+std::string getGroupId(const std::string &group) {
+    auto config = getConfig();
+    auto kafkaConf = config["kafka"];
+    auto groupIds = kafkaConf["groupid"];
+    auto id = groupIds[group].as<std::string>();
+    return id;
+}

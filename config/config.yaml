@@ -12,4 +12,6 @@ kafka:
   timeout: "1000"
   newMsgToRedis:
     topic: "newMsgToRedis"
+  groupid:
+    newMsgGroup: "newMsgGroup"
     
