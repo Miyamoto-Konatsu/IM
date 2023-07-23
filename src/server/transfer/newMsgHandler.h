@@ -18,7 +18,7 @@ public:
     ~NewMsgHandler();
     NewMsgHandler(const NewMsgHandler &) = delete;
     NewMsgHandler &operator=(const NewMsgHandler &) = delete;
-    void start() override;
+    void run() override;
 
 private:
     void stop() override;
@@ -29,7 +29,6 @@ private:
                    const std::vector<sendMsgReq> &msgReqs);
 
 private:
-    int volatile running = 0;
     std::unique_ptr<ConsumerMQ> newMsgConsumer;
     std::vector<std::thread> msgHandlerThreads;
     std::vector<Channel<ConsumerMQ::MsgVector>> channels;

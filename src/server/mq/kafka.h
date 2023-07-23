@@ -32,6 +32,9 @@ public:
     std::unique_ptr<ConsumerMQ> getConsumer() override;
 };
 
-
+class MsgToPushConsumerFactory : public MqConsumerFactory {
+public:
+    std::unique_ptr<ConsumerMQ> getConsumer() override;
+};
 
 #endif // KAFKA_MQ_H

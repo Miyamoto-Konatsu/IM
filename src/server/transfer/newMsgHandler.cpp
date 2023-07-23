@@ -65,7 +65,7 @@ void NewMsgHandler::msgHandler(int index) {
             msgReq.ParseFromString(message_payload);
             auto &msg = msgReq.msg_data();
             // std::cerr << msg.fromuserid() << ":" << msg.touserid() << ":"
-                    //   << msg.content() << std::endl;
+            //   << msg.content() << std::endl;
             msgReqs.push_back((msgReq));
         }
 
@@ -84,7 +84,7 @@ void NewMsgHandler::handleNewMsg(ConsumerMQ::MsgVector &&msgs) {
     msgDistribute(std::move(msgs));
 }
 
-void NewMsgHandler::start() {
+void NewMsgHandler::run() {
     auto threadNum = std::thread::hardware_concurrency();
     for (int i = 0; i < threadNum; ++i) {
         // channels.emplace_back();
@@ -97,6 +97,7 @@ void NewMsgHandler::stop() {
     newMsgConsumer.reset();
     for (auto &channel : channels) { channel.close(); }
     for (auto &thread : msgHandlerThreads) { thread.join(); }
+    msgToPushProducer.reset();
 }
 
 void NewMsgHandler::msgToPush(std::string key,

@@ -66,4 +66,5 @@ int main() {
     builder.RegisterService(&service);
     std::unique_ptr<Server> server(builder.BuildAndStart());
     server->Wait();
+    return 0;
 }

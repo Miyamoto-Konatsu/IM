@@ -1,5 +1,5 @@
-#ifndef MSGHANDLER_TRANSFER_H
-#define MSGHANDLER_TRANSFER_H
+#ifndef MSGHANDLER_COMMON_H
+#define MSGHANDLER_COMMON_H
 #include <memory>
 #include <queue>
 #include <condition_variable>
@@ -13,7 +13,7 @@ public:
     MsgHandler(const MsgHandler &) = delete;
     MsgHandler &operator=(const MsgHandler &) = delete;
 
-    virtual void start() = 0;
+    virtual void run() = 0;
 
 protected:
     virtual void stop() = 0;

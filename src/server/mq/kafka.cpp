@@ -19,10 +19,16 @@ std::unique_ptr<ProducerMQ> MsgToPushProducerFactory::getProducer() {
     return producer;
 }
 
-
 std::unique_ptr<ConsumerMQ> NewMsgMqConsumerFactory::getConsumer() {
     std::unique_ptr<ConsumerMQ> consumer =
         std::make_unique<ConsumerMQ>("newMsgGroup");
     consumer->setTopic("newMsgToRedis");
+    return consumer;
+}
+
+std::unique_ptr<ConsumerMQ> MsgToPushConsumerFactory::getConsumer() {
+    std::unique_ptr<ConsumerMQ> consumer =
+        std::make_unique<ConsumerMQ>("msgToPushGroup");
+    consumer->setTopic("msgToPush");
     return consumer;
 }

@@ -16,4 +16,5 @@ kafka:
     topic: "msgToPush"
   groupid:
     newMsgGroup: "newMsgGroup"
+    msgToPushGroup: "msgToPushGroup"
     
