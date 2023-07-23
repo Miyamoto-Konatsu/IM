@@ -14,7 +14,7 @@ int main() {
     msg_->set_content("hello");
     msg_->set_msgtype(1);
     msg_->set_platformid(1);
-    sendMsgReq.set_allocated_msg(msg_);
+    sendMsgReq.set_allocated_msg_data(msg_);
 
     std::vector<std::thread> threads;
     auto now = std::chrono::system_clock::now();
@@ -29,22 +29,20 @@ int main() {
             while (j--) {
                 msg *msg_ = new msg;
                 sendMsgReq sendMsgReq;
-                msg_->set_touserid("thread:" + std::to_string(i)
-                                   + ":from:" + std::to_string(j));
-                msg_->set_fromuserid("thread:" + std::to_string(i)
-                                     + ":to:" + std::to_string(j));
+                msg_->set_touserid("to:" + std::to_string(i));
+                msg_->set_fromuserid("from:" + std::to_string(i));
                 msg_->set_content("hello");
                 msg_->set_msgtype(1);
                 msg_->set_platformid(1);
-                sendMsgReq.set_allocated_msg(msg_);
+                sendMsgReq.set_allocated_msg_data(msg_);
                 sendMsgResp sendMsgResp;
                 auto status = msgClient.sendMsg(&sendMsgReq, &sendMsgResp);
-                // if (!status.ok()) {
-                //     std::cout << "sendMsg rpc failed." << std::endl;
-                // } else {
-                //     std::cout << "sendMsgResp: " << sendMsgResp.sendtime()
-                //               << std::endl;
-                // }
+                if (!status.ok()) {
+                    std::cout << "sendMsg rpc failed." << std::endl;
+                } else {
+                    // std::cout << "sendMsgResp: " << sendMsgResp.sendtime()
+                    //           << std::endl;
+                }
             }
         }));
     }

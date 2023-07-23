@@ -11,10 +11,14 @@
 #include "utils/commonUtils.h"
 #include "msg.pb.h"
 #include "cache/common.h"
+#include "utils/msgutils.h"
 #include <atomic>
 using ServerRpc::msg::sendMsgReq;
 
-NewMsgHandler::NewMsgHandler() : channels(std::thread::hardware_concurrency()){
+NewMsgHandler::NewMsgHandler() : channels(std::thread::hardware_concurrency()) {
+    auto producerFactory = std::make_unique<MsgToPushProducerFactory>();
+    msgToPushProducer = producerFactory->getProducer();
+
     auto factory = std::make_unique<NewMsgMqConsumerFactory>();
     newMsgConsumer = factory->getConsumer();
     auto consumeNewMsgCall =
@@ -49,18 +53,30 @@ void NewMsgHandler::msgHandler(int index) {
             std::cerr << e.what() << std::endl;
             break;
         }
-
+        std::vector<sendMsgReq> msgReqs;
+        msgReqs.reserve(msgs.size());
+        std::string key;
         for (auto &message : msgs) {
             if (message->err()) { continue; }
-            auto key = *message->key();
+            key = *message->key();
             std::string message_payload(static_cast<char *>(message->payload()),
                                         message->len());
             sendMsgReq msgReq;
             msgReq.ParseFromString(message_payload);
-            auto &msg = msgReq.msg();
-            std::cerr << msg.fromuserid() << ":" << msg.touserid() << ":"
-                      << msg.content() << std::endl;
+            auto &msg = msgReq.msg_data();
+            // std::cerr << msg.fromuserid() << ":" << msg.touserid() << ":"
+                    //   << msg.content() << std::endl;
+            msgReqs.push_back((msgReq));
         }
+
+        bool isNewConversion = msgDatabase.batchInsertMsg(msgReqs);
+
+        if (isNewConversion) {
+            //在关系数据库里创建新的会话
+        }
+
+        // push到mq，给push模块消费
+        msgToPush(key, msgReqs);
     }
 }
 
@@ -81,4 +97,16 @@ void NewMsgHandler::stop() {
     newMsgConsumer.reset();
     for (auto &channel : channels) { channel.close(); }
     for (auto &thread : msgHandlerThreads) { thread.join(); }
+}
+
+void NewMsgHandler::msgToPush(std::string key,
+                              const std::vector<sendMsgReq> &msgReqs) {
+    for (auto msg : msgReqs) {
+        std::string msgStr;
+        msg.SerializeToString(&msgStr);
+        auto ErrorCode = msgToPushProducer->produce(msgStr, key, nullptr);
+        if (ErrorCode != RdKafka::ERR_NO_ERROR) {
+            std::cerr << "msgToPushProducer produce error" << std::endl;
+        }
+    }
 }

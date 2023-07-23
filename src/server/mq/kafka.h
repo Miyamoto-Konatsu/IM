@@ -5,13 +5,18 @@
 #include "producer.h"
 #include <memory>
 #include <queue>
-
+// 生产者工厂
 class MqProducerFactory {
 public:
     virtual std::unique_ptr<ProducerMQ> getProducer() = 0;
 };
 
 class NewMsgMqProducerFactory : public MqProducerFactory {
+public:
+    std::unique_ptr<ProducerMQ> getProducer() override;
+};
+
+class MsgToPushProducerFactory : public MqProducerFactory {
 public:
     std::unique_ptr<ProducerMQ> getProducer() override;
 };
@@ -26,5 +31,7 @@ class NewMsgMqConsumerFactory : public MqConsumerFactory {
 public:
     std::unique_ptr<ConsumerMQ> getConsumer() override;
 };
+
+
 
 #endif // KAFKA_MQ_H

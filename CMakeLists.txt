@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 3.6.1)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
 
@@ -13,7 +13,7 @@ find_package(Protobuf REQUIRED HINTS "/root/code/lib")
 # 查找 gRPC
 find_package(gRPC REQUIRED)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # 获取配置文件的绝对路径
 set(config_file_path "${CMAKE_CURRENT_LIST_DIR}/config/config.yaml")

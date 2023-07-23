@@ -465,22 +465,22 @@ class sendMsgReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMsgFieldNumber = 1,
+    kMsgDataFieldNumber = 1,
   };
-  // .ServerRpc.msg.msg msg = 1;
-  bool has_msg() const;
-  void clear_msg() ;
-  const ::ServerRpc::msg::msg& msg() const;
-  PROTOBUF_NODISCARD ::ServerRpc::msg::msg* release_msg();
-  ::ServerRpc::msg::msg* mutable_msg();
-  void set_allocated_msg(::ServerRpc::msg::msg* msg);
+  // .ServerRpc.msg.msg msg_data = 1;
+  bool has_msg_data() const;
+  void clear_msg_data() ;
+  const ::ServerRpc::msg::msg& msg_data() const;
+  PROTOBUF_NODISCARD ::ServerRpc::msg::msg* release_msg_data();
+  ::ServerRpc::msg::msg* mutable_msg_data();
+  void set_allocated_msg_data(::ServerRpc::msg::msg* msg_data);
   private:
-  const ::ServerRpc::msg::msg& _internal_msg() const;
-  ::ServerRpc::msg::msg* _internal_mutable_msg();
+  const ::ServerRpc::msg::msg& _internal_msg_data() const;
+  ::ServerRpc::msg::msg* _internal_mutable_msg_data();
   public:
-  void unsafe_arena_set_allocated_msg(
-      ::ServerRpc::msg::msg* msg);
-  ::ServerRpc::msg::msg* unsafe_arena_release_msg();
+  void unsafe_arena_set_allocated_msg_data(
+      ::ServerRpc::msg::msg* msg_data);
+  ::ServerRpc::msg::msg* unsafe_arena_release_msg_data();
   // @@protoc_insertion_point(class_scope:ServerRpc.msg.sendMsgReq)
  private:
   class _Internal;
@@ -491,7 +491,7 @@ class sendMsgReq final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::ServerRpc::msg::msg* msg_;
+    ::ServerRpc::msg::msg* msg_data_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_msg_2eproto;
@@ -893,42 +893,42 @@ inline void msg::_internal_set_msgtype(::int32_t value) {
 
 // sendMsgReq
 
-// .ServerRpc.msg.msg msg = 1;
-inline bool sendMsgReq::has_msg() const {
+// .ServerRpc.msg.msg msg_data = 1;
+inline bool sendMsgReq::has_msg_data() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.msg_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.msg_data_ != nullptr);
   return value;
 }
-inline void sendMsgReq::clear_msg() {
-  if (_impl_.msg_ != nullptr) _impl_.msg_->Clear();
+inline void sendMsgReq::clear_msg_data() {
+  if (_impl_.msg_data_ != nullptr) _impl_.msg_data_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::ServerRpc::msg::msg& sendMsgReq::_internal_msg() const {
-  const ::ServerRpc::msg::msg* p = _impl_.msg_;
+inline const ::ServerRpc::msg::msg& sendMsgReq::_internal_msg_data() const {
+  const ::ServerRpc::msg::msg* p = _impl_.msg_data_;
   return p != nullptr ? *p : reinterpret_cast<const ::ServerRpc::msg::msg&>(
       ::ServerRpc::msg::_msg_default_instance_);
 }
-inline const ::ServerRpc::msg::msg& sendMsgReq::msg() const {
-  // @@protoc_insertion_point(field_get:ServerRpc.msg.sendMsgReq.msg)
-  return _internal_msg();
+inline const ::ServerRpc::msg::msg& sendMsgReq::msg_data() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.sendMsgReq.msg_data)
+  return _internal_msg_data();
 }
-inline void sendMsgReq::unsafe_arena_set_allocated_msg(
-    ::ServerRpc::msg::msg* msg) {
+inline void sendMsgReq::unsafe_arena_set_allocated_msg_data(
+    ::ServerRpc::msg::msg* msg_data) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.msg_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.msg_data_);
   }
-  _impl_.msg_ = msg;
-  if (msg) {
+  _impl_.msg_data_ = msg_data;
+  if (msg_data) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerRpc.msg.sendMsgReq.msg)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerRpc.msg.sendMsgReq.msg_data)
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::release_msg() {
+inline ::ServerRpc::msg::msg* sendMsgReq::release_msg_data() {
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::msg::msg* temp = _impl_.msg_;
-  _impl_.msg_ = nullptr;
+  ::ServerRpc::msg::msg* temp = _impl_.msg_data_;
+  _impl_.msg_data_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -940,44 +940,44 @@ inline ::ServerRpc::msg::msg* sendMsgReq::release_msg() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::unsafe_arena_release_msg() {
-  // @@protoc_insertion_point(field_release:ServerRpc.msg.sendMsgReq.msg)
+inline ::ServerRpc::msg::msg* sendMsgReq::unsafe_arena_release_msg_data() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.sendMsgReq.msg_data)
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::msg::msg* temp = _impl_.msg_;
-  _impl_.msg_ = nullptr;
+  ::ServerRpc::msg::msg* temp = _impl_.msg_data_;
+  _impl_.msg_data_ = nullptr;
   return temp;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::_internal_mutable_msg() {
+inline ::ServerRpc::msg::msg* sendMsgReq::_internal_mutable_msg_data() {
   _impl_._has_bits_[0] |= 0x00000001u;
-  if (_impl_.msg_ == nullptr) {
+  if (_impl_.msg_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::ServerRpc::msg::msg>(GetArenaForAllocation());
-    _impl_.msg_ = p;
+    _impl_.msg_data_ = p;
   }
-  return _impl_.msg_;
+  return _impl_.msg_data_;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::mutable_msg() {
-  ::ServerRpc::msg::msg* _msg = _internal_mutable_msg();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.sendMsgReq.msg)
+inline ::ServerRpc::msg::msg* sendMsgReq::mutable_msg_data() {
+  ::ServerRpc::msg::msg* _msg = _internal_mutable_msg_data();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.sendMsgReq.msg_data)
   return _msg;
 }
-inline void sendMsgReq::set_allocated_msg(::ServerRpc::msg::msg* msg) {
+inline void sendMsgReq::set_allocated_msg_data(::ServerRpc::msg::msg* msg_data) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.msg_;
+    delete _impl_.msg_data_;
   }
-  if (msg) {
+  if (msg_data) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(msg);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(msg_data);
     if (message_arena != submessage_arena) {
-      msg = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, msg, submessage_arena);
+      msg_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, msg_data, submessage_arena);
     }
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  _impl_.msg_ = msg;
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.sendMsgReq.msg)
+  _impl_.msg_data_ = msg_data;
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.sendMsgReq.msg_data)
 }
 
 // -------------------------------------------------------------------

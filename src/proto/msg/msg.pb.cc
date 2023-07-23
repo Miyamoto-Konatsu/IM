@@ -59,7 +59,7 @@ PROTOBUF_CONSTEXPR sendMsgReq::sendMsgReq(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.msg_)*/nullptr} {}
+  , /*decltype(_impl_.msg_data_)*/nullptr} {}
 struct sendMsgReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR sendMsgReqDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~sendMsgReqDefaultTypeInternal() {}
@@ -118,7 +118,7 @@ const ::uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::sendMsgReq, _impl_.msg_),
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::sendMsgReq, _impl_.msg_data_),
     0,
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::sendMsgResp, _internal_metadata_),
@@ -148,16 +148,17 @@ const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
     "omUserID\030\001 \001(\t\022\020\n\010toUserID\030\002 \001(\t\022\017\n\007cont"
     "ent\030\003 \001(\014\022\022\n\ncreateTime\030\004 \001(\003\022\013\n\003seq\030\005 \001"
     "(\003\022\022\n\nplatformID\030\006 \001(\005\022\017\n\007msgType\030\007 \001(\005\""
-    "-\n\nsendMsgReq\022\037\n\003msg\030\001 \001(\0132\022.ServerRpc.m"
-    "sg.msg\"\037\n\013sendMsgResp\022\020\n\010sendTime\030\001 \001(\0032"
-    "G\n\003Msg\022@\n\007sendMsg\022\031.ServerRpc.msg.sendMs"
-    "gReq\032\032.ServerRpc.msg.sendMsgRespb\006proto3"
+    "2\n\nsendMsgReq\022$\n\010msg_data\030\001 \001(\0132\022.Server"
+    "Rpc.msg.msg\"\037\n\013sendMsgResp\022\020\n\010sendTime\030\001"
+    " \001(\0032G\n\003Msg\022@\n\007sendMsg\022\031.ServerRpc.msg.s"
+    "endMsgReq\032\032.ServerRpc.msg.sendMsgRespb\006p"
+    "roto3"
 };
 static ::absl::once_flag descriptor_table_msg_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_msg_2eproto = {
     false,
     false,
-    320,
+    325,
     descriptor_table_protodef_msg_2eproto,
     "msg.proto",
     &descriptor_table_msg_2eproto_once,
@@ -613,15 +614,15 @@ class sendMsgReq::_Internal {
   using HasBits = decltype(std::declval<sendMsgReq>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
     8 * PROTOBUF_FIELD_OFFSET(sendMsgReq, _impl_._has_bits_);
-  static const ::ServerRpc::msg::msg& msg(const sendMsgReq* msg);
-  static void set_has_msg(HasBits* has_bits) {
+  static const ::ServerRpc::msg::msg& msg_data(const sendMsgReq* msg);
+  static void set_has_msg_data(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
 };
 
 const ::ServerRpc::msg::msg&
-sendMsgReq::_Internal::msg(const sendMsgReq* msg) {
-  return *msg->_impl_.msg_;
+sendMsgReq::_Internal::msg_data(const sendMsgReq* msg) {
+  return *msg->_impl_.msg_data_;
 }
 sendMsgReq::sendMsgReq(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
@@ -634,11 +635,11 @@ sendMsgReq::sendMsgReq(const sendMsgReq& from)
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.msg_){nullptr}};
+    , decltype(_impl_.msg_data_){nullptr}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.msg_ = new ::ServerRpc::msg::msg(*from._impl_.msg_);
+    _this->_impl_.msg_data_ = new ::ServerRpc::msg::msg(*from._impl_.msg_data_);
   }
   // @@protoc_insertion_point(copy_constructor:ServerRpc.msg.sendMsgReq)
 }
@@ -648,7 +649,7 @@ inline void sendMsgReq::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.msg_){nullptr}
+    , decltype(_impl_.msg_data_){nullptr}
   };
 }
 
@@ -663,7 +664,7 @@ sendMsgReq::~sendMsgReq() {
 
 inline void sendMsgReq::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.msg_;
+  if (this != internal_default_instance()) delete _impl_.msg_data_;
 }
 
 void sendMsgReq::SetCachedSize(int size) const {
@@ -678,8 +679,8 @@ void sendMsgReq::Clear() {
 
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.msg_ != nullptr);
-    _impl_.msg_->Clear();
+    ABSL_DCHECK(_impl_.msg_data_ != nullptr);
+    _impl_.msg_data_->Clear();
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -692,10 +693,10 @@ const char* sendMsgReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
     ::uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // .ServerRpc.msg.msg msg = 1;
+      // .ServerRpc.msg.msg msg_data = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_msg(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_msg_data(), ptr);
           CHK_(ptr);
         } else {
           goto handle_unusual;
@@ -732,11 +733,11 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  // .ServerRpc.msg.msg msg = 1;
+  // .ServerRpc.msg.msg msg_data = 1;
   if (cached_has_bits & 0x00000001u) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::msg(this),
-        _Internal::msg(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(1, _Internal::msg_data(this),
+        _Internal::msg_data(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -755,12 +756,12 @@ failure:
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .ServerRpc.msg.msg msg = 1;
+  // .ServerRpc.msg.msg msg_data = 1;
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.msg_);
+        *_impl_.msg_data_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -782,8 +783,8 @@ void sendMsgReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   (void) cached_has_bits;
 
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_internal_mutable_msg()->::ServerRpc::msg::msg::MergeFrom(
-        from._internal_msg());
+    _this->_internal_mutable_msg_data()->::ServerRpc::msg::msg::MergeFrom(
+        from._internal_msg_data());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -803,7 +804,7 @@ void sendMsgReq::InternalSwap(sendMsgReq* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.msg_, other->_impl_.msg_);
+  swap(_impl_.msg_data_, other->_impl_.msg_data_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata sendMsgReq::GetMetadata() const {

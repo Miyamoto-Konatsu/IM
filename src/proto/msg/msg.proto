@@ -13,7 +13,7 @@ message msg {
 }
 
 message sendMsgReq {
-    msg msg = 1;
+    msg msg_data = 1;
 }
 
 message sendMsgResp {
