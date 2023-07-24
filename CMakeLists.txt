@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
 include_directories("/root/code/lib/include")
 include_directories("/root/code/lib/include/google")
 link_directories("/root/code/lib/lib")
-
+include_directories("thirdparty")
 # 查找 protobuf
 find_package(Protobuf REQUIRED HINTS "/root/code/lib")
 # 查找 gRPC

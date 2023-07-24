@@ -14,6 +14,8 @@ public:
     Pusher(const Pusher &) = delete;
     Pusher &operator=(const Pusher &) = delete;
 
-    bool PushMsg2User(const msg &msg);
+    bool pushMsg2User(const msg &msg);
+
+    bool pushMsg2Group(const msg &msg);
 };
 #endif

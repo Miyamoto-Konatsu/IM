@@ -7,4 +7,6 @@
 // token
 #define TOKEN_EXPIRE_TIME_SECONDS (60 * 60 * 24) // one day
 
+#define SINGLE_CHAT_TYPE 0
+#define GROUP_CHAT_TYPE 1
 #endif

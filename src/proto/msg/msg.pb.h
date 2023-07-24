@@ -211,6 +211,7 @@ class msg final :
     kFromUserIDFieldNumber = 1,
     kToUserIDFieldNumber = 2,
     kContentFieldNumber = 3,
+    kGroupIDFieldNumber = 8,
     kCreateTimeFieldNumber = 4,
     kSeqFieldNumber = 5,
     kPlatformIDFieldNumber = 6,
@@ -276,6 +277,26 @@ class msg final :
   std::string* _internal_mutable_content();
 
   public:
+  // string groupID = 8;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // int64 createTime = 4;
   void clear_createtime() ;
   ::int64_t createtime() const;
@@ -327,6 +348,7 @@ class msg final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fromuserid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr touserid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr content_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     ::int64_t createtime_;
     ::int64_t seq_;
     ::int32_t platformid_;
@@ -760,6 +782,53 @@ inline void msg::set_allocated_touserid(std::string* value) {
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.msg.toUserID)
+}
+
+// string groupID = 8;
+inline void msg::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& msg::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.msg.groupID)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void msg::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.msg.groupID)
+}
+inline std::string* msg::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.msg.groupID)
+  return _s;
+}
+inline const std::string& msg::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void msg::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* msg::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* msg::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.msg.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void msg::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.msg.groupID)
 }
 
 // bytes content = 3;

@@ -1,6 +1,7 @@
 #include "consumerHandler.h"
 #include "kafka.h"
 #include "msg.pb.h"
+#include "constant.h"
 ConsumerHandler::ConsumerHandler() {
 }
 
@@ -29,6 +30,13 @@ void ConsumerHandler::pushMsg(ConsumerMQ::MsgVector &&msgs) {
         std::string msgStr((char *)msg->payload(), msg->len());
         ServerRpc::msg::sendMsgReq msgObj;
         msgObj.ParseFromString(msgStr);
-        pusher.PushMsg2User(msgObj.msg_data());
+        
+        if (msgObj.msg_data().msgtype() == SINGLE_CHAT_TYPE) {
+            pusher.pushMsg2User(msgObj.msg_data());
+        } else if (msgObj.msg_data().msgtype() == GROUP_CHAT_TYPE) {
+            pusher.pushMsg2Group(msgObj.msg_data());
+        } else {
+            std::cout << "invalid msg type" << std::endl;
+        }
     }
 }

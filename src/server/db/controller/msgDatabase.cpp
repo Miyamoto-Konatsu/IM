@@ -10,24 +10,23 @@ MsgDatabase::MsgDatabase() {
 MsgDatabase::~MsgDatabase() {
 }
 
-int64_t MsgDatabase::getConversionMaxId(const std::string &key) {
-    return msgCache.getConversionMaxId(key);
+int64_t MsgDatabase::getConversationMaxId(const std::string &key) {
+    return msgCache.getConversationMaxId(key);
 }
 
-bool MsgDatabase::setConversionMaxId(const std::string &key, int64_t id) {
-    return msgCache.setConversionMaxId(key, id);
+bool MsgDatabase::setConversationMaxId(const std::string &key, int64_t id) {
+    return msgCache.setConversationMaxId(key, id);
 }
 
 bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
     auto &msg = msgReqs[0].msg_data();
-    bool isNewConversion = false;
+    bool isNewConversation = false;
 
-    auto conversionId =
-        getConversionIdForSingle(msg.fromuserid(), msg.touserid());
-    int64_t maxId = getConversionMaxId(conversionId);
+    auto conversationId = getConversationId(msg);
+    int64_t maxId = getConversationMaxId(conversationId);
 
     if (maxId == -1) {
-        isNewConversion = true;
+        isNewConversation = true;
         maxId = 0;
     }
 
@@ -36,11 +35,11 @@ bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
         msg.set_seq(++maxId);
     }
 
-    if (!msgCache.setConversionMaxId(conversionId, maxId)) {
-        std::cerr << "setConversionMaxId failed" << std::endl;
+    if (!msgCache.setConversationMaxId(conversationId, maxId)) {
+        std::cerr << "setConversationMaxId failed" << std::endl;
     } else {
-        std::cerr << "setConversionMaxId success" << std::endl;
+        std::cerr << "setConversationMaxId success" << std::endl;
     }
 
-    return isNewConversion;
+    return isNewConversation;
 }

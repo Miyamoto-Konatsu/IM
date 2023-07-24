@@ -14,6 +14,7 @@ using grpc::Status;
 using ServerRpc::msg::sendMsgReq;
 using ServerRpc::msg::sendMsgResp;
 using ServerRpc::msg::Msg;
+using ServerRpc::msg::msg;
 
 class MsgServiceImpl : public Msg::Service {
 public:
@@ -23,6 +24,7 @@ public:
 
 private:
     Status produce(const sendMsgReq *request);
+    std::string getKey(const msg &request);
     std::unique_ptr<ProducerMQ> producer;
 };
 

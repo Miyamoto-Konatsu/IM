@@ -35,6 +35,10 @@ PROTOBUF_CONSTEXPR msg::msg(
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
+  , /*decltype(_impl_.groupid_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
   , /*decltype(_impl_.createtime_)*/ ::int64_t{0}
 
   , /*decltype(_impl_.seq_)*/ ::int64_t{0}
@@ -105,6 +109,7 @@ const ::uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.fromuserid_),
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.touserid_),
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.groupid_),
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.content_),
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.createtime_),
     PROTOBUF_FIELD_OFFSET(::ServerRpc::msg::msg, _impl_.seq_),
@@ -134,8 +139,8 @@ const ::uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
         { 0, -1, -1, sizeof(::ServerRpc::msg::msg)},
-        { 15, 24, -1, sizeof(::ServerRpc::msg::sendMsgReq)},
-        { 25, -1, -1, sizeof(::ServerRpc::msg::sendMsgResp)},
+        { 16, 25, -1, sizeof(::ServerRpc::msg::sendMsgReq)},
+        { 26, -1, -1, sizeof(::ServerRpc::msg::sendMsgResp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -144,21 +149,21 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::ServerRpc::msg::_sendMsgResp_default_instance_._instance,
 };
 const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-    "\n\tmsg.proto\022\rServerRpc.msg\"\202\001\n\003msg\022\022\n\nfr"
-    "omUserID\030\001 \001(\t\022\020\n\010toUserID\030\002 \001(\t\022\017\n\007cont"
-    "ent\030\003 \001(\014\022\022\n\ncreateTime\030\004 \001(\003\022\013\n\003seq\030\005 \001"
-    "(\003\022\022\n\nplatformID\030\006 \001(\005\022\017\n\007msgType\030\007 \001(\005\""
-    "2\n\nsendMsgReq\022$\n\010msg_data\030\001 \001(\0132\022.Server"
-    "Rpc.msg.msg\"\037\n\013sendMsgResp\022\020\n\010sendTime\030\001"
-    " \001(\0032G\n\003Msg\022@\n\007sendMsg\022\031.ServerRpc.msg.s"
-    "endMsgReq\032\032.ServerRpc.msg.sendMsgRespb\006p"
-    "roto3"
+    "\n\tmsg.proto\022\rServerRpc.msg\"\223\001\n\003msg\022\022\n\nfr"
+    "omUserID\030\001 \001(\t\022\020\n\010toUserID\030\002 \001(\t\022\017\n\007grou"
+    "pID\030\010 \001(\t\022\017\n\007content\030\003 \001(\014\022\022\n\ncreateTime"
+    "\030\004 \001(\003\022\013\n\003seq\030\005 \001(\003\022\022\n\nplatformID\030\006 \001(\005\022"
+    "\017\n\007msgType\030\007 \001(\005\"2\n\nsendMsgReq\022$\n\010msg_da"
+    "ta\030\001 \001(\0132\022.ServerRpc.msg.msg\"\037\n\013sendMsgR"
+    "esp\022\020\n\010sendTime\030\001 \001(\0032G\n\003Msg\022@\n\007sendMsg\022"
+    "\031.ServerRpc.msg.sendMsgReq\032\032.ServerRpc.m"
+    "sg.sendMsgRespb\006proto3"
 };
 static ::absl::once_flag descriptor_table_msg_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_msg_2eproto = {
     false,
     false,
-    325,
+    342,
     descriptor_table_protodef_msg_2eproto,
     "msg.proto",
     &descriptor_table_msg_2eproto_once,
@@ -213,6 +218,8 @@ msg::msg(const msg& from)
 
     , decltype(_impl_.content_) {}
 
+    , decltype(_impl_.groupid_) {}
+
     , decltype(_impl_.createtime_) {}
 
     , decltype(_impl_.seq_) {}
@@ -245,6 +252,13 @@ msg::msg(const msg& from)
   if (!from._internal_content().empty()) {
     _this->_impl_.content_.Set(from._internal_content(), _this->GetArenaForAllocation());
   }
+  _impl_.groupid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.groupid_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_groupid().empty()) {
+    _this->_impl_.groupid_.Set(from._internal_groupid(), _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.createtime_, &from._impl_.createtime_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.msgtype_) -
     reinterpret_cast<char*>(&_impl_.createtime_)) + sizeof(_impl_.msgtype_));
@@ -259,6 +273,8 @@ inline void msg::SharedCtor(::_pb::Arena* arena) {
     , decltype(_impl_.touserid_) {}
 
     , decltype(_impl_.content_) {}
+
+    , decltype(_impl_.groupid_) {}
 
     , decltype(_impl_.createtime_) { ::int64_t{0} }
 
@@ -282,6 +298,10 @@ inline void msg::SharedCtor(::_pb::Arena* arena) {
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.content_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.groupid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.groupid_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 msg::~msg() {
@@ -298,6 +318,7 @@ inline void msg::SharedDtor() {
   _impl_.fromuserid_.Destroy();
   _impl_.touserid_.Destroy();
   _impl_.content_.Destroy();
+  _impl_.groupid_.Destroy();
 }
 
 void msg::SetCachedSize(int size) const {
@@ -313,6 +334,7 @@ void msg::Clear() {
   _impl_.fromuserid_.ClearToEmpty();
   _impl_.touserid_.ClearToEmpty();
   _impl_.content_.ClearToEmpty();
+  _impl_.groupid_.ClearToEmpty();
   ::memset(&_impl_.createtime_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.msgtype_) -
       reinterpret_cast<char*>(&_impl_.createtime_)) + sizeof(_impl_.msgtype_));
@@ -389,6 +411,17 @@ const char* msg::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 56)) {
           _impl_.msgtype_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string groupID = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 66)) {
+          auto str = _internal_mutable_groupid();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "ServerRpc.msg.msg.groupID"));
         } else {
           goto handle_unusual;
         }
@@ -472,6 +505,14 @@ failure:
         7, this->_internal_msgtype(), target);
   }
 
+  // string groupID = 8;
+  if (!this->_internal_groupid().empty()) {
+    const std::string& _s = this->_internal_groupid();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "ServerRpc.msg.msg.groupID");
+    target = stream->WriteStringMaybeAliased(8, _s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -504,6 +545,12 @@ failure:
   if (!this->_internal_content().empty()) {
     total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
                                     this->_internal_content());
+  }
+
+  // string groupID = 8;
+  if (!this->_internal_groupid().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_groupid());
   }
 
   // int64 createTime = 4;
@@ -557,6 +604,9 @@ void msg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_N
   if (!from._internal_content().empty()) {
     _this->_internal_set_content(from._internal_content());
   }
+  if (!from._internal_groupid().empty()) {
+    _this->_internal_set_groupid(from._internal_groupid());
+  }
   if (from._internal_createtime() != 0) {
     _this->_internal_set_createtime(from._internal_createtime());
   }
@@ -594,6 +644,8 @@ void msg::InternalSwap(msg* other) {
                                        &other->_impl_.touserid_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.content_, lhs_arena,
                                        &other->_impl_.content_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.groupid_, lhs_arena,
+                                       &other->_impl_.groupid_, rhs_arena);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(msg, _impl_.msgtype_)
       + sizeof(msg::_impl_.msgtype_)

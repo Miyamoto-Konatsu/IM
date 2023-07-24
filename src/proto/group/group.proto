@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package ServerRpc.group;
+
+message groupInfo{
+    string groupName = 1;
+    string groupDesc = 2;
+    string groupOwner = 3;
+    repeated string groupMembers = 4;
+    string groupID = 5;
+    int64 createTime = 6;
+}
+
+message createGroupReq {
+    string groupName = 1;
+    string groupDesc = 2;
+    string groupOwner = 3;
+    repeated string groupMembers = 4;
+}
+
+message createGroupResp {
+    groupInfo groupInfo = 2;
+}
+
+message joinGroupReq {
+    string groupID = 1;
+    string userID = 2;
+}
+
+message joinGroupResp {
+}
+
+message getGroupInfoReq {
+    string groupID = 1;
+}
+
+message getGroupInfoResp {
+    groupInfo groupInfo = 2;
+}
+
+message getGroupListReq {
+    string userID = 1;
+}
+
+message getGroupListResp {
+    repeated groupInfo groupInfo = 2;
+}
+
+message getGroupMemberReq {
+    string groupID = 1;
+}
+
+message getGroupMemberResp {
+    repeated string groupMembers = 2;
+}
+
+service Group {
+    rpc createGroup(createGroupReq) returns (createGroupResp);
+    rpc joinGroup(joinGroupReq) returns (joinGroupResp);
+    rpc getGroupInfo(getGroupInfoReq) returns (getGroupInfoResp);
+    rpc getGroupList(getGroupListReq) returns (getGroupListResp);
+    rpc getGroupMember(getGroupMemberReq) returns (getGroupMemberResp);
+}

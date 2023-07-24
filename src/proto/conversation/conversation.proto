@@ -1,0 +1,117 @@
+syntax = "proto3";
+package ServerRpc.conversation;
+
+message conversation {
+    string ownerId = 1;
+    string conversationId = 2;
+    string conversationType = 3;
+    string groupId = 4;
+    string toUserId = 5;
+    uint64 maxSeq = 6;
+    uint64 minSeq = 7;
+}
+
+message setConversationReq {
+  conversation conversation = 1; 
+}
+
+message setConversationResp {
+}
+
+message getConversationReq {
+  string conversationID = 1;
+  string ownerUserID = 2;
+}
+
+message getConversationResp {
+  conversation conversation = 2;
+}
+
+message getConversationsReq {
+  string ownerUserID = 1;
+  repeated string conversationIDs = 2;
+}
+
+message getConversationsResp {
+  repeated conversation conversations = 2;
+}
+
+message getAllConversationsReq {
+  string ownerUserID = 1;
+}
+
+message getAllConversationsResp {
+  repeated conversation conversations = 2;
+}
+
+message batchSetConversationsReq {
+  repeated conversation conversations = 1;
+  string ownerUserID = 2;
+}
+
+message batchSetConversationsResp {
+}
+
+
+message createSingleChatConversationsReq {
+  string recvID = 1;
+  string sendID = 2;
+}
+
+message createSingleChatConversationsResp {
+}
+
+message createGroupChatConversationsReq {
+  repeated string userIDs = 1;
+  string groupID = 2;
+}
+
+message createGroupChatConversationsResp {
+}
+
+message setConversationMaxSeqReq {
+  string conversationID = 1;
+  repeated string ownerUserID = 2;
+  int64 maxSeq = 3;
+}
+
+message setConversationMaxSeqResp {
+}
+
+message getConversationIDsReq {
+  string userID = 1;
+}
+
+message getConversationIDsResp {
+  repeated string conversationIDs = 1;
+}
+
+message getUserConversationIDsHashReq {
+  string ownerUserID = 1;
+}
+
+message getUserConversationIDsHashResp {
+  uint64 hash = 1;
+}
+
+message getConversationsByConversationIDReq {
+  repeated string conversationIDs = 1;
+}
+
+message getConversationsByConversationIDResp {
+  repeated conversation conversations = 1;
+}
+
+service Conversation {
+    rpc setConversation(setConversationReq) returns (setConversationResp) {}
+    rpc getConversation(getConversationReq) returns (getConversationResp) {}
+    rpc getConversations(getConversationsReq) returns (getConversationsResp) {}
+    rpc getAllConversations(getAllConversationsReq) returns (getAllConversationsResp) {}
+    rpc batchSetConversations(batchSetConversationsReq) returns (batchSetConversationsResp) {}
+    rpc createSingleChatConversations(createSingleChatConversationsReq) returns (createSingleChatConversationsResp) {}
+    rpc createGroupChatConversations(createGroupChatConversationsReq) returns (createGroupChatConversationsResp) {}
+    rpc setConversationMaxSeq(setConversationMaxSeqReq) returns (setConversationMaxSeqResp) {}
+    rpc getConversationIDs(getConversationIDsReq) returns (getConversationIDsResp) {}
+    rpc getUserConversationIDsHash(getUserConversationIDsHashReq) returns (getUserConversationIDsHashResp) {}
+    rpc getConversationsByConversationID(getConversationsByConversationIDReq) returns (getConversationsByConversationIDResp) {}
+}

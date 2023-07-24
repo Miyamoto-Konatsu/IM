@@ -9,7 +9,7 @@ public:
     MsgCache();
     ~MsgCache();
 
-    int64_t getConversionMaxId(const std::string &key);
-    bool setConversionMaxId(const std::string &key, int64_t id);
+    int64_t getConversationMaxId(const std::string &key);
+    bool setConversationMaxId(const std::string &key, int64_t id);
 };
 #endif // MSG_CACHE_H

@@ -2,13 +2,14 @@
 #include <chrono>
 #include <grpcpp/support/status.h>
 #include <memory>
+#include <stdexcept>
 #include <thread>
 #include "grpcpp/server_builder.h"
 #include "kafka.h"
 #include "utils/msgutils.h"
 #include <future>
 #include "librdkafka/rdkafkacpp.h"
-
+#include "constant.h"
 using RdKafka::ErrorCode;
 
 using grpc::ServerBuilder;
@@ -24,6 +25,7 @@ Status MsgServiceImpl::sendMsg(ServerContext *context,
                                const sendMsgReq *request,
                                sendMsgResp *response) {
     const auto &msg = request->msg_data();
+
     // std::cout << "Received message from client: " << msg.content() <<
     // std::endl; std::cout << "Received message from client id: " <<
     // msg.fromuserid()
@@ -39,10 +41,21 @@ Status MsgServiceImpl::sendMsg(ServerContext *context,
     return this->produce(request);
 }
 
+std::string MsgServiceImpl::getKey(const msg &request) {
+    if (request.msgtype() == SINGLE_CHAT_TYPE) {
+        return getSingleChatKey(request.fromuserid(), request.touserid());
+    } else if (request.msgtype() == GROUP_CHAT_TYPE) {
+        return getGroupChatKey(request.touserid());
+    } else {
+        throw std::invalid_argument("invalid msg type");
+    }
+}
+
 Status MsgServiceImpl::produce(const sendMsgReq *request) {
     auto &msg = request->msg_data();
     auto requestString = request->SerializeAsString();
-    auto key = getSingleChatKey(msg.fromuserid(), msg.touserid());
+
+    auto key = getKey(msg);
     std::promise<ErrorCode> p;
     auto f = p.get_future();
     // std::cout << msg.fromuserid() << ' ' << msg.touserid() << std::endl;

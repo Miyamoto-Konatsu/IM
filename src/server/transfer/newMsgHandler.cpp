@@ -69,9 +69,9 @@ void NewMsgHandler::msgHandler(int index) {
             msgReqs.push_back((msgReq));
         }
 
-        bool isNewConversion = msgDatabase.batchInsertMsg(msgReqs);
+        bool isNewConversation = msgDatabase.batchInsertMsg(msgReqs);
 
-        if (isNewConversion) {
+        if (isNewConversation) {
             //在关系数据库里创建新的会话
         }
 
