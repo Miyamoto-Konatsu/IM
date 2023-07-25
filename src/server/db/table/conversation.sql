@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `relation`;
 CREATE TABLE `relation` (
   `conversationKey_ownerId` VARCHAR(128) NOT NULL,
   `conversationKey_conversationId` VARCHAR(128) NOT NULL,
-  `conversationType` TEXT NOT NULL,
+  `conversationType` SMALLINT UNSIGNED NOT NULL,
   `groupId` TEXT NOT NULL,
   `toUserId` TEXT NOT NULL,
   `maxSeq` BIGINT UNSIGNED NOT NULL,

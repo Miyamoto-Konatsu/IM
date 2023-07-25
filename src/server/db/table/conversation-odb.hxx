@@ -185,9 +185,9 @@ namespace odb
     typedef
     mysql::query_column<
       mysql::value_traits<
-        ::std::string,
-        mysql::id_string >::query_type,
-      mysql::id_string >
+        ::u_short,
+        mysql::id_ushort >::query_type,
+      mysql::id_ushort >
     conversationType_type_;
 
     static const conversationType_type_ conversationType;
@@ -306,8 +306,7 @@ namespace odb
 
       // conversationType_
       //
-      details::buffer conversationType_value;
-      unsigned long conversationType_size;
+      unsigned short conversationType_value;
       my_bool conversationType_null;
 
       // groupId_

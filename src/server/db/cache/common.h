@@ -8,6 +8,8 @@
 #include "config/config.h"
 #include <json.hpp>
 #include <vector>
+#include "conversation.pb.h"
+#include "table/conversation.h"
 
 class Cache : public std::enable_shared_from_this<Cache> {
 public:
@@ -32,36 +34,48 @@ protected:
     cpp_redis::client client;
 };
 
-using json = nlohmann::json;
+using ConversationRpc = ServerRpc::conversation::conversation;
+void copyField(Conversation &conversion, const ConversationRpc &other);
+void copyField(ConversationRpc &conversion, const Conversation &other);
 
-template <typename T>
-T getCache(const std::string &key, std::shared_ptr<Cache> redisClient,
-           int expire, const std::function<T()> fn) {
+
+
+template <typename NS, typename S>
+NS getCache(const std::string &key, std::shared_ptr<Cache> redisClient,
+            int expire, const std::function<NS()> fn) {
     bool write = false;
     auto reply = redisClient->get(key);
     if (reply.ok() && reply.is_string()) {
-        return json::parse(reply.as_string()).get<T>();
+        S s;
+        NS ns;
+        s.ParseFromString(reply.as_string());
+        copyField(ns, s);
+        return ns;
     }
-    T t = fn();
-    std::string v = json(t).dump();
-    redisClient->set(key, v);
-    return t;
+    NS ns = fn();
+    S s;
+    copyField(s, ns);
+    redisClient->set(key, s.SerializeAsString());
+    return ns;
 }
 
-template <typename T>
-std::vector<T> batchGetCache(
-    const std::vector<std::string> &keys, std::shared_ptr<Cache> redisClient,
-    int expire,
-    const std::function<std::string(T, const std::vector<std::string>)>
-        keyIndexFn,
-    const std::function<std::shared_ptr<T>()> fn) {
+template <typename NS, typename S>
+std::vector<NS>
+batchGetCache(const std::vector<std::string> &keys,
+              std::shared_ptr<Cache> redisClient, int expire,
+              const std::function<std::string(const NS &)> keyFn,
+              const std::function<std::vector<NS>()> fn) {
     auto reply = redisClient->batchGet(keys);
-    std::vector<T> result;
-    if (reply.ok() && reply.is_bulk_string()) {
+    std::vector<NS> result;
+    if (reply.ok() && reply.is_array()) {
         bool isFound = true;
         for (auto &item : reply.as_array()) {
             if (item.is_string()) {
-                result.push_back(json::parse(reply.as_string()).get<T>());
+                S s;
+                s.ParseFromString(item.as_string());
+                NS ns;
+                copyField(ns, s);
+                result.push_back(ns);
             } else {
                 isFound = false;
                 break;
@@ -74,8 +88,9 @@ std::vector<T> batchGetCache(
     result = fn();
     std::vector<std::pair<std::string, std::string>> keyValues;
     for (auto &item : result) {
-        keyValues.push_back(
-            std::make_pair(keyIndexFn(item, keys), json(item).dump()));
+        S s;
+        copyField(s, item);
+        keyValues.push_back(std::make_pair(keyFn(item), s.SerializeAsString()));
     }
     auto setReply = redisClient->batchSet(keyValues);
     if (setReply.ko()) {

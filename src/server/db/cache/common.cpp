@@ -1,4 +1,6 @@
 #include "common.h"
+#include "json.hpp"
+#include <vector>
 
 Cache::Cache() {
     auto config = getConfig();
@@ -55,4 +57,43 @@ cpp_redis::reply Cache::batchGet(const std::vector<std::string> &keys) {
     auto mget = client.mget(keys);
     client.commit();
     return mget.get();
+}
+
+void copyField(Conversation &conversion, const ConversationRpc &other) {
+    conversion.conversationId(other.conversationid());
+    conversion.conversationType(other.conversationtype());
+    conversion.groupId(other.groupid());
+    conversion.maxSeq(other.maxseq());
+    conversion.minSeq(other.minseq());
+    conversion.ownerId(other.ownerid());
+    conversion.toUserId(other.touserid());
+}
+
+void copyField(ConversationRpc &conversion, const Conversation &other) {
+    conversion.set_conversationid(other.conversationId());
+    conversion.set_conversationtype(other.conversationType());
+    conversion.set_groupid(other.groupId());
+    conversion.set_maxseq(other.maxSeq());
+    conversion.set_minseq(other.minSeq());
+    conversion.set_ownerid(other.ownerId());
+    conversion.set_touserid(other.toUserId());
+}
+
+using json = nlohmann::json;
+
+template <typename T>
+std::string SerializeAsString(const T &data) {
+    std::vector<std::string> v;
+    for (auto &item : data) { v.push_back(item.SerializeAsString()); }
+    return SerializeAsString(v);
+}
+
+template <>
+std::string SerializeAsString(const std::vector<std::string> &data) {
+    nlohmann::json j = data;
+    return j.dump();
+}
+
+void ParseFromString(const std::string &s, T1 &t) {
+    std::vector<std::string> t2 = json::parse(s);
 }

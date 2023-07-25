@@ -31,10 +31,6 @@ PROTOBUF_CONSTEXPR conversation::conversation(
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
-  , /*decltype(_impl_.conversationtype_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
   , /*decltype(_impl_.groupid_)*/ {
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
@@ -46,6 +42,8 @@ PROTOBUF_CONSTEXPR conversation::conversation(
   , /*decltype(_impl_.maxseq_)*/ ::uint64_t{0u}
 
   , /*decltype(_impl_.minseq_)*/ ::uint64_t{0u}
+
+  , /*decltype(_impl_.conversationtype_)*/ 0
 
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct conversationDefaultTypeInternal {
@@ -706,7 +704,7 @@ const char descriptor_table_protodef_conversation_2eproto[] PROTOBUF_SECTION_VAR
     "\n\022conversation.proto\022\026ServerRpc.conversa"
     "tion\"\224\001\n\014conversation\022\017\n\007ownerId\030\001 \001(\t\022\026"
     "\n\016conversationId\030\002 \001(\t\022\030\n\020conversationTy"
-    "pe\030\003 \001(\t\022\017\n\007groupId\030\004 \001(\t\022\020\n\010toUserId\030\005 "
+    "pe\030\003 \001(\005\022\017\n\007groupId\030\004 \001(\t\022\020\n\010toUserId\030\005 "
     "\001(\t\022\016\n\006maxSeq\030\006 \001(\004\022\016\n\006minSeq\030\007 \001(\004\"P\n\022s"
     "etConversationReq\022:\n\014conversation\030\001 \001(\0132"
     "$.ServerRpc.conversation.conversation\"\025\n"
@@ -837,8 +835,6 @@ conversation::conversation(const conversation& from)
 
     , decltype(_impl_.conversationid_) {}
 
-    , decltype(_impl_.conversationtype_) {}
-
     , decltype(_impl_.groupid_) {}
 
     , decltype(_impl_.touserid_) {}
@@ -846,6 +842,8 @@ conversation::conversation(const conversation& from)
     , decltype(_impl_.maxseq_) {}
 
     , decltype(_impl_.minseq_) {}
+
+    , decltype(_impl_.conversationtype_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -864,13 +862,6 @@ conversation::conversation(const conversation& from)
   if (!from._internal_conversationid().empty()) {
     _this->_impl_.conversationid_.Set(from._internal_conversationid(), _this->GetArenaForAllocation());
   }
-  _impl_.conversationtype_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.conversationtype_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_conversationtype().empty()) {
-    _this->_impl_.conversationtype_.Set(from._internal_conversationtype(), _this->GetArenaForAllocation());
-  }
   _impl_.groupid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.groupid_.Set("", GetArenaForAllocation());
@@ -886,8 +877,8 @@ conversation::conversation(const conversation& from)
     _this->_impl_.touserid_.Set(from._internal_touserid(), _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.maxseq_, &from._impl_.maxseq_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.minseq_) -
-    reinterpret_cast<char*>(&_impl_.maxseq_)) + sizeof(_impl_.minseq_));
+    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.conversationtype_) -
+    reinterpret_cast<char*>(&_impl_.maxseq_)) + sizeof(_impl_.conversationtype_));
   // @@protoc_insertion_point(copy_constructor:ServerRpc.conversation.conversation)
 }
 
@@ -898,8 +889,6 @@ inline void conversation::SharedCtor(::_pb::Arena* arena) {
 
     , decltype(_impl_.conversationid_) {}
 
-    , decltype(_impl_.conversationtype_) {}
-
     , decltype(_impl_.groupid_) {}
 
     , decltype(_impl_.touserid_) {}
@@ -907,6 +896,8 @@ inline void conversation::SharedCtor(::_pb::Arena* arena) {
     , decltype(_impl_.maxseq_) { ::uint64_t{0u} }
 
     , decltype(_impl_.minseq_) { ::uint64_t{0u} }
+
+    , decltype(_impl_.conversationtype_) { 0 }
 
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -917,10 +908,6 @@ inline void conversation::SharedCtor(::_pb::Arena* arena) {
   _impl_.conversationid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.conversationid_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.conversationtype_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.conversationtype_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.groupid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -945,7 +932,6 @@ inline void conversation::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.ownerid_.Destroy();
   _impl_.conversationid_.Destroy();
-  _impl_.conversationtype_.Destroy();
   _impl_.groupid_.Destroy();
   _impl_.touserid_.Destroy();
 }
@@ -962,12 +948,11 @@ void conversation::Clear() {
 
   _impl_.ownerid_.ClearToEmpty();
   _impl_.conversationid_.ClearToEmpty();
-  _impl_.conversationtype_.ClearToEmpty();
   _impl_.groupid_.ClearToEmpty();
   _impl_.touserid_.ClearToEmpty();
   ::memset(&_impl_.maxseq_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.minseq_) -
-      reinterpret_cast<char*>(&_impl_.maxseq_)) + sizeof(_impl_.minseq_));
+      reinterpret_cast<char*>(&_impl_.conversationtype_) -
+      reinterpret_cast<char*>(&_impl_.maxseq_)) + sizeof(_impl_.conversationtype_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -999,13 +984,11 @@ const char* conversation::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
           goto handle_unusual;
         }
         continue;
-      // string conversationType = 3;
+      // int32 conversationType = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_conversationtype();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
+          _impl_.conversationtype_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "ServerRpc.conversation.conversation.conversationType"));
         } else {
           goto handle_unusual;
         }
@@ -1095,12 +1078,11 @@ failure:
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // string conversationType = 3;
-  if (!this->_internal_conversationtype().empty()) {
-    const std::string& _s = this->_internal_conversationtype();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "ServerRpc.conversation.conversation.conversationType");
-    target = stream->WriteStringMaybeAliased(3, _s, target);
+  // int32 conversationType = 3;
+  if (this->_internal_conversationtype() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+        3, this->_internal_conversationtype(), target);
   }
 
   // string groupId = 4;
@@ -1161,12 +1143,6 @@ failure:
                                     this->_internal_conversationid());
   }
 
-  // string conversationType = 3;
-  if (!this->_internal_conversationtype().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-                                    this->_internal_conversationtype());
-  }
-
   // string groupId = 4;
   if (!this->_internal_groupid().empty()) {
     total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -1189,6 +1165,12 @@ failure:
   if (this->_internal_minseq() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
         this->_internal_minseq());
+  }
+
+  // int32 conversationType = 3;
+  if (this->_internal_conversationtype() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_conversationtype());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1215,9 +1197,6 @@ void conversation::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   if (!from._internal_conversationid().empty()) {
     _this->_internal_set_conversationid(from._internal_conversationid());
   }
-  if (!from._internal_conversationtype().empty()) {
-    _this->_internal_set_conversationtype(from._internal_conversationtype());
-  }
   if (!from._internal_groupid().empty()) {
     _this->_internal_set_groupid(from._internal_groupid());
   }
@@ -1229,6 +1208,9 @@ void conversation::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   }
   if (from._internal_minseq() != 0) {
     _this->_internal_set_minseq(from._internal_minseq());
+  }
+  if (from._internal_conversationtype() != 0) {
+    _this->_internal_set_conversationtype(from._internal_conversationtype());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1253,15 +1235,13 @@ void conversation::InternalSwap(conversation* other) {
                                        &other->_impl_.ownerid_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.conversationid_, lhs_arena,
                                        &other->_impl_.conversationid_, rhs_arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.conversationtype_, lhs_arena,
-                                       &other->_impl_.conversationtype_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.groupid_, lhs_arena,
                                        &other->_impl_.groupid_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.touserid_, lhs_arena,
                                        &other->_impl_.touserid_, rhs_arena);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(conversation, _impl_.minseq_)
-      + sizeof(conversation::_impl_.minseq_)
+      PROTOBUF_FIELD_OFFSET(conversation, _impl_.conversationtype_)
+      + sizeof(conversation::_impl_.conversationtype_)
       - PROTOBUF_FIELD_OFFSET(conversation, _impl_.maxseq_)>(
           reinterpret_cast<char*>(&_impl_.maxseq_),
           reinterpret_cast<char*>(&other->_impl_.maxseq_));

@@ -311,11 +311,11 @@ class conversation final :
   enum : int {
     kOwnerIdFieldNumber = 1,
     kConversationIdFieldNumber = 2,
-    kConversationTypeFieldNumber = 3,
     kGroupIdFieldNumber = 4,
     kToUserIdFieldNumber = 5,
     kMaxSeqFieldNumber = 6,
     kMinSeqFieldNumber = 7,
+    kConversationTypeFieldNumber = 3,
   };
   // string ownerId = 1;
   void clear_ownerid() ;
@@ -355,26 +355,6 @@ class conversation final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_conversationid(
       const std::string& value);
   std::string* _internal_mutable_conversationid();
-
-  public:
-  // string conversationType = 3;
-  void clear_conversationtype() ;
-  const std::string& conversationtype() const;
-
-
-
-
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_conversationtype(Arg_&& arg, Args_... args);
-  std::string* mutable_conversationtype();
-  PROTOBUF_NODISCARD std::string* release_conversationtype();
-  void set_allocated_conversationtype(std::string* ptr);
-
-  private:
-  const std::string& _internal_conversationtype() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_conversationtype(
-      const std::string& value);
-  std::string* _internal_mutable_conversationtype();
 
   public:
   // string groupId = 4;
@@ -437,6 +417,16 @@ class conversation final :
   void _internal_set_minseq(::uint64_t value);
 
   public:
+  // int32 conversationType = 3;
+  void clear_conversationtype() ;
+  ::int32_t conversationtype() const;
+  void set_conversationtype(::int32_t value);
+
+  private:
+  ::int32_t _internal_conversationtype() const;
+  void _internal_set_conversationtype(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:ServerRpc.conversation.conversation)
  private:
   class _Internal;
@@ -447,11 +437,11 @@ class conversation final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ownerid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr conversationid_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr conversationtype_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr touserid_;
     ::uint64_t maxseq_;
     ::uint64_t minseq_;
+    ::int32_t conversationtype_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4167,51 +4157,24 @@ inline void conversation::set_allocated_conversationid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.conversation.conversation.conversationId)
 }
 
-// string conversationType = 3;
+// int32 conversationType = 3;
 inline void conversation::clear_conversationtype() {
-  _impl_.conversationtype_.ClearToEmpty();
+  _impl_.conversationtype_ = 0;
 }
-inline const std::string& conversation::conversationtype() const {
+inline ::int32_t conversation::conversationtype() const {
   // @@protoc_insertion_point(field_get:ServerRpc.conversation.conversation.conversationType)
   return _internal_conversationtype();
 }
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void conversation::set_conversationtype(Arg_&& arg,
-                                                     Args_... args) {
-  ;
-  _impl_.conversationtype_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+inline void conversation::set_conversationtype(::int32_t value) {
+  _internal_set_conversationtype(value);
   // @@protoc_insertion_point(field_set:ServerRpc.conversation.conversation.conversationType)
 }
-inline std::string* conversation::mutable_conversationtype() {
-  std::string* _s = _internal_mutable_conversationtype();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.conversation.conversation.conversationType)
-  return _s;
+inline ::int32_t conversation::_internal_conversationtype() const {
+  return _impl_.conversationtype_;
 }
-inline const std::string& conversation::_internal_conversationtype() const {
-  return _impl_.conversationtype_.Get();
-}
-inline void conversation::_internal_set_conversationtype(const std::string& value) {
+inline void conversation::_internal_set_conversationtype(::int32_t value) {
   ;
-
-
-  _impl_.conversationtype_.Set(value, GetArenaForAllocation());
-}
-inline std::string* conversation::_internal_mutable_conversationtype() {
-  ;
-  return _impl_.conversationtype_.Mutable( GetArenaForAllocation());
-}
-inline std::string* conversation::release_conversationtype() {
-  // @@protoc_insertion_point(field_release:ServerRpc.conversation.conversation.conversationType)
-  return _impl_.conversationtype_.Release();
-}
-inline void conversation::set_allocated_conversationtype(std::string* value) {
-  _impl_.conversationtype_.SetAllocated(value, GetArenaForAllocation());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        if (_impl_.conversationtype_.IsDefault()) {
-          _impl_.conversationtype_.Set("", GetArenaForAllocation());
-        }
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.conversation.conversation.conversationType)
+  _impl_.conversationtype_ = value;
 }
 
 // string groupId = 4;

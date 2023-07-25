@@ -17,7 +17,7 @@ public:
     ConversationModel() : db(getDB()) {
     }
 
-    void createConversation(const Conversation &conversation) {
+    void createConversations(const Conversation &conversation) {
         odb::transaction t(db->begin());
         db->persist(conversation); // 将对象插入数据库
         t.commit();                // 提交事务
@@ -51,12 +51,33 @@ public:
         for (auto &item : queryResult) { result.push_back(std::move(item)); }
         return result;
     }
-    
+
     // 更新 Conversation 对象
-    void updateConversation(const Conversation &conversation) {
+    void updateConversation(const std::vector<Conversation> &conversations) {
         odb::transaction t(db->begin());
-        db->update(conversation); // 更新对象在数据库中的记录
-        t.commit();               // 提交事务
+        for (auto &conversation : conversations) {
+            try {
+                auto existingConversation =
+                    db->load<Conversation>(conversation.conversationKey());
+                db->update(conversation);
+            } catch (odb::object_not_persistent &e) {
+                db->persist(conversation);
+            }
+        }
+        t.commit(); // 提交事务
+    }
+
+    std::vector<std::string> findConversationIds(const std::string &ownerId) {
+        odb::transaction t(db->begin());
+        odb::query<Conversation> query(
+            odb::query<Conversation>::conversationKey.ownerId == ownerId);
+        std::vector<std::string> result;
+        auto queryResult = db->query(query);
+        t.commit();
+        for (auto &item : queryResult) {
+            result.push_back(item.conversationKey().conversationId_);
+        }
+        return result;
     }
 
 private:

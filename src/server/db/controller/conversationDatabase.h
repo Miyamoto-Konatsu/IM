@@ -12,9 +12,18 @@ public:
     ConversationDatabase() = default;
     ~ConversationDatabase() = default;
 
-    bool createConversation(const std::vector<Conversation> &conversations);
+    bool createConversations(const std::vector<Conversation> &conversations);
+
+    bool setConversations(const std::vector<Conversation> &conversations);
 
     std::vector<Conversation> getConversations(const std::string &ownerId);
+
+    Conversation getConversation(const std::string &ownerId,
+                                 const std::string &conversationId);
+
+    std::vector<std::string> getConversationIds(const std::string &ownerId);
+
+    uint64_t getConversationIdsHash(const std::string &ownerId);
 
 private:
     std::shared_ptr<ConversationCache> cache;
