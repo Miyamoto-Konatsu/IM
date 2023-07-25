@@ -33,7 +33,7 @@ protected:
 
 private:
     void poll() {
-        while (run) { producer->poll(50); }
+        while (run)  { producer->poll(50); }
     }
 };
 

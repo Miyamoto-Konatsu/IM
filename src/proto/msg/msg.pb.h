@@ -211,6 +211,7 @@ class msg final :
     kFromUserIDFieldNumber = 1,
     kToUserIDFieldNumber = 2,
     kContentFieldNumber = 3,
+    kGroupIDFieldNumber = 8,
     kCreateTimeFieldNumber = 4,
     kSeqFieldNumber = 5,
     kPlatformIDFieldNumber = 6,
@@ -276,6 +277,26 @@ class msg final :
   std::string* _internal_mutable_content();
 
   public:
+  // string groupID = 8;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // int64 createTime = 4;
   void clear_createtime() ;
   ::int64_t createtime() const;
@@ -327,6 +348,7 @@ class msg final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fromuserid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr touserid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr content_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     ::int64_t createtime_;
     ::int64_t seq_;
     ::int32_t platformid_;
@@ -465,22 +487,22 @@ class sendMsgReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMsgFieldNumber = 1,
+    kMsgDataFieldNumber = 1,
   };
-  // .ServerRpc.msg.msg msg = 1;
-  bool has_msg() const;
-  void clear_msg() ;
-  const ::ServerRpc::msg::msg& msg() const;
-  PROTOBUF_NODISCARD ::ServerRpc::msg::msg* release_msg();
-  ::ServerRpc::msg::msg* mutable_msg();
-  void set_allocated_msg(::ServerRpc::msg::msg* msg);
+  // .ServerRpc.msg.msg msg_data = 1;
+  bool has_msg_data() const;
+  void clear_msg_data() ;
+  const ::ServerRpc::msg::msg& msg_data() const;
+  PROTOBUF_NODISCARD ::ServerRpc::msg::msg* release_msg_data();
+  ::ServerRpc::msg::msg* mutable_msg_data();
+  void set_allocated_msg_data(::ServerRpc::msg::msg* msg_data);
   private:
-  const ::ServerRpc::msg::msg& _internal_msg() const;
-  ::ServerRpc::msg::msg* _internal_mutable_msg();
+  const ::ServerRpc::msg::msg& _internal_msg_data() const;
+  ::ServerRpc::msg::msg* _internal_mutable_msg_data();
   public:
-  void unsafe_arena_set_allocated_msg(
-      ::ServerRpc::msg::msg* msg);
-  ::ServerRpc::msg::msg* unsafe_arena_release_msg();
+  void unsafe_arena_set_allocated_msg_data(
+      ::ServerRpc::msg::msg* msg_data);
+  ::ServerRpc::msg::msg* unsafe_arena_release_msg_data();
   // @@protoc_insertion_point(class_scope:ServerRpc.msg.sendMsgReq)
  private:
   class _Internal;
@@ -491,7 +513,7 @@ class sendMsgReq final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::ServerRpc::msg::msg* msg_;
+    ::ServerRpc::msg::msg* msg_data_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_msg_2eproto;
@@ -762,6 +784,53 @@ inline void msg::set_allocated_touserid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.msg.toUserID)
 }
 
+// string groupID = 8;
+inline void msg::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& msg::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.msg.groupID)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void msg::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.msg.groupID)
+}
+inline std::string* msg::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.msg.groupID)
+  return _s;
+}
+inline const std::string& msg::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void msg::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* msg::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* msg::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.msg.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void msg::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.msg.groupID)
+}
+
 // bytes content = 3;
 inline void msg::clear_content() {
   _impl_.content_.ClearToEmpty();
@@ -893,42 +962,42 @@ inline void msg::_internal_set_msgtype(::int32_t value) {
 
 // sendMsgReq
 
-// .ServerRpc.msg.msg msg = 1;
-inline bool sendMsgReq::has_msg() const {
+// .ServerRpc.msg.msg msg_data = 1;
+inline bool sendMsgReq::has_msg_data() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.msg_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.msg_data_ != nullptr);
   return value;
 }
-inline void sendMsgReq::clear_msg() {
-  if (_impl_.msg_ != nullptr) _impl_.msg_->Clear();
+inline void sendMsgReq::clear_msg_data() {
+  if (_impl_.msg_data_ != nullptr) _impl_.msg_data_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::ServerRpc::msg::msg& sendMsgReq::_internal_msg() const {
-  const ::ServerRpc::msg::msg* p = _impl_.msg_;
+inline const ::ServerRpc::msg::msg& sendMsgReq::_internal_msg_data() const {
+  const ::ServerRpc::msg::msg* p = _impl_.msg_data_;
   return p != nullptr ? *p : reinterpret_cast<const ::ServerRpc::msg::msg&>(
       ::ServerRpc::msg::_msg_default_instance_);
 }
-inline const ::ServerRpc::msg::msg& sendMsgReq::msg() const {
-  // @@protoc_insertion_point(field_get:ServerRpc.msg.sendMsgReq.msg)
-  return _internal_msg();
+inline const ::ServerRpc::msg::msg& sendMsgReq::msg_data() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.sendMsgReq.msg_data)
+  return _internal_msg_data();
 }
-inline void sendMsgReq::unsafe_arena_set_allocated_msg(
-    ::ServerRpc::msg::msg* msg) {
+inline void sendMsgReq::unsafe_arena_set_allocated_msg_data(
+    ::ServerRpc::msg::msg* msg_data) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.msg_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.msg_data_);
   }
-  _impl_.msg_ = msg;
-  if (msg) {
+  _impl_.msg_data_ = msg_data;
+  if (msg_data) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerRpc.msg.sendMsgReq.msg)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerRpc.msg.sendMsgReq.msg_data)
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::release_msg() {
+inline ::ServerRpc::msg::msg* sendMsgReq::release_msg_data() {
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::msg::msg* temp = _impl_.msg_;
-  _impl_.msg_ = nullptr;
+  ::ServerRpc::msg::msg* temp = _impl_.msg_data_;
+  _impl_.msg_data_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -940,44 +1009,44 @@ inline ::ServerRpc::msg::msg* sendMsgReq::release_msg() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::unsafe_arena_release_msg() {
-  // @@protoc_insertion_point(field_release:ServerRpc.msg.sendMsgReq.msg)
+inline ::ServerRpc::msg::msg* sendMsgReq::unsafe_arena_release_msg_data() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.sendMsgReq.msg_data)
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::msg::msg* temp = _impl_.msg_;
-  _impl_.msg_ = nullptr;
+  ::ServerRpc::msg::msg* temp = _impl_.msg_data_;
+  _impl_.msg_data_ = nullptr;
   return temp;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::_internal_mutable_msg() {
+inline ::ServerRpc::msg::msg* sendMsgReq::_internal_mutable_msg_data() {
   _impl_._has_bits_[0] |= 0x00000001u;
-  if (_impl_.msg_ == nullptr) {
+  if (_impl_.msg_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::ServerRpc::msg::msg>(GetArenaForAllocation());
-    _impl_.msg_ = p;
+    _impl_.msg_data_ = p;
   }
-  return _impl_.msg_;
+  return _impl_.msg_data_;
 }
-inline ::ServerRpc::msg::msg* sendMsgReq::mutable_msg() {
-  ::ServerRpc::msg::msg* _msg = _internal_mutable_msg();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.sendMsgReq.msg)
+inline ::ServerRpc::msg::msg* sendMsgReq::mutable_msg_data() {
+  ::ServerRpc::msg::msg* _msg = _internal_mutable_msg_data();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.sendMsgReq.msg_data)
   return _msg;
 }
-inline void sendMsgReq::set_allocated_msg(::ServerRpc::msg::msg* msg) {
+inline void sendMsgReq::set_allocated_msg_data(::ServerRpc::msg::msg* msg_data) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.msg_;
+    delete _impl_.msg_data_;
   }
-  if (msg) {
+  if (msg_data) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(msg);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(msg_data);
     if (message_arena != submessage_arena) {
-      msg = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, msg, submessage_arena);
+      msg_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, msg_data, submessage_arena);
     }
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  _impl_.msg_ = msg;
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.sendMsgReq.msg)
+  _impl_.msg_data_ = msg_data;
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.sendMsgReq.msg_data)
 }
 
 // -------------------------------------------------------------------

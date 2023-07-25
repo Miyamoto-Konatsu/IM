@@ -5,6 +5,7 @@ package ServerRpc.msg;
 message msg {
     string fromUserID  = 1;
     string toUserID = 2;
+    string groupID = 8;
     bytes content = 3;
     int64 createTime = 4;
     int64 seq = 5;
@@ -13,7 +14,7 @@ message msg {
 }
 
 message sendMsgReq {
-    msg msg = 1;
+    msg msg_data = 1;
 }
 
 message sendMsgResp {
