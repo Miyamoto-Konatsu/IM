@@ -60,7 +60,7 @@ public:
     createGroupChatConversations(ServerContext *context,
                                  const createGroupChatConversationsReq *request,
                                  createGroupChatConversationsResp *response);
-    Status createSingleChatConversation(
+    Status createSingleChatConversations(
         ServerContext *context, const createSingleChatConversationsReq *request,
         createSingleChatConversationsResp *response);
 
@@ -79,6 +79,7 @@ public:
         ServerContext *context,
         const getConversationsByConversationIDReq *request,
         getConversationsByConversationIDResp *response);
+    
 
 private:
     ConversationDatabase db;

@@ -569,7 +569,7 @@ namespace odb
   }
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::persist_statement[] =
-  "INSERT INTO `relation` "
+  "INSERT INTO `Conversation` "
   "(`conversationKey_ownerId`, "
   "`conversationKey_conversationId`, "
   "`conversationType`, "
@@ -582,18 +582,18 @@ namespace odb
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::find_statement[] =
   "SELECT "
-  "`relation`.`conversationKey_ownerId`, "
-  "`relation`.`conversationKey_conversationId`, "
-  "`relation`.`conversationType`, "
-  "`relation`.`groupId`, "
-  "`relation`.`toUserId`, "
-  "`relation`.`maxSeq`, "
-  "`relation`.`minSeq` "
-  "FROM `relation` "
-  "WHERE `relation`.`conversationKey_ownerId`=? AND `relation`.`conversationKey_conversationId`=?";
+  "`Conversation`.`conversationKey_ownerId`, "
+  "`Conversation`.`conversationKey_conversationId`, "
+  "`Conversation`.`conversationType`, "
+  "`Conversation`.`groupId`, "
+  "`Conversation`.`toUserId`, "
+  "`Conversation`.`maxSeq`, "
+  "`Conversation`.`minSeq` "
+  "FROM `Conversation` "
+  "WHERE `Conversation`.`conversationKey_ownerId`=? AND `Conversation`.`conversationKey_conversationId`=?";
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::update_statement[] =
-  "UPDATE `relation` "
+  "UPDATE `Conversation` "
   "SET "
   "`conversationType`=?, "
   "`groupId`=?, "
@@ -603,25 +603,25 @@ namespace odb
   "WHERE `conversationKey_ownerId`=? AND `conversationKey_conversationId`=?";
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::erase_statement[] =
-  "DELETE FROM `relation` "
+  "DELETE FROM `Conversation` "
   "WHERE `conversationKey_ownerId`=? AND `conversationKey_conversationId`=?";
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::query_statement[] =
   "SELECT "
-  "`relation`.`conversationKey_ownerId`, "
-  "`relation`.`conversationKey_conversationId`, "
-  "`relation`.`conversationType`, "
-  "`relation`.`groupId`, "
-  "`relation`.`toUserId`, "
-  "`relation`.`maxSeq`, "
-  "`relation`.`minSeq` "
-  "FROM `relation`";
+  "`Conversation`.`conversationKey_ownerId`, "
+  "`Conversation`.`conversationKey_conversationId`, "
+  "`Conversation`.`conversationType`, "
+  "`Conversation`.`groupId`, "
+  "`Conversation`.`toUserId`, "
+  "`Conversation`.`maxSeq`, "
+  "`Conversation`.`minSeq` "
+  "FROM `Conversation`";
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::erase_query_statement[] =
-  "DELETE FROM `relation`";
+  "DELETE FROM `Conversation`";
 
   const char access::object_traits_impl< ::Conversation, id_mysql >::table_name[] =
-  "`relation`";
+  "`Conversation`";
 
   void access::object_traits_impl< ::Conversation, id_mysql >::
   persist (database& db, const object_type& obj)

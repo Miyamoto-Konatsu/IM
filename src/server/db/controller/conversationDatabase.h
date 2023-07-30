@@ -9,8 +9,11 @@
 
 class ConversationDatabase {
 public:
-    ConversationDatabase() = default;
+    ConversationDatabase();
     ~ConversationDatabase() = default;
+
+    ConversationDatabase(const ConversationDatabase &) = delete;
+    ConversationDatabase &operator=(const ConversationDatabase &) = delete;
 
     bool createConversations(const std::vector<Conversation> &conversations);
 

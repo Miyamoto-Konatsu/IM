@@ -3,14 +3,20 @@
 #include "constant.h"
 #include "table/conversation.h"
 #include "utils/msgutils.h"
+#include <grpcpp/support/status.h>
 #include <stdexcept>
+// ConversationServiceImp::ConversationServiceImp() :
+//      {
+// }
+
 Status
 ConversationServiceImp::setConversation(ServerContext *context,
                                         const setConversationReq *request,
                                         setConversationResp *response) {
     auto conversationRpc = request->conversation();
     Conversation conversation;
-    db.createConversations({conversation});
+    copyField(conversation, conversationRpc);
+    db.setConversations({conversation});
     return Status::OK;
 }
 
@@ -92,7 +98,7 @@ Status ConversationServiceImp::createGroupChatConversations(
     return Status::OK;
 }
 
-Status ConversationServiceImp::createSingleChatConversation(
+Status ConversationServiceImp::createSingleChatConversations(
     ServerContext *context, const createSingleChatConversationsReq *request,
     createSingleChatConversationsResp *response) {
     auto sendid = request->sendid();
@@ -110,8 +116,12 @@ Status ConversationServiceImp::createSingleChatConversation(
     conversation2.toUserId(sendid);
     conversation2.conversationId(conversationId);
     conversation2.conversationType(SINGLE_CHAT_TYPE);
-
-    db.createConversations({conversation1, conversation2});
+    try {
+        db.createConversations({conversation1, conversation2});
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
     return Status::OK;
 }
 Status ConversationServiceImp::setConversationMaxSeq(
@@ -138,4 +148,23 @@ Status ConversationServiceImp::getUserConversationIDsHash(
     auto hash = db.getConversationIdsHash(ownerId);
     response->set_hash(hash);
     return Status::OK;
+}
+Status ConversationServiceImp::getConversationsByConversationID(
+    ServerContext *context, const getConversationsByConversationIDReq *request,
+    getConversationsByConversationIDResp *response) {
+    return Status::OK;
+}
+
+int main() {
+    std::string server_address("0.0.0.0:50051");
+    ConversationServiceImp service;
+    grpc::ServerBuilder builder;
+
+    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    std::cout << "ConversationService Server listening on " << server_address
+              << std::endl;
+    server->Wait();
+    return 0;
 }

@@ -2,9 +2,9 @@
  * compiler for C++.
  */
 
-DROP TABLE IF EXISTS `relation`;
+DROP TABLE IF EXISTS `Conversation`;
 
-CREATE TABLE `relation` (
+CREATE TABLE `Conversation` (
   `conversationKey_ownerId` VARCHAR(128) NOT NULL,
   `conversationKey_conversationId` VARCHAR(128) NOT NULL,
   `conversationType` SMALLINT UNSIGNED NOT NULL,

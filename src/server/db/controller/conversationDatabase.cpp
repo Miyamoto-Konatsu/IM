@@ -3,6 +3,11 @@
 #include <picojson/picojson.h>
 #include <string>
 
+ConversationDatabase::ConversationDatabase() {
+    db = std::make_shared<ConversationModel>();
+    cache = std::make_shared<ConversationCache>(db);
+}
+
 bool ConversationDatabase::createConversations(
     const std::vector<Conversation> &conversations) {
     for (auto &conversation : conversations) {

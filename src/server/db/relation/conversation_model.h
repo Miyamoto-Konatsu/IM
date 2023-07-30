@@ -19,6 +19,10 @@ public:
 
     void createConversations(const Conversation &conversation) {
         odb::transaction t(db->begin());
+
+        auto existingConversation =
+            db->load<Conversation>(conversation.conversationKey());
+        throw DatabaseLookupError("Conversation already exists");
         db->persist(conversation); // 将对象插入数据库
         t.commit();                // 提交事务
     }
@@ -32,8 +36,9 @@ public:
                 == conversationId
             && odb::query<Conversation>::conversationKey.ownerId == ownerId);
         Conversation result;
+
         auto isFound = db->query_one(query, result);
-        t.commit();
+        t.commit(); // 提交事务
         if (isFound) {
             return result;
         } else {
@@ -42,13 +47,30 @@ public:
     }
 
     std::vector<Conversation> findConversations(const std::string &ownerId) {
-        odb::transaction t(db->begin());
         odb::query<Conversation> query(
             odb::query<Conversation>::conversationKey.ownerId == ownerId);
         std::vector<Conversation> result;
+        odb::transaction t(db->begin());
+
         auto queryResult = db->query(query);
-        t.commit();
         for (auto &item : queryResult) { result.push_back(std::move(item)); }
+        t.commit();
+        return result;
+    }
+
+    std::vector<Conversation>
+    findConversations(const std::string &ownerId,
+                      std::vector<std::string> &conversationIds) {
+        odb::query<Conversation> query(
+            odb::query<Conversation>::conversationKey.ownerId == ownerId
+            && odb::query<Conversation>::conversationKey.conversationId
+                   .in_range(conversationIds.begin(), conversationIds.end()));
+        std::vector<Conversation> result;
+        odb::transaction t(db->begin());
+
+        auto queryResult = db->query(query);
+        for (auto &item : queryResult) { result.push_back(std::move(item)); }
+        t.commit();
         return result;
     }
 
@@ -69,14 +91,13 @@ public:
 
     std::vector<std::string> findConversationIds(const std::string &ownerId) {
         odb::transaction t(db->begin());
-        odb::query<Conversation> query(
-            odb::query<Conversation>::conversationKey.ownerId == ownerId);
+        auto queryResult(db->query(odb::query<Conversation>(
+            odb::query<Conversation>::conversationKey.ownerId == "123")));
         std::vector<std::string> result;
-        auto queryResult = db->query(query);
-        t.commit();
         for (auto &item : queryResult) {
             result.push_back(item.conversationKey().conversationId_);
         }
+        t.commit();
         return result;
     }
 

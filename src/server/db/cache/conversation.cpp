@@ -10,11 +10,18 @@ using ConversationRpc = ServerRpc::conversation::conversation;
 
 const std::string ConversationCache::CONVERSATION_PREFIX = "conversation:";
 const std::string ConversationCache::CONVERSATION_IDS_PREFIX =
-    "conversaion_id:";
+    "conversaions_id:";
 const std::string ConversationCache::CONVERSATION_IDS_HASH_PREFIX =
-    "conversation_id_hash:";
+    "conversations_id_hash:";
 const std::string ConversationCache::CONVERSATION_HAS_READ_PREFIX =
     "conversation_has_read:";
+
+using std::vector;
+using std::string;
+
+ConversationCache::ConversationCache(std::shared_ptr<ConversationModel> db) :
+    db(db) {
+}
 
 Conversation
 ConversationCache::getConversation(const std::string &ownerId,
@@ -24,8 +31,7 @@ ConversationCache::getConversation(const std::string &ownerId,
         auto conversation = this->db->findConversation(ownerId, conversationId);
         return conversation;
     };
-    return getCache<Conversation, ConversationRpc>(key, shared_from_this(), 100,
-                                                   std::move(fn));
+    return getCache(key, shared_from_this(), 100, std::move(fn));
 }
 
 std::vector<Conversation>
@@ -36,7 +42,8 @@ ConversationCache::getConversations(const std::string &ownerId) {
         keys.push_back(getConversationKey(ownerId, item));
     }
     std::function<std::vector<Conversation>()> fn = [&, this]() {
-        auto conversations = this->db->findConversations(ownerId);
+        auto conversations =
+            this->db->findConversations(ownerId, conversaionIds);
         return conversations;
     };
 
@@ -45,20 +52,25 @@ ConversationCache::getConversations(const std::string &ownerId) {
             return this->getConversationKey(conversation.ownerId(),
                                             conversation.conversationId());
         };
-    return batchGetCache<Conversation, ConversationRpc>(
-        keys, shared_from_this(), 100, std::move(keyFn), std::move(fn));
+
+    std::function<int(const Conversation &, std::vector<std::string>)> indexFn =
+        std::bind(&ConversationCache::getKey, this, std::placeholders::_1,
+                  std::placeholders::_2);
+
+    return batchGetCache<Conversation>(keys, shared_from_this(), 100,
+                                       std::move(keyFn), std::move(indexFn),
+                                       std::move(fn));
 }
 
 std::vector<std::string>
 ConversationCache::getConversationIds(const std::string &ownerId) {
     std::string key = getConversationIdsKey(ownerId);
-    std::function<std::vector<std::string>()> fn = [&, this]() {
+    std::function<std::vector<std::string>()> fn = [=, this]() {
         auto conversationIds = this->db->findConversationIds(ownerId);
         return conversationIds;
     };
 
-    return getCache<std::vector<std::string>, std::string>(
-        key, shared_from_this(), 100, std::move(fn));
+    return getCache(key, shared_from_this(), 100, std::move(fn));
 }
 
 uint64_t ConversationCache::getConversationIdsHash(const std::string &ownerId) {
@@ -72,8 +84,7 @@ uint64_t ConversationCache::getConversationIdsHash(const std::string &ownerId) {
         return hash;
     };
 
-    return getCache<Conversation, ConversationRpc>(key, shared_from_this(), 100,
-                                                   std::move(fn));
+    return getCache(key, shared_from_this(), 100, std::move(fn));
 }
 
 std::vector<std::string> ConversationCache::getConversationIdsKey(
@@ -90,4 +101,16 @@ std::vector<std::string> ConversationCache::getConversationIdsHashKey(
         keys.push_back(getConversationIdsHashKey(item));
     }
     return keys;
+}
+
+int ConversationCache::getKey(const Conversation &conversation,
+                              const std::vector<std::string> &keys) {
+    for (int i = 0; i < keys.size(); i++) {
+        if (keys[i]
+            == getConversationKey(conversation.ownerId(),
+                                  conversation.conversationId())) {
+            return i;
+        }
+    }
+    return -1;
 }

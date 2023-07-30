@@ -4,7 +4,6 @@
 #include "odb/core.hxx"
 #include <string>
 #include <sys/types.h>
-#include "conversation.pb.h"
 
 using namespace odb::core;
 
@@ -14,7 +13,7 @@ struct ConversationKey {
     std::string ownerId_;
     std::string conversationId_;
 };
-#pragma db object table("relation")
+#pragma db object table("Conversation")
 class Conversation {
 public:
     Conversation() {

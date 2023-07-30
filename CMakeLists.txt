@@ -1,8 +1,14 @@
 
 cmake_minimum_required(VERSION 3.6.1)
+project(IM)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+endif()
 
 include_directories("/root/code/lib/include")
 include_directories("/root/code/lib/include/google")

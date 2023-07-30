@@ -79,21 +79,18 @@ void copyField(ConversationRpc &conversion, const Conversation &other) {
     conversion.set_touserid(other.toUserId());
 }
 
-using json = nlohmann::json;
+// using json = nlohmann::json;
 
-template <typename T>
-std::string SerializeAsString(const T &data) {
-    std::vector<std::string> v;
-    for (auto &item : data) { v.push_back(item.SerializeAsString()); }
-    return SerializeAsString(v);
-}
+// template <typename T>
+// std::string SerializeAsString(const T &data) {
+//     std::vector<std::string> v;
+//     for (auto &item : data) { v.push_back(item.SerializeAsString()); }
+//     return SerializeAsString(v);
+// }
 
-template <>
-std::string SerializeAsString(const std::vector<std::string> &data) {
-    nlohmann::json j = data;
-    return j.dump();
-}
+// template <>
+// std::string SerializeAsString(const std::vector<std::string> &data) {
+//     nlohmann::json j = data;
+//     return j.dump();
+// }
 
-void ParseFromString(const std::string &s, T1 &t) {
-    std::vector<std::string> t2 = json::parse(s);
-}
