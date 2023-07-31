@@ -116,6 +116,7 @@ void ApiServer::start() {
 }
 
 int main(int argc, char *argv[]) {
+    std::cout << "ApiServer listening on 0.0.0.0:8080" << std::endl;
     ApiServer server(8080, 4);
     server.start();
     return 0;

@@ -34,3 +34,7 @@ TokenInfo parseToken(const std::string &token) {
         std::chrono::duration_cast<std::chrono::seconds>(timeToLive).count();
     return TokenInfo{userID, stoi(platform), timeToLiveSeconds};
 }
+
+std::string getTokenKey(std::string userID, int32_t platform) {
+    return "IM_RPC_SERVER_AUTH:" + userID + +":" + std::to_string(platform);
+}

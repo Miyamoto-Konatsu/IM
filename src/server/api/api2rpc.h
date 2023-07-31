@@ -8,9 +8,10 @@
 #include <grpcpp/support/status.h>
 #include "conversation.pb.h"
 #include "auth.pb.h"
-
+#include "json.hpp"
 #include "msg.pb.h"
 #include "protobuf/json/json.h"
+#include "constant/msg.h"
 
 using HttpRequest = httplib::Request;
 using HttpResponse = httplib::Response;
@@ -27,7 +28,7 @@ void api2rpc(std::function<Status(const T1 *, T2 *)> rpcFunc,
     auto convertStatus = JsonStringToMessage(jsonStr, &request);
     if (!convertStatus.ok()) {
         respHttp.status = 400;
-        respHttp.set_content("invalid param", "text/plain");
+        respHttp.set_content("invalid parameter", "text/plain");
         return;
     }
     Status status = rpcFunc(&request, &response);
@@ -36,9 +37,15 @@ void api2rpc(std::function<Status(const T1 *, T2 *)> rpcFunc,
         google::protobuf::json::PrintOptions option;
         option.always_print_primitive_fields = true;
         MessageToJsonString(response, &responseStr, option);
-        respHttp.set_content(responseStr, "application/json");
+        nlohmann::json res;
+        res["code"] = MSG_CODE_SUCCESS;
+        res["data"] = responseStr;
+        respHttp.set_content(res.dump(), "application/json");
     } else {
-        respHttp.set_content(status.error_message(), "text/plain");
+        nlohmann::json res;
+        res["code"] = MSG_CODE_ERROR;
+        res["error_message"] = status.error_message();
+        respHttp.set_content(status.error_message(), "application/json");
     }
 }
 

@@ -15,6 +15,7 @@
 #include <muduo/base/Singleton.h>
 #include <memory>
 #include <json.hpp>
+#include "cache/auth.h"
 
 using namespace muduo;
 using namespace muduo::net;
@@ -56,23 +57,14 @@ private:
     }
 
     void onStringMessage(const TcpConnectionPtr &conn, const string &message,
-                         Timestamp st) {
-        auto client = clientMap.find(conn);
-        if (!client) {
-            //从message中解析出platform和id
-            json j = json::parse(message);
-            int platform = j["platform"];
-            std::string userId = j["userId"];
-            client = std::make_shared<Client>(platform, userId, conn,
-                                              shared_from_this());
-            clientMap.insert(client);
-        }
-        client->handlerMsg(message);
-    }
+                         Timestamp st);
 
+    ClientPtr registerClient(const TcpConnectionPtr &conn,
+                             const string &message);
     TcpServer server_;
     LengthHeaderCodec codec_;
     ClientMap &clientMap;
+    AuthCache authCache;
 };
 
 #endif // SERVER_GATEWAY_H
