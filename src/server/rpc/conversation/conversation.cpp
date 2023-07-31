@@ -64,6 +64,7 @@ Status ConversationServiceImp::getAllConversations(
     ServerContext *context, const getAllConversationsReq *request,
     getAllConversationsResp *response) {
     auto ownerId = request->owneruserid();
+    std::cout << "getAllConversations ownerId:" << ownerId << std::endl;
     auto conversations = db.getConversations(ownerId);
     for (auto &item : conversations) {
         auto conversationRpc = response->add_conversations();
@@ -149,9 +150,11 @@ Status ConversationServiceImp::getUserConversationIDsHash(
     response->set_hash(hash);
     return Status::OK;
 }
+
 Status ConversationServiceImp::getConversationsByConversationID(
     ServerContext *context, const getConversationsByConversationIDReq *request,
     getConversationsByConversationIDResp *response) {
+    throw std::runtime_error("not implemented");
     return Status::OK;
 }
 

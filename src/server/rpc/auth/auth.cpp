@@ -70,7 +70,7 @@ Status AuthServiceImp::userToken(ServerContext *context,
 }
 
 int main() {
-    std::string server_address("0.0.0.0:50051");
+    std::string server_address("0.0.0.0:50052");
     AuthServiceImp service;
     ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());

@@ -10,6 +10,17 @@
 //     server.start();
 //     return 0;
 // }
+#include <iostream>
+#include "json.hpp"
 int main() {
-
+    nlohmann::json j;
+    //   string secret = 1;
+    // int32 platformID = 2;
+    // string userID = 3;
+    // string password = 4;
+    j["secret"] = "www";
+    j["platformID"] = 1;
+    j["userID"] = "wwdddw";
+    j["password"] = "wdfsdfww";
+    std::cout << j.dump() << std::endl;
 }
