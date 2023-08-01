@@ -41,35 +41,49 @@
 class ConversationCache : public Cache {
 public:
     static const std::string CONVERSATION_PREFIX;
-    static const std::string CONVERSATION_ID_PREFIX;
-    static const std::string CONVERSATION_ID_HASH_PREFIX;
+    static const std::string CONVERSATION_IDS_PREFIX;
+    static const std::string CONVERSATION_IDS_HASH_PREFIX;
     static const std::string CONVERSATION_HAS_READ_PREFIX;
-    ConversationCache();
 
-    virtual ~ConversationCache();
+    ConversationCache(std::shared_ptr<ConversationModel>);
+
+    virtual ~ConversationCache() = default;
 
     Conversation getConversation(const std::string &ownerId,
                                  const std::string &conversationId);
 
     std::vector<Conversation> getConversations(const std::string &ownerId);
 
+    std::vector<std::string> getConversationIds(const std::string &ownerId);
+
     std::string getConversationKey(const std::string &ownerId,
                                    const std::string &conversationId) {
         return CONVERSATION_PREFIX + ownerId + ":" + conversationId;
     }
 
-    std::string getConversationIdKey(const std::string &ownerId) {
-        return CONVERSATION_ID_PREFIX + ownerId;
+    std::string getConversationIdsKey(const std::string &ownerId) {
+        return CONVERSATION_IDS_PREFIX + ownerId;
     }
 
-    std::string getConversationIdHashKey(const std::string &ownerId) {
-        return CONVERSATION_ID_HASH_PREFIX + ownerId;
+    std::string getConversationIdsHashKey(const std::string &ownerId) {
+        return CONVERSATION_IDS_HASH_PREFIX + ownerId;
     }
 
     std::string getConversationHasReadKey(const std::string &ownerId,
                                           const std::string &conversationId) {
         return CONVERSATION_HAS_READ_PREFIX + ownerId + ":" + conversationId;
     }
+
+    uint64_t getConversationIdsHash(const std::string &ownerId);
+
+    std::vector<std::string>
+    getConversationIdsKey(const std::vector<std::string> &users);
+
+    std::vector<std::string>
+    getConversationIdsHashKey(const std::vector<std::string> &users);
+
+    int getKey(const Conversation &conversation,
+               const std::vector<std::string> &keys);
 
 private:
     std::shared_ptr<ConversationModel> db;

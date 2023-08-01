@@ -4,7 +4,7 @@ package ServerRpc.conversation;
 message conversation {
     string ownerId = 1;
     string conversationId = 2;
-    string conversationType = 3;
+    int32 conversationType = 3;
     string groupId = 4;
     string toUserId = 5;
     uint64 maxSeq = 6;

@@ -4,7 +4,7 @@
 
 int main() {
     AuthClient authClient(grpc::CreateChannel(
-        "localhost:50051", grpc::InsecureChannelCredentials()));
+        "localhost:50052", grpc::InsecureChannelCredentials()));
 
     userTokenResp userTokenResp;
     userTokenReq userTokenReq;

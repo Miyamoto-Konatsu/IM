@@ -7,12 +7,12 @@
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_context.h>
-
+#include "controller/conversationDatabase.h"
 using grpc::ServerContext;
 using grpc::Status;
 
 // using ServerRpc::conversation里的全部成员
-using ServerRpc::conversation::conversation;
+using RpcConversationData = ServerRpc::conversation::conversation;
 using ServerRpc::conversation::setConversationReq;
 using ServerRpc::conversation::setConversationResp;
 using ServerRpc::conversation::getConversationReq;
@@ -37,11 +37,10 @@ using ServerRpc::conversation::getUserConversationIDsHashResp;
 using ServerRpc::conversation::getConversationsByConversationIDReq;
 using ServerRpc::conversation::getConversationsByConversationIDResp;
 
-using ServerRpc::conversation::Conversation;
+using RpcConversationService = ServerRpc::conversation::Conversation;
 
-class ConversationServiceImp : public Conversation::Service {
+class ConversationServiceImp : public RpcConversationService::Service {
 public:
-    
     Status setConversation(ServerContext *context,
                            const setConversationReq *request,
                            setConversationResp *response);
@@ -61,7 +60,7 @@ public:
     createGroupChatConversations(ServerContext *context,
                                  const createGroupChatConversationsReq *request,
                                  createGroupChatConversationsResp *response);
-    Status createSingleChatConversation(
+    Status createSingleChatConversations(
         ServerContext *context, const createSingleChatConversationsReq *request,
         createSingleChatConversationsResp *response);
 
@@ -80,5 +79,9 @@ public:
         ServerContext *context,
         const getConversationsByConversationIDReq *request,
         getConversationsByConversationIDResp *response);
+    
+
+private:
+    ConversationDatabase db;
 };
 #endif // CONVERSATION_RPC_H

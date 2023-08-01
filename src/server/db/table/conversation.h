@@ -3,6 +3,8 @@
 
 #include "odb/core.hxx"
 #include <string>
+#include <sys/types.h>
+
 using namespace odb::core;
 
 typedef unsigned long long uint64;
@@ -11,7 +13,7 @@ struct ConversationKey {
     std::string ownerId_;
     std::string conversationId_;
 };
-#pragma db object table("relation")
+#pragma db object table("Conversation")
 class Conversation {
 public:
     Conversation() {
@@ -38,10 +40,10 @@ public:
         conversationKey_.conversationId_ = conversationId;
     }
 
-    const std::string &conversationType() const {
+    const u_short &conversationType() const {
         return conversationType_;
     }
-    void conversationType(const std::string &conversationType) {
+    void conversationType(const u_short &conversationType) {
         conversationType_ = conversationType;
     }
 
@@ -79,7 +81,7 @@ private:
 #pragma db id
     ConversationKey conversationKey_;
 
-    std::string conversationType_;
+    u_short conversationType_;
     std::string groupId_;  // for group conversation
     std::string toUserId_; // for private conversation
     uint64 maxSeq_;

@@ -10,6 +10,23 @@
 //     server.start();
 //     return 0;
 // }
+#include <iostream>
+#include <thread>
+void f() {
+    std::thread t([]() {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::cout << "hello" << std::endl;
+    });
+    t.detach();
+    std::cout << "f end" << std::endl;
+}
 int main() {
-
+    //   string secret = 1;
+    // int32 platformID = 2;
+    // string userID = 3;
+    // string password = 4;
+    f();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cout << "world" << std::endl;
+    return 0;
 }
