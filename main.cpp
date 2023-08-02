@@ -12,6 +12,7 @@
 // }
 #include <iostream>
 #include <thread>
+#include <muduo/base/Logging.h>
 void f() {
     std::thread t([]() {
         std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -21,6 +22,8 @@ void f() {
     std::cout << "f end" << std::endl;
 }
 int main() {
+    muduo::Logger::setLogLevel(muduo::Logger::LogLevel::DEBUG);
+    LOG_DEBUG << "hello" ;
     //   string secret = 1;
     // int32 platformID = 2;
     // string userID = 3;

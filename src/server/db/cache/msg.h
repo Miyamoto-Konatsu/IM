@@ -11,5 +11,7 @@ public:
 
     int64_t getConversationMaxId(const std::string &key);
     bool setConversationMaxId(const std::string &key, int64_t id);
+
+    std::string getConversationIdSeqKey(const std::string& conversationId);
 };
 #endif // MSG_CACHE_H

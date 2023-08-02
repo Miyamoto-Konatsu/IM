@@ -70,9 +70,9 @@ public:
         return stub_->batchSetConversations(&context, *request, response);
     }
 
-    Status createGroupChatConversations(
-        const createGroupChatConversationsReq *request,
-        createGroupChatConversationsResp *response) {
+    Status
+    createGroupChatConversations(const createGroupChatConversationsReq *request,
+                                 createGroupChatConversationsResp *response) {
         grpc::ClientContext context;
         return stub_->createGroupChatConversations(&context, *request,
                                                    response);
@@ -98,12 +98,11 @@ public:
         return stub_->getConversationIDs(&context, *request, response);
     }
 
-    Status getUserConversationIDsHash(
-        const getUserConversationIDsHashReq *request,
-        getUserConversationIDsHashResp *response) {
+    Status
+    getUserConversationIDsHash(const getUserConversationIDsHashReq *request,
+                               getUserConversationIDsHashResp *response) {
         grpc::ClientContext context;
-        return stub_->getUserConversationIDsHash(&context, *request,
-                                                 response);
+        return stub_->getUserConversationIDsHash(&context, *request, response);
     }
 
     Status getConversationsByConversationID(
@@ -112,6 +111,11 @@ public:
         grpc::ClientContext context;
         return stub_->getConversationsByConversationID(&context, *request,
                                                        response);
+    }
+
+    static ConversationClient getConversationClient() {
+        return ConversationClient(grpc::CreateChannel(
+            "localhost:50051", grpc::InsecureChannelCredentials()));
     }
 
 private:

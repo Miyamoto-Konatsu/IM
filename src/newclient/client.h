@@ -7,6 +7,7 @@
 #include "connclient.h"
 #include "apiclient.h"
 #include "user.h"
+
 class Client {
 public:
     Client(std::shared_ptr<ConnClient> connClient,
@@ -24,11 +25,13 @@ public:
     void onMessage(const muduo::net::TcpConnectionPtr &conn,
                    const std::string &message, muduo::Timestamp receiveTime);
 
-    void send(const std::string &message);
-
+    // 输入用户名和密码和终端，然后获取token
     void login();
-
+    
+    void sendMsg();
     void main();
+
+    void registerClient();
 
 private:
     std::shared_ptr<ApiClient> apiClient_;

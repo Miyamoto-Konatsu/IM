@@ -33,6 +33,8 @@ public:
 
     void handlerMsg(const std::string &msg);
 
+    void replayMsg(const std::string &msg);
+
 private:
     int platform_;
     std::shared_ptr<ChatServer> server_;

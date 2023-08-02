@@ -36,3 +36,13 @@ $httpServerPath &
 tcpServerPath="$server_dir/gateway/gate"
 # 启动tcp服务
 $tcpServerPath &
+
+# 获取transefer目录的绝对路径
+transferPath="$server_dir/transfer/transferServer"
+# 启动transfer服务
+$transferPath &
+
+# 获取push目录的绝对路径
+pushPath="$server_dir/push/pushServer"
+# 启动push服务
+$pushPath &

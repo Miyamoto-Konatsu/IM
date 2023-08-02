@@ -1,6 +1,6 @@
 #include "client.h"
 #include <iostream>
-
+#include "constant/msg.h"
 void Client::onConnection(const muduo::net::TcpConnectionPtr &conn) {
     // do nothing
 }
@@ -13,12 +13,15 @@ void Client::onMessage(const muduo::net::TcpConnectionPtr &conn,
               << std::endl;
 }
 
-void Client::send(const std::string &message) {
-    connClient_->send(message);
+void Client::registerClient() {
+    json data;
+    data["userID"] = user_.getUserID();
+    data["token"] = user_.getToken();
+    data["platform"] = platform_;
+    connClient_->send(data.dump());
 }
-
 void Client::login() {
-    std::string userID, password, secret="secret";
+    std::string userID, password, secret = "secret";
     int platform;
     std::cout << "userID: ";
     std::cin >> userID;
@@ -33,11 +36,54 @@ void Client::login() {
     user_.setSecret(secret);
     user_.setToken(token);
     platform_ = platform;
-    // std::string loginMessage = user_.loginMessage();
-    // std::cout << "login message: " << loginMessage << std::endl;
-    // connClient_->send(loginMessage);
+    registerClient();
 }
 
+void Client::sendMsg() {
+    std::string toUserID, groupID;
+    std::string content;
+    int msgType;
+    json msgSend;
+    msgSend["type"] = TCP_MSG_OP_TYPE_SEND_MSG;
+    std::cout << "msg type: \n single chat:1\n group chat:2" << std::endl;
+    std::cin >> msgType;
+    switch (msgType) {
+    case TCP_MSG_SINGLE_CHAT_TYPE: {
+        std::cout << "to userID: ";
+        std::cin >> toUserID;
+        std::cin.get();
+        std::cout << "content: ";
+        std::getline(std::cin, content);
+        json data;
+        data["toUserID"] = toUserID;
+        data["content"] = content;
+        data["msgType"] = TCP_MSG_SINGLE_CHAT_TYPE;
+        data["fromUserID"] = user_.getUserID();
+        msgSend["data"] = data;
+        connClient_->send(msgSend.dump());
+        break;
+    }
+    case TCP_MSG_GROUP_CHAT_TYPE: {
+        std::cout << "groupID: ";
+        std::cin >> groupID;
+        std::cout << "content: ";
+        std::cin.get();
+        std::getline(std::cin, content);
+        json data;
+        data["groupID"] = toUserID;
+        data["content"] = content;
+        data["msgType"] = TCP_MSG_GROUP_CHAT_TYPE;
+        data["fromUserID"] = user_.getUserID();
+        msgSend["data"] = data;
+        connClient_->send(msgSend.dump());
+        break;
+    }
+    default: {
+        std::cout << "msg type error" << std::endl;
+        return;
+    }
+    }
+}
 void Client::main() {
     mainThread_ = std::thread([this]() {
         std::string message;
@@ -46,10 +92,11 @@ void Client::main() {
             std::cin >> message;
             if (message == "login") {
                 login();
+
             } else if (message == "exit") {
                 break;
-            } else {
-                send(message);
+            } else if (message == "send") {
+                sendMsg();
             }
         }
     });

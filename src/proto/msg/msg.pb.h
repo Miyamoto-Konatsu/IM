@@ -257,7 +257,7 @@ class msg final :
   std::string* _internal_mutable_touserid();
 
   public:
-  // bytes content = 3;
+  // string content = 3;
   void clear_content() ;
   const std::string& content() const;
 
@@ -831,7 +831,7 @@ inline void msg::set_allocated_groupid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.msg.groupID)
 }
 
-// bytes content = 3;
+// string content = 3;
 inline void msg::clear_content() {
   _impl_.content_.ClearToEmpty();
 }
@@ -843,7 +843,7 @@ template <typename Arg_, typename... Args_>
 inline PROTOBUF_ALWAYS_INLINE void msg::set_content(Arg_&& arg,
                                                      Args_... args) {
   ;
-  _impl_.content_.SetBytes(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  _impl_.content_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:ServerRpc.msg.msg.content)
 }
 inline std::string* msg::mutable_content() {

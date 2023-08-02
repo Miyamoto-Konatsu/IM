@@ -29,6 +29,11 @@ public:
         return stub_->userToken(&context, *request, response);
     }
 
+    static AuthClient getAuthClient() {
+        return AuthClient(grpc::CreateChannel(
+            "localhost:50052", grpc::InsecureChannelCredentials()));
+    }
+
 private:
     std::unique_ptr<ServerRpc::auth::Auth::Stub> stub_;
 };

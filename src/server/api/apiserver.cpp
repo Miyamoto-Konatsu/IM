@@ -2,9 +2,11 @@
 #include "auth.h"
 #include <httplib.h>
 #include <memory>
+#include <muduo/base/Logging.h>
 #include <muduo/net/EventLoop.h>
 #include <functional>
 #include "conversation.h"
+
 ApiServer::ApiServer(unsigned short port, int threadNum) :
     port_(port), server_(new httplib::Server()), numThreads_(threadNum) {
     // server_->setHttpCallback(std::bind(&ApiServer::onRequest, this,
@@ -35,8 +37,11 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
         [authApi](const httplib::Request &req,
                   httplib::Response &res) -> httplib::Server::HandlerResponse {
             if (req.path != "/auth/userToken") {
-                std::string token = req.get_param_value("token");
+                std::string token = req.get_header_value("token");
                 if (token.empty()) {
+                    LOG_DEBUG << "ip: " << req.remote_addr
+                              << " port: " << req.remote_port << " error: "
+                              << " token is empty, unauthorized";
                     res.status = 401;
                     res.set_content("Unauthorized", "text/plain");
                     return httplib::Server::HandlerResponse::Handled;
@@ -46,6 +51,9 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
                 ServerRpc::auth::parseTokenResp respRpc;
                 auto status = authApi->parseToken(reqRpc, respRpc);
                 if (!status.ok()) {
+                    LOG_DEBUG << "ip: " << req.remote_addr
+                              << " port: " << req.remote_port << " error: "
+                              << status.error_message();
                     res.status = 401;
                     res.set_content("Unauthorized", "text/plain");
                     return httplib::Server::HandlerResponse::Handled;
@@ -81,7 +89,7 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
             std::bind(&ConversationApi::getAllConversations, conversationApi,
                       std::placeholders::_1, std::placeholders::_2);
     server_->Post("/conversation/getAllConversations", getAllConversationsFunc);
-    
+
     using funcBind = std::function<void(const HttpRequest &, HttpResponse &)>;
     funcBind createSingleChatConversationsFunc = std::bind(
         &ConversationApi::createSingleChatConversations, conversationApi,
@@ -116,6 +124,7 @@ void ApiServer::start() {
 }
 
 int main(int argc, char *argv[]) {
+    muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
     std::cout << "ApiServer listening on 0.0.0.0:8080" << std::endl;
     ApiServer server(8080, 4);
     server.start();

@@ -1,0 +1,10 @@
+/root/code/cpp/IM/build/src/server/rpc/auth/authServer
+/root/code/cpp/IM/build/src/server/rpc/msg/msgServer
+/root/code/cpp/IM/build/src/server/rpc/conversation/conversationServer
+
+/root/code/cpp/IM/build/src/server/api/api
+
+/root/code/cpp/IM/build/src/server/gateway/gate
+
+/root/code/cpp/IM/build/src/server/transfer/transferServer
+/root/code/cpp/IM/build/src/server/push/pushServer

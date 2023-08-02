@@ -151,7 +151,7 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n\tmsg.proto\022\rServerRpc.msg\"\223\001\n\003msg\022\022\n\nfr"
     "omUserID\030\001 \001(\t\022\020\n\010toUserID\030\002 \001(\t\022\017\n\007grou"
-    "pID\030\010 \001(\t\022\017\n\007content\030\003 \001(\014\022\022\n\ncreateTime"
+    "pID\030\010 \001(\t\022\017\n\007content\030\003 \001(\t\022\022\n\ncreateTime"
     "\030\004 \001(\003\022\013\n\003seq\030\005 \001(\003\022\022\n\nplatformID\030\006 \001(\005\022"
     "\017\n\007msgType\030\007 \001(\005\"2\n\nsendMsgReq\022$\n\010msg_da"
     "ta\030\001 \001(\0132\022.ServerRpc.msg.msg\"\037\n\013sendMsgR"
@@ -369,12 +369,13 @@ const char* msg::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
           goto handle_unusual;
         }
         continue;
-      // bytes content = 3;
+      // string content = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
           auto str = _internal_mutable_content();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "ServerRpc.msg.msg.content"));
         } else {
           goto handle_unusual;
         }
@@ -471,10 +472,12 @@ failure:
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // bytes content = 3;
+  // string content = 3;
   if (!this->_internal_content().empty()) {
     const std::string& _s = this->_internal_content();
-    target = stream->WriteBytesMaybeAliased(3, _s, target);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "ServerRpc.msg.msg.content");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
   }
 
   // int64 createTime = 4;
@@ -541,9 +544,9 @@ failure:
                                     this->_internal_touserid());
   }
 
-  // bytes content = 3;
+  // string content = 3;
   if (!this->_internal_content().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
                                     this->_internal_content());
   }
 

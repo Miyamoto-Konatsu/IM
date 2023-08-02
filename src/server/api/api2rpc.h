@@ -12,6 +12,7 @@
 #include "msg.pb.h"
 #include "protobuf/json/json.h"
 #include "constant/msg.h"
+#include <muduo/base/Logging.h>
 
 using HttpRequest = httplib::Request;
 using HttpResponse = httplib::Response;
@@ -27,6 +28,10 @@ void api2rpc(std::function<Status(const T1 *, T2 *)> rpcFunc,
     std::string jsonStr = reqHttp.body;
     auto convertStatus = JsonStringToMessage(jsonStr, &request);
     if (!convertStatus.ok()) {
+        LOG_ERROR << "ip: " << reqHttp.remote_addr
+                  << " port: " << reqHttp.remote_port << " body: " << jsonStr
+                  << " error: "
+                  << "convert json to protobuf error";
         respHttp.status = 400;
         respHttp.set_content("invalid parameter", "text/plain");
         return;
@@ -37,11 +42,17 @@ void api2rpc(std::function<Status(const T1 *, T2 *)> rpcFunc,
         google::protobuf::json::PrintOptions option;
         option.always_print_primitive_fields = true;
         MessageToJsonString(response, &responseStr, option);
+        LOG_DEBUG << "ip: " << reqHttp.remote_addr
+                  << " port: " << reqHttp.remote_port << " body: " << jsonStr
+                  << " response: " << responseStr;
         nlohmann::json res;
         res["code"] = MSG_CODE_SUCCESS;
         res["data"] = responseStr;
         respHttp.set_content(res.dump(), "application/json");
     } else {
+        LOG_DEBUG << "ip: " << reqHttp.remote_addr
+                  << " port: " << reqHttp.remote_port << " body: " << jsonStr
+                  << " error: " << status.error_message();
         nlohmann::json res;
         res["code"] = MSG_CODE_ERROR;
         res["error_message"] = status.error_message();

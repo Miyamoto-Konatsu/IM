@@ -24,6 +24,11 @@ public:
         return stub_->sendMsg(&context, *request, response);
     }
 
+    static MsgClient getMsgClient() {
+        return MsgClient(grpc::CreateChannel(
+            "localhost:50053", grpc::InsecureChannelCredentials()));
+    }
+
 private:
     std::unique_ptr<Msg::Stub> stub_;
 };

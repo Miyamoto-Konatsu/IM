@@ -16,16 +16,16 @@
 #include <memory>
 #include <json.hpp>
 #include "cache/auth.h"
+#include "gateMsghandler.h"
 
 using namespace muduo;
 using namespace muduo::net;
 using json = nlohmann::json;
 
-class ChatServer : muduo::noncopyable,
-                   std::enable_shared_from_this<ChatServer> {
+class ChatServer : public std::enable_shared_from_this<ChatServer> {
 public:
     ChatServer(muduo::net::EventLoop *loop, const InetAddress &listenAddr) :
-        server_(loop, listenAddr, "ChatServer"),
+        server_(loop, listenAddr, "ChatServer"), msgHandler(),
         clientMap(muduo::Singleton<ClientMap>::instance()),
         codec_(std::bind(&ChatServer::onStringMessage, this, _1, _2, _3)) {
         server_.setConnectionCallback(
@@ -43,6 +43,12 @@ public:
         //     std::bind(&ChatServer::threadInit, this, _1));
         server_.start();
     }
+
+    GateMsgHandler &getMsgHandler() {
+        return msgHandler;
+    }
+
+    void send(muduo::net::TcpConnection *conn, const string &message);
 
 private:
     void onConnection(const TcpConnectionPtr &conn) {
@@ -65,6 +71,7 @@ private:
     LengthHeaderCodec codec_;
     ClientMap &clientMap;
     AuthCache authCache;
+    GateMsgHandler msgHandler;
 };
 
 #endif // SERVER_GATEWAY_H
