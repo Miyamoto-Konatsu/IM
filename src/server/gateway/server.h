@@ -50,6 +50,10 @@ public:
 
     void send(muduo::net::TcpConnection *conn, const string &message);
 
+    ClientMap &getClientMap() {
+        return clientMap;
+    }
+
 private:
     void onConnection(const TcpConnectionPtr &conn) {
         LOG_INFO << conn->peerAddress().toIpPort() << " -> "

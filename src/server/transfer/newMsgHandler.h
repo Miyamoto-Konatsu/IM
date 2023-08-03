@@ -31,7 +31,7 @@ private:
 private:
     std::unique_ptr<ConsumerMQ> newMsgConsumer;
     std::vector<std::thread> msgHandlerThreads;
-    std::vector<Channel<ConsumerMQ::MsgVector>> channels;
+    std::vector<BlockChannel<ConsumerMQ::MsgVector>> channels;
     MsgDatabase msgDatabase;
 
     std::unique_ptr<ProducerMQ> msgToPushProducer;

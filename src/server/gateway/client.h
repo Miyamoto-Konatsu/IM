@@ -2,7 +2,9 @@
 #define CLIENT_GATEWAY_H
 #include <memory>
 #include <muduo/net/TcpConnection.h>
-
+#include "gateway.pb.h"
+#include "msg.pb.h"
+using ServerRpc::msg::msg;
 using muduo::net::TcpConnectionPtr;
 class ChatServer;
 class Client {
@@ -33,7 +35,9 @@ public:
 
     void handlerMsg(const std::string &msg);
 
-    void replayMsg(const std::string &msg);
+    void pushMsg(const msg *msg);
+
+    void writeMsg(const std::string &msg);
 
 private:
     int platform_;

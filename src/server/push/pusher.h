@@ -2,9 +2,10 @@
 #define PUSHSERVER_PUSH_H
 #include <iostream>
 #include <memory>
-#include "protobuf/message.h"
 #include "utils/commonUtils.h"
 #include "msg.pb.h"
+#include "gateway/gateway.h"
+
 using ServerRpc::msg::msg;
 
 class Pusher {
@@ -17,5 +18,11 @@ public:
     bool pushMsg2User(const msg &msg);
 
     bool pushMsg2Group(const msg &msg);
+
+    void getConnsAndOnlinePush(const std::vector<std::string> &userIds,
+                               const msg &msg);
+
+private:
+    GatewayClient gatewayClient_;
 };
 #endif

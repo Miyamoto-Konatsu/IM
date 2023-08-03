@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include "token/jwt_token.h"
 #include <muduo/base/Logging.h>
+#include "rpcService.h"
 
 ClientPtr ChatServer::registerClient(const TcpConnectionPtr &conn,
                                      const string &message) {
@@ -65,6 +66,7 @@ void ChatServer::onStringMessage(const TcpConnectionPtr &conn,
 void ChatServer::send(muduo::net::TcpConnection *conn, const string &message) {
     codec_.send(conn, message);
 }
+
 int main(int argc, char *argv[]) {
     muduo::Logger::setLogLevel(muduo::Logger::LogLevel::DEBUG);
     EventLoop loop;
@@ -75,5 +77,6 @@ int main(int argc, char *argv[]) {
         std::make_shared<ChatServer>(&loop, serverAddr);
     if (argc > 2) { server->setThreadNum(atoi(argv[2])); }
     server->start();
+    GatewayServiceImpl::startServer(server);
     loop.loop();
 }

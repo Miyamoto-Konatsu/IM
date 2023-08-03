@@ -21,6 +21,10 @@ message sendMsgResp {
     int64 sendTime = 1;
 }
 
+message pullMsgs {
+    repeated msg msgs = 1;
+}
+
 service Msg {
     rpc sendMsg(sendMsgReq) returns (sendMsgResp);
 }

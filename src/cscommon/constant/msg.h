@@ -1,7 +1,7 @@
 #ifndef MSG_CONSTANT_H
 #define MSG_CONSTANT_H
 // ********  API  ******
-// return message code
+// success message code
 #define MSG_CODE_SUCCESS 100
 
 // error message code
@@ -19,7 +19,7 @@
 #define TCP_MSG_GROUP_CHAT_TYPE 2
 
 
-// msg return code
+// msg success code
 #define TCP_MSG_CODE_SUCCESS 100
 
 // msg error code

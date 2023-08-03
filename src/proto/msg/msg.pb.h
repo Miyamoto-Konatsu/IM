@@ -55,6 +55,9 @@ namespace msg {
 class msg;
 struct msgDefaultTypeInternal;
 extern msgDefaultTypeInternal _msg_default_instance_;
+class pullMsgs;
+struct pullMsgsDefaultTypeInternal;
+extern pullMsgsDefaultTypeInternal _pullMsgs_default_instance_;
 class sendMsgReq;
 struct sendMsgReqDefaultTypeInternal;
 extern sendMsgReqDefaultTypeInternal _sendMsgReq_default_instance_;
@@ -66,6 +69,8 @@ extern sendMsgRespDefaultTypeInternal _sendMsgResp_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template <>
 ::ServerRpc::msg::msg* Arena::CreateMaybeMessage<::ServerRpc::msg::msg>(Arena*);
+template <>
+::ServerRpc::msg::pullMsgs* Arena::CreateMaybeMessage<::ServerRpc::msg::pullMsgs>(Arena*);
 template <>
 ::ServerRpc::msg::sendMsgReq* Arena::CreateMaybeMessage<::ServerRpc::msg::sendMsgReq>(Arena*);
 template <>
@@ -672,6 +677,171 @@ class sendMsgResp final :
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_msg_2eproto;
+};// -------------------------------------------------------------------
+
+class pullMsgs final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.pullMsgs) */ {
+ public:
+  inline pullMsgs() : pullMsgs(nullptr) {}
+  ~pullMsgs() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR pullMsgs(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  pullMsgs(const pullMsgs& from);
+  pullMsgs(pullMsgs&& from) noexcept
+    : pullMsgs() {
+    *this = ::std::move(from);
+  }
+
+  inline pullMsgs& operator=(const pullMsgs& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline pullMsgs& operator=(pullMsgs&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const pullMsgs& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const pullMsgs* internal_default_instance() {
+    return reinterpret_cast<const pullMsgs*>(
+               &_pullMsgs_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(pullMsgs& a, pullMsgs& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(pullMsgs* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(pullMsgs* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  pullMsgs* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<pullMsgs>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const pullMsgs& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const pullMsgs& from) {
+    pullMsgs::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(pullMsgs* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.msg.pullMsgs";
+  }
+  protected:
+  explicit pullMsgs(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMsgsFieldNumber = 1,
+  };
+  // repeated .ServerRpc.msg.msg msgs = 1;
+  int msgs_size() const;
+  private:
+  int _internal_msgs_size() const;
+
+  public:
+  void clear_msgs() ;
+  ::ServerRpc::msg::msg* mutable_msgs(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::msg::msg >*
+      mutable_msgs();
+  private:
+  const ::ServerRpc::msg::msg& _internal_msgs(int index) const;
+  ::ServerRpc::msg::msg* _internal_add_msgs();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::msg::msg>& _internal_msgs() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::msg::msg>* _internal_mutable_msgs();
+  public:
+  const ::ServerRpc::msg::msg& msgs(int index) const;
+  ::ServerRpc::msg::msg* add_msgs();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::msg::msg >&
+      msgs() const;
+  // @@protoc_insertion_point(class_scope:ServerRpc.msg.pullMsgs)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::msg::msg > msgs_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_msg_2eproto;
 };
 
 // ===================================================================
@@ -1071,6 +1241,58 @@ inline ::int64_t sendMsgResp::_internal_sendtime() const {
 inline void sendMsgResp::_internal_set_sendtime(::int64_t value) {
   ;
   _impl_.sendtime_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// pullMsgs
+
+// repeated .ServerRpc.msg.msg msgs = 1;
+inline int pullMsgs::_internal_msgs_size() const {
+  return _impl_.msgs_.size();
+}
+inline int pullMsgs::msgs_size() const {
+  return _internal_msgs_size();
+}
+inline void pullMsgs::clear_msgs() {
+  _internal_mutable_msgs()->Clear();
+}
+inline ::ServerRpc::msg::msg* pullMsgs::mutable_msgs(int index) {
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.pullMsgs.msgs)
+  return _internal_mutable_msgs()->Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::msg::msg >*
+pullMsgs::mutable_msgs() {
+  // @@protoc_insertion_point(field_mutable_list:ServerRpc.msg.pullMsgs.msgs)
+  return _internal_mutable_msgs();
+}
+inline const ::ServerRpc::msg::msg& pullMsgs::_internal_msgs(int index) const {
+  return _internal_msgs().Get(index);
+}
+inline const ::ServerRpc::msg::msg& pullMsgs::msgs(int index) const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.pullMsgs.msgs)
+  return _internal_msgs(index);
+}
+inline ::ServerRpc::msg::msg* pullMsgs::_internal_add_msgs() {
+  return _internal_mutable_msgs()->Add();
+}
+inline ::ServerRpc::msg::msg* pullMsgs::add_msgs() {
+  ::ServerRpc::msg::msg* _add = _internal_add_msgs();
+  // @@protoc_insertion_point(field_add:ServerRpc.msg.pullMsgs.msgs)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::msg::msg >&
+pullMsgs::msgs() const {
+  // @@protoc_insertion_point(field_list:ServerRpc.msg.pullMsgs.msgs)
+  return _internal_msgs();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::msg::msg>&
+pullMsgs::_internal_msgs() const {
+  return _impl_.msgs_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::msg::msg>*
+pullMsgs::_internal_mutable_msgs() {
+  return &_impl_.msgs_;
 }
 
 #ifdef __GNUC__

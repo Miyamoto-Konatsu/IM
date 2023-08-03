@@ -27,8 +27,9 @@ public:
 
     // 输入用户名和密码和终端，然后获取token
     void login();
-    
+
     void sendMsg();
+    
     void main();
 
     void registerClient();

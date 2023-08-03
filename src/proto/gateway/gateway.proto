@@ -1,0 +1,22 @@
+syntax="proto3";
+
+package ServerRpc.gateway;
+
+import "msg.proto";
+
+message pushMessage {
+   map<string, msg.pullMsgs> msgs = 1;
+}
+
+message onlineBatchPushOneMsgReq {
+    msg.msg msg_data = 1;
+    repeated string pushToUserIDs = 2;
+}
+
+message onlineBatchPushOneMsgResp {
+}
+
+service Gateway {
+    rpc onlineBatchPushOneMsg(onlineBatchPushOneMsgReq) returns (onlineBatchPushOneMsgResp);
+}
+
