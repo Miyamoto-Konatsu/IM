@@ -15,8 +15,11 @@ Status GatewayServiceImpl::onlineBatchPushOneMsg(
     onlineBatchPushOneMsgResp *response) {
     for (auto pushToUserId : request->pushtouserids()) {
         auto clients = chatServer_->getClientMap().find(pushToUserId);
-        for (auto client : clients) { client->pushMsg(&request->msg_data()); }
-        // chatServer_->send(client->second->getConn(), request->msg()
+        for (auto client : clients) {
+            if (client->getPlatform() == request->msg_data().platformid())
+                continue;
+            client->pushMsg(&request->msg_data());
+        }
     }
     return Status::OK;
 }
@@ -32,7 +35,6 @@ void GatewayServiceImpl::startServer(std::shared_ptr<ChatServer> chatServer) {
         std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
         LOG_DEBUG << "Gateway rpc Server listening on " << server_address;
         server->Wait();
-
     });
     t.detach();
 }

@@ -6,6 +6,7 @@ include_directories(${gRPC_INCLUDE_DIRS})
 foreach(_target
     auth
     msg
+    user
     group
     conversation
     gateway
@@ -18,6 +19,16 @@ foreach(_target
     )
 endforeach()
 
+# 将前面生成的库合并到一个库里
+add_library(grpc_proto_lib INTERFACE)
+target_link_libraries(grpc_proto_lib INTERFACE
+    auth_grpc_proto_lib
+    msg_grpc_proto_lib
+    user_grpc_proto_lib
+    group_grpc_proto_lib
+    conversation_grpc_proto_lib
+    gateway_grpc_proto_lib
+)
 
 include_directories("${CMAKE_CURRENT_LIST_DIR}/common/token")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/common")

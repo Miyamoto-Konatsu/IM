@@ -9,7 +9,16 @@
 #include <json.hpp>
 #include <vector>
 #include "conversation.pb.h"
+#include "table/user.h"
+#include "user.pb.h"
+#include "group.pb.h"
 #include "table/conversation.h"
+#include "table/group.h"
+#include <google/protobuf/util/json_util.h>
+
+using google::protobuf::util::JsonStringToMessage;
+using google::protobuf::util::MessageToJsonString;
+using google::protobuf::util::JsonPrintOptions;
 
 class Cache : public std::enable_shared_from_this<Cache> {
 public:
@@ -38,7 +47,12 @@ using ConversationRpc = ServerRpc::conversation::conversation;
 void copyField(Conversation &conversion, const ConversationRpc &other);
 void copyField(ConversationRpc &conversion, const Conversation &other);
 
-// Conversation serialization
+using UserRpc = ServerRpc::user::user;
+void copyField(User &user, const UserRpc &other);
+void copyField(UserRpc &user, const User &other);
+
+using json = nlohmann::json;
+
 inline void to_json(nlohmann::json &j, const Conversation &s) {
     j["conversaionId"] = s.conversationId();
     j["conversationType"] = s.conversationType();
@@ -58,8 +72,72 @@ inline void from_json(const nlohmann::json &j, Conversation &s) {
     s.ownerId(j.at("ownerId").get<std::string>());
     s.toUserId(j.at("toUserId").get<std::string>());
 }
-using json = nlohmann::json;
 
+inline void to_json(nlohmann::json &j, const ChatGroup &s) {
+    j["id"] = s.id();
+    j["groupName"] = s.groupName();
+}
+
+inline void from_json(const json &j, ChatGroup &s) {
+    s.groupName(j.at("groupName").get<std::string>());
+    s.id_ = (j.at("id").get<unsigned long>());
+}
+
+inline void to_json(nlohmann::json &j, const UserRpc &s) {
+    j["userId"] = s.userid();
+    j["nickname"] = s.nickname();
+    j["password"] = s.password();
+}
+
+inline void from_json(const nlohmann::json &j, UserRpc &s) {
+    s.set_userid(j.at("userId").get<std::string>());
+    s.set_nickname(j.at("nickname").get<std::string>());
+    s.set_password(j.at("password").get<std::string>());
+}
+
+using GroupMemberRpc = ServerRpc::group::groupMember;
+inline void to_json(nlohmann::json &j, const GroupMemberRpc &s) {
+    // std::string str;
+    // static JsonPrintOptions options;
+    // options.always_print_primitive_fields = true;
+    // auto status = MessageToJsonString(s, &str, options);
+    // if (!status.ok()) { throw std::runtime_error("parse json error"); }
+    // j = json::parse(str);
+}
+
+inline void from_json(const nlohmann::json &j, GroupMemberRpc &s) {
+    // std::string str = j.dump();
+    // auto status = JsonStringToMessage(str, &s);
+    // if (!status.ok()) { throw std::runtime_error("parse json error"); }
+}
+
+inline void to_json(nlohmann::json &j, const User &s) {
+    j["userId"] = s.userId();
+    j["nickname"] = s.nickname();
+    j["password"] = s.password();
+    j["id"] = s.id();
+}
+
+inline void from_json(const nlohmann::json &j, User &s) {
+    s.userId(j.at("userId").get<std::string>());
+    s.nickname(j.at("nickname").get<std::string>());
+    s.password(j.at("password").get<std::string>());
+    s.id_ = (j.at("id").get<unsigned long>());
+}
+
+inline void to_json(nlohmann::json &j, const GroupMember &s) {
+    j["id"] = s.id();
+    j["user"] = *s.user();
+    j["group"] = *s.group();
+    j["role"] = s.roler();
+}
+
+inline void from_json(const nlohmann::json &j, GroupMember &s) {
+    s.id_ = (j.at("id").get<unsigned long>());
+    s.roler(j.at("role").get<GroupMember::GroupMemberRoler>());
+    s.user(std::make_shared<User>(j.at("user").get<User>()));
+    s.group(std::make_shared<ChatGroup>(j.at("group").get<ChatGroup>()));
+}
 template <typename T>
 T getCache(const std::string &key, std::shared_ptr<Cache> redisClient,
            int expire, const std::function<T()> fn) {

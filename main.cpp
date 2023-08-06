@@ -21,15 +21,21 @@ void f() {
     t.detach();
     std::cout << "f end" << std::endl;
 }
+
+template <typename T, int n>
+struct Pointer {
+    using type = typename Pointer<T, n - 1>::type *;
+};
+
+template <typename T>
+struct Pointer<T, 0> {
+    using type = T;
+};
+
+// template <typename T>
+// void fun(T t) {
+//     std::cout << T << std::endl;
+//     std::cout << t << std::endl;
+// }
 int main() {
-    muduo::Logger::setLogLevel(muduo::Logger::LogLevel::DEBUG);
-    LOG_DEBUG << "hello" ;
-    //   string secret = 1;
-    // int32 platformID = 2;
-    // string userID = 3;
-    // string password = 4;
-    f();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    std::cout << "world" << std::endl;
-    return 0;
 }

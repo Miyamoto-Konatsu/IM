@@ -22,7 +22,9 @@ public:
 
         auto existingConversation =
             db->load<Conversation>(conversation.conversationKey());
-        throw DatabaseLookupError("Conversation already exists");
+        if (existingConversation) {
+            throw DatabaseLookupError("Conversation already exists");
+        }
         db->persist(conversation); // 将对象插入数据库
         t.commit();                // 提交事务
     }

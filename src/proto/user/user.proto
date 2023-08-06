@@ -1,0 +1,40 @@
+syntax="proto3";
+
+package ServerRpc.user;
+
+message user {
+    string userId = 1;
+    string password = 2;
+    string nickname = 3;
+}
+// "{\"userId\": \"123\"", \"password\": \"123\", \"nickname\": \"123\"}"
+message createUserReq {
+    user user = 1;
+}
+
+message createUserResp {
+    bool isSuccess = 1;
+}
+
+message getUserReq {
+    string userId = 1;
+}
+
+message getUserResp {
+    user user = 1;
+}
+
+message checkUserReq {
+    string userId = 1;
+    string password = 2;
+}
+
+message checkUserResp {
+    bool isSuccess = 1;
+}
+
+service User {
+    rpc createUser(createUserReq) returns (createUserResp);
+    rpc getUser(getUserReq) returns (getUserResp);
+    rpc checkUser(checkUserReq) returns (checkUserResp);
+}

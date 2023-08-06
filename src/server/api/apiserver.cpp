@@ -6,7 +6,7 @@
 #include <muduo/net/EventLoop.h>
 #include <functional>
 #include "conversation.h"
-
+#include "user.h"
 ApiServer::ApiServer(unsigned short port, int threadNum) :
     port_(port), server_(new httplib::Server()), numThreads_(threadNum) {
     // server_->setHttpCallback(std::bind(&ApiServer::onRequest, this,
@@ -36,7 +36,7 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
     server_->set_pre_routing_handler(
         [authApi](const httplib::Request &req,
                   httplib::Response &res) -> httplib::Server::HandlerResponse {
-            if (req.path != "/auth/userToken") {
+            if (req.path != "/auth/userToken" && req.path != "/user/createUser") {
                 std::string token = req.get_header_value("token");
                 if (token.empty()) {
                     LOG_DEBUG << "ip: " << req.remote_addr
@@ -52,8 +52,8 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
                 auto status = authApi->parseToken(reqRpc, respRpc);
                 if (!status.ok()) {
                     LOG_DEBUG << "ip: " << req.remote_addr
-                              << " port: " << req.remote_port << " error: "
-                              << status.error_message();
+                              << " port: " << req.remote_port
+                              << " error: " << status.error_message();
                     res.status = 401;
                     res.set_content("Unauthorized", "text/plain");
                     return httplib::Server::HandlerResponse::Handled;
@@ -69,6 +69,8 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
     //         snprintf(buf, sizeof(buf), fmt, res.status);
     //         res.set_content(buf, "text/html");
     //     });
+
+    // ********* conversation api register *********
 
     std::shared_ptr<ConversationApi> conversationApi =
         std::make_shared<ConversationApi>();
@@ -107,6 +109,25 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
                   std::placeholders::_1, std::placeholders::_2);
     server_->Post("/conversation/getUserConversationIDsHash",
                   getUserConversationIDsHashFunc);
+
+    // ********* user api register *********
+    std::shared_ptr<UserApi> userApi = std::make_shared<UserApi>();
+
+    funcBind getUserFunc =
+        std::bind(&UserApi::getUser, userApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/user/getUser", getUserFunc);
+
+    funcBind createUserFunc =
+        std::bind(&UserApi::createUser, userApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/user/createUser", createUserFunc);
+
+    funcBind checkUserFunc =
+        std::bind(&UserApi::checkUser, userApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/user/checkUser", checkUserFunc);
+    // ********* group api register *********
 }
 
 ApiServer::~ApiServer() {

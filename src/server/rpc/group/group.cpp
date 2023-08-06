@@ -4,7 +4,8 @@ Status GroupServiceImpl::createGroup(ServerContext *context,
                                      const createGroupReq *request,
                                      createGroupResp *response) {
     std::string groupname = request->groupname();
-    std::string groupowner = request->groupowner();
+    std::string groupownerId = request->groupownerid();
+    
     return Status::OK;
 }
 

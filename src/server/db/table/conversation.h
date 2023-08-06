@@ -17,18 +17,21 @@ struct ConversationKey {
 class Conversation {
 public:
     Conversation() {
-    } // 补全构造函数
+    } 
 
-    // 补全 getter 和 setter 函数
+    //  getter 和 setter 函数
     const ConversationKey &conversationKey() const {
         return conversationKey_;
     }
+
     void conversationKey(const ConversationKey &conversationKey) {
         conversationKey_ = conversationKey;
     }
+
     const std::string &ownerId() const {
         return conversationKey_.ownerId_;
     }
+
     void ownerId(const std::string &ownerId) {
         conversationKey_.ownerId_ = ownerId;
     }
@@ -36,6 +39,7 @@ public:
     const std::string &conversationId() const {
         return conversationKey_.conversationId_;
     }
+
     void conversationId(const std::string &conversationId) {
         conversationKey_.conversationId_ = conversationId;
     }
@@ -43,6 +47,7 @@ public:
     const u_short &conversationType() const {
         return conversationType_;
     }
+
     void conversationType(const u_short &conversationType) {
         conversationType_ = conversationType;
     }
@@ -50,6 +55,7 @@ public:
     const std::string &groupId() const {
         return groupId_;
     }
+
     void groupId(const std::string &groupId) {
         groupId_ = groupId;
     }
@@ -57,6 +63,7 @@ public:
     const std::string &toUserId() const {
         return toUserId_;
     }
+
     void toUserId(const std::string &toUserId) {
         toUserId_ = toUserId;
     }
@@ -64,6 +71,7 @@ public:
     uint64 maxSeq() const {
         return maxSeq_;
     }
+
     void maxSeq(uint64 maxSeq) {
         maxSeq_ = maxSeq;
     }
@@ -71,6 +79,7 @@ public:
     uint64 minSeq() const {
         return minSeq_;
     }
+    
     void minSeq(uint64 minSeq) {
         minSeq_ = minSeq;
     }

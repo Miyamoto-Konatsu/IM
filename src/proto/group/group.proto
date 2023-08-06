@@ -2,20 +2,29 @@ syntax = "proto3";
 
 package ServerRpc.group;
 
+import "user.proto";
+
+message groupMember{
+    user.user user = 1;
+    uint64 groupID = 2;
+    enum groupMemberRole{
+       owner = 0;
+        member = 1;
+    }
+}
+
 message groupInfo{
     string groupName = 1;
     string groupDesc = 2;
-    string groupOwner = 3;
-    repeated string groupMembers = 4;
-    string groupID = 5;
-    int64 createTime = 6;
+    string groupOwnerId = 3;
+    repeated groupMember groupMembers = 4;
 }
 
 message createGroupReq {
     string groupName = 1;
     string groupDesc = 2;
-    string groupOwner = 3;
-    repeated string groupMembers = 4;
+    string groupOwnerId = 3;
+    repeated string groupMemberIds = 4;
 }
 
 message createGroupResp {
@@ -23,7 +32,7 @@ message createGroupResp {
 }
 
 message joinGroupReq {
-    string groupID = 1;
+    uint64 groupID = 1;
     string userID = 2;
 }
 
@@ -31,7 +40,7 @@ message joinGroupResp {
 }
 
 message getGroupInfoReq {
-    string groupID = 1;
+    uint64 groupID = 1;
 }
 
 message getGroupInfoResp {
@@ -47,11 +56,11 @@ message getGroupListResp {
 }
 
 message getGroupMemberReq {
-    string groupID = 1;
+    uint64 groupID = 1;
 }
 
 message getGroupMemberResp {
-    repeated string groupMembers = 2;
+    repeated groupMember groupMembers = 2;
 }
 
 service Group {

@@ -20,10 +20,12 @@ server_dir="$build_dir/src/server"
 authRpcPath="$server_dir/rpc/auth/authServer"
 conversationRpcPath="$server_dir/rpc/conversation/conversationServer"
 msgRpcPath="$server_dir/rpc/msg/msgServer"
+userRpcPath="$server_dir/rpc/user/userServer"
 # 启动rpc服务
 $authRpcPath &
 $conversationRpcPath &
 $msgRpcPath &
+$userRpcPath &
 
 
 # 获取http服务的绝对路径
