@@ -56,7 +56,7 @@ void api2rpc(std::function<Status(const T1 *, T2 *)> rpcFunc,
         nlohmann::json res;
         res["code"] = MSG_CODE_ERROR;
         res["error_message"] = status.error_message();
-        respHttp.set_content(status.error_message(), "application/json");
+        respHttp.set_content(res.dump(), "application/json");
     }
 }
 

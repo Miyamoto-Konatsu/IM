@@ -308,9 +308,30 @@ class groupMember final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kUserFieldNumber = 1,
     kGroupIDFieldNumber = 2,
+    kUserFieldNumber = 1,
+    kRoleFieldNumber = 3,
   };
+  // string groupID = 2;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // .ServerRpc.user.user user = 1;
   bool has_user() const;
   void clear_user() ;
@@ -325,14 +346,14 @@ class groupMember final :
   void unsafe_arena_set_allocated_user(
       ::ServerRpc::user::user* user);
   ::ServerRpc::user::user* unsafe_arena_release_user();
-  // uint64 groupID = 2;
-  void clear_groupid() ;
-  ::uint64_t groupid() const;
-  void set_groupid(::uint64_t value);
+  // .ServerRpc.group.groupMember.groupMemberRole role = 3;
+  void clear_role() ;
+  ::ServerRpc::group::groupMember_groupMemberRole role() const;
+  void set_role(::ServerRpc::group::groupMember_groupMemberRole value);
 
   private:
-  ::uint64_t _internal_groupid() const;
-  void _internal_set_groupid(::uint64_t value);
+  ::ServerRpc::group::groupMember_groupMemberRole _internal_role() const;
+  void _internal_set_role(::ServerRpc::group::groupMember_groupMemberRole value);
 
   public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.groupMember)
@@ -345,8 +366,9 @@ class groupMember final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     ::ServerRpc::user::user* user_;
-    ::uint64_t groupid_;
+    int role_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_group_2eproto;
@@ -480,12 +502,13 @@ class groupInfo final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGroupMembersFieldNumber = 4,
+    kGroupMembersFieldNumber = 5,
     kGroupNameFieldNumber = 1,
     kGroupDescFieldNumber = 2,
     kGroupOwnerIdFieldNumber = 3,
+    kGroupIdFieldNumber = 4,
   };
-  // repeated .ServerRpc.group.groupMember groupMembers = 4;
+  // repeated .ServerRpc.group.groupMember groupMembers = 5;
   int groupmembers_size() const;
   private:
   int _internal_groupmembers_size() const;
@@ -565,6 +588,26 @@ class groupInfo final :
   std::string* _internal_mutable_groupownerid();
 
   public:
+  // string groupId = 4;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.groupInfo)
  private:
   class _Internal;
@@ -577,6 +620,7 @@ class groupInfo final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupname_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupdesc_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupownerid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -711,12 +755,13 @@ class createGroupReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGroupMemberIdsFieldNumber = 4,
+    kGroupMemberIdsFieldNumber = 5,
     kGroupNameFieldNumber = 1,
     kGroupDescFieldNumber = 2,
     kGroupOwnerIdFieldNumber = 3,
+    kGroupIdFieldNumber = 4,
   };
-  // repeated string groupMemberIds = 4;
+  // repeated string groupMemberIds = 5;
   int groupmemberids_size() const;
   private:
   int _internal_groupmemberids_size() const;
@@ -806,6 +851,26 @@ class createGroupReq final :
   std::string* _internal_mutable_groupownerid();
 
   public:
+  // string groupId = 4;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.createGroupReq)
  private:
   class _Internal;
@@ -818,6 +883,7 @@ class createGroupReq final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupname_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupdesc_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupownerid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -825,10 +891,9 @@ class createGroupReq final :
 };// -------------------------------------------------------------------
 
 class createGroupResp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.createGroupResp) */ {
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:ServerRpc.group.createGroupResp) */ {
  public:
   inline createGroupResp() : createGroupResp(nullptr) {}
-  ~createGroupResp() override;
   template<typename = void>
   explicit PROTOBUF_CONSTEXPR createGroupResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
@@ -909,29 +974,15 @@ class createGroupResp final :
   createGroupResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<createGroupResp>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const createGroupResp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const createGroupResp& from) {
-    createGroupResp::MergeImpl(*this, from);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const createGroupResp& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
   }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const createGroupResp& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
   public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  ::size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(createGroupResp* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -951,23 +1002,6 @@ class createGroupResp final :
 
   // accessors -------------------------------------------------------
 
-  enum : int {
-    kGroupInfoFieldNumber = 2,
-  };
-  // .ServerRpc.group.groupInfo groupInfo = 2;
-  bool has_groupinfo() const;
-  void clear_groupinfo() ;
-  const ::ServerRpc::group::groupInfo& groupinfo() const;
-  PROTOBUF_NODISCARD ::ServerRpc::group::groupInfo* release_groupinfo();
-  ::ServerRpc::group::groupInfo* mutable_groupinfo();
-  void set_allocated_groupinfo(::ServerRpc::group::groupInfo* groupinfo);
-  private:
-  const ::ServerRpc::group::groupInfo& _internal_groupinfo() const;
-  ::ServerRpc::group::groupInfo* _internal_mutable_groupinfo();
-  public:
-  void unsafe_arena_set_allocated_groupinfo(
-      ::ServerRpc::group::groupInfo* groupinfo);
-  ::ServerRpc::group::groupInfo* unsafe_arena_release_groupinfo();
   // @@protoc_insertion_point(class_scope:ServerRpc.group.createGroupResp)
  private:
   class _Internal;
@@ -976,11 +1010,7 @@ class createGroupResp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::ServerRpc::group::groupInfo* groupinfo_;
   };
-  union { Impl_ _impl_; };
   friend struct ::TableStruct_group_2eproto;
 };// -------------------------------------------------------------------
 
@@ -1112,9 +1142,29 @@ class joinGroupReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kUserIDFieldNumber = 2,
     kGroupIDFieldNumber = 1,
+    kUserIDFieldNumber = 2,
   };
+  // string groupID = 1;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
   // string userID = 2;
   void clear_userid() ;
   const std::string& userid() const;
@@ -1135,16 +1185,6 @@ class joinGroupReq final :
   std::string* _internal_mutable_userid();
 
   public:
-  // uint64 groupID = 1;
-  void clear_groupid() ;
-  ::uint64_t groupid() const;
-  void set_groupid(::uint64_t value);
-
-  private:
-  ::uint64_t _internal_groupid() const;
-  void _internal_set_groupid(::uint64_t value);
-
-  public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.joinGroupReq)
  private:
   class _Internal;
@@ -1153,8 +1193,8 @@ class joinGroupReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
-    ::uint64_t groupid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1415,14 +1455,24 @@ class getGroupInfoReq final :
   enum : int {
     kGroupIDFieldNumber = 1,
   };
-  // uint64 groupID = 1;
+  // string groupID = 1;
   void clear_groupid() ;
-  ::uint64_t groupid() const;
-  void set_groupid(::uint64_t value);
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
 
   private:
-  ::uint64_t _internal_groupid() const;
-  void _internal_set_groupid(::uint64_t value);
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
 
   public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupInfoReq)
@@ -1433,7 +1483,7 @@ class getGroupInfoReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::uint64_t groupid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2060,14 +2110,24 @@ class getGroupMemberReq final :
   enum : int {
     kGroupIDFieldNumber = 1,
   };
-  // uint64 groupID = 1;
+  // string groupID = 1;
   void clear_groupid() ;
-  ::uint64_t groupid() const;
-  void set_groupid(::uint64_t value);
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
 
   private:
-  ::uint64_t _internal_groupid() const;
-  void _internal_set_groupid(::uint64_t value);
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
 
   public:
   // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberReq)
@@ -2078,7 +2138,7 @@ class getGroupMemberReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::uint64_t groupid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2350,24 +2410,71 @@ inline void groupMember::set_allocated_user(::ServerRpc::user::user* user) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.groupMember.user)
 }
 
-// uint64 groupID = 2;
+// string groupID = 2;
 inline void groupMember::clear_groupid() {
-  _impl_.groupid_ = ::uint64_t{0u};
+  _impl_.groupid_.ClearToEmpty();
 }
-inline ::uint64_t groupMember::groupid() const {
+inline const std::string& groupMember::groupid() const {
   // @@protoc_insertion_point(field_get:ServerRpc.group.groupMember.groupID)
   return _internal_groupid();
 }
-inline void groupMember::set_groupid(::uint64_t value) {
-  _internal_set_groupid(value);
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void groupMember::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:ServerRpc.group.groupMember.groupID)
 }
-inline ::uint64_t groupMember::_internal_groupid() const {
-  return _impl_.groupid_;
+inline std::string* groupMember::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.groupMember.groupID)
+  return _s;
 }
-inline void groupMember::_internal_set_groupid(::uint64_t value) {
+inline const std::string& groupMember::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void groupMember::_internal_set_groupid(const std::string& value) {
   ;
-  _impl_.groupid_ = value;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* groupMember::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* groupMember::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.groupMember.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void groupMember::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.groupMember.groupID)
+}
+
+// .ServerRpc.group.groupMember.groupMemberRole role = 3;
+inline void groupMember::clear_role() {
+  _impl_.role_ = 0;
+}
+inline ::ServerRpc::group::groupMember_groupMemberRole groupMember::role() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.groupMember.role)
+  return _internal_role();
+}
+inline void groupMember::set_role(::ServerRpc::group::groupMember_groupMemberRole value) {
+   _internal_set_role(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.group.groupMember.role)
+}
+inline ::ServerRpc::group::groupMember_groupMemberRole groupMember::_internal_role() const {
+  return static_cast<::ServerRpc::group::groupMember_groupMemberRole>(_impl_.role_);
+}
+inline void groupMember::_internal_set_role(::ServerRpc::group::groupMember_groupMemberRole value) {
+  ;
+  _impl_.role_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -2515,7 +2622,54 @@ inline void groupInfo::set_allocated_groupownerid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.groupInfo.groupOwnerId)
 }
 
-// repeated .ServerRpc.group.groupMember groupMembers = 4;
+// string groupId = 4;
+inline void groupInfo::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& groupInfo::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.groupInfo.groupId)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void groupInfo::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.group.groupInfo.groupId)
+}
+inline std::string* groupInfo::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.groupInfo.groupId)
+  return _s;
+}
+inline const std::string& groupInfo::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void groupInfo::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* groupInfo::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* groupInfo::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.groupInfo.groupId)
+  return _impl_.groupid_.Release();
+}
+inline void groupInfo::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.groupInfo.groupId)
+}
+
+// repeated .ServerRpc.group.groupMember groupMembers = 5;
 inline int groupInfo::_internal_groupmembers_size() const {
   return _impl_.groupmembers_.size();
 }
@@ -2708,7 +2862,54 @@ inline void createGroupReq::set_allocated_groupownerid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.createGroupReq.groupOwnerId)
 }
 
-// repeated string groupMemberIds = 4;
+// string groupId = 4;
+inline void createGroupReq::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& createGroupReq::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.createGroupReq.groupId)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void createGroupReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.group.createGroupReq.groupId)
+}
+inline std::string* createGroupReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.createGroupReq.groupId)
+  return _s;
+}
+inline const std::string& createGroupReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void createGroupReq::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* createGroupReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* createGroupReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.createGroupReq.groupId)
+  return _impl_.groupid_.Release();
+}
+inline void createGroupReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.createGroupReq.groupId)
+}
+
+// repeated string groupMemberIds = 5;
 inline int createGroupReq::_internal_groupmemberids_size() const {
   return _impl_.groupmemberids_.size();
 }
@@ -2805,115 +3006,55 @@ createGroupReq::_internal_mutable_groupmemberids() {
 
 // createGroupResp
 
-// .ServerRpc.group.groupInfo groupInfo = 2;
-inline bool createGroupResp::has_groupinfo() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.groupinfo_ != nullptr);
-  return value;
-}
-inline void createGroupResp::clear_groupinfo() {
-  if (_impl_.groupinfo_ != nullptr) _impl_.groupinfo_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const ::ServerRpc::group::groupInfo& createGroupResp::_internal_groupinfo() const {
-  const ::ServerRpc::group::groupInfo* p = _impl_.groupinfo_;
-  return p != nullptr ? *p : reinterpret_cast<const ::ServerRpc::group::groupInfo&>(
-      ::ServerRpc::group::_groupInfo_default_instance_);
-}
-inline const ::ServerRpc::group::groupInfo& createGroupResp::groupinfo() const {
-  // @@protoc_insertion_point(field_get:ServerRpc.group.createGroupResp.groupInfo)
-  return _internal_groupinfo();
-}
-inline void createGroupResp::unsafe_arena_set_allocated_groupinfo(
-    ::ServerRpc::group::groupInfo* groupinfo) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.groupinfo_);
-  }
-  _impl_.groupinfo_ = groupinfo;
-  if (groupinfo) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerRpc.group.createGroupResp.groupInfo)
-}
-inline ::ServerRpc::group::groupInfo* createGroupResp::release_groupinfo() {
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::group::groupInfo* temp = _impl_.groupinfo_;
-  _impl_.groupinfo_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::ServerRpc::group::groupInfo* createGroupResp::unsafe_arena_release_groupinfo() {
-  // @@protoc_insertion_point(field_release:ServerRpc.group.createGroupResp.groupInfo)
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::ServerRpc::group::groupInfo* temp = _impl_.groupinfo_;
-  _impl_.groupinfo_ = nullptr;
-  return temp;
-}
-inline ::ServerRpc::group::groupInfo* createGroupResp::_internal_mutable_groupinfo() {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  if (_impl_.groupinfo_ == nullptr) {
-    auto* p = CreateMaybeMessage<::ServerRpc::group::groupInfo>(GetArenaForAllocation());
-    _impl_.groupinfo_ = p;
-  }
-  return _impl_.groupinfo_;
-}
-inline ::ServerRpc::group::groupInfo* createGroupResp::mutable_groupinfo() {
-  ::ServerRpc::group::groupInfo* _msg = _internal_mutable_groupinfo();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.group.createGroupResp.groupInfo)
-  return _msg;
-}
-inline void createGroupResp::set_allocated_groupinfo(::ServerRpc::group::groupInfo* groupinfo) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.groupinfo_;
-  }
-  if (groupinfo) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(groupinfo);
-    if (message_arena != submessage_arena) {
-      groupinfo = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, groupinfo, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  _impl_.groupinfo_ = groupinfo;
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.createGroupResp.groupInfo)
-}
-
 // -------------------------------------------------------------------
 
 // joinGroupReq
 
-// uint64 groupID = 1;
+// string groupID = 1;
 inline void joinGroupReq::clear_groupid() {
-  _impl_.groupid_ = ::uint64_t{0u};
+  _impl_.groupid_.ClearToEmpty();
 }
-inline ::uint64_t joinGroupReq::groupid() const {
+inline const std::string& joinGroupReq::groupid() const {
   // @@protoc_insertion_point(field_get:ServerRpc.group.joinGroupReq.groupID)
   return _internal_groupid();
 }
-inline void joinGroupReq::set_groupid(::uint64_t value) {
-  _internal_set_groupid(value);
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void joinGroupReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:ServerRpc.group.joinGroupReq.groupID)
 }
-inline ::uint64_t joinGroupReq::_internal_groupid() const {
-  return _impl_.groupid_;
+inline std::string* joinGroupReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.joinGroupReq.groupID)
+  return _s;
 }
-inline void joinGroupReq::_internal_set_groupid(::uint64_t value) {
+inline const std::string& joinGroupReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void joinGroupReq::_internal_set_groupid(const std::string& value) {
   ;
-  _impl_.groupid_ = value;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* joinGroupReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* joinGroupReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.joinGroupReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void joinGroupReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.joinGroupReq.groupID)
 }
 
 // string userID = 2;
@@ -2971,24 +3112,51 @@ inline void joinGroupReq::set_allocated_userid(std::string* value) {
 
 // getGroupInfoReq
 
-// uint64 groupID = 1;
+// string groupID = 1;
 inline void getGroupInfoReq::clear_groupid() {
-  _impl_.groupid_ = ::uint64_t{0u};
+  _impl_.groupid_.ClearToEmpty();
 }
-inline ::uint64_t getGroupInfoReq::groupid() const {
+inline const std::string& getGroupInfoReq::groupid() const {
   // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupInfoReq.groupID)
   return _internal_groupid();
 }
-inline void getGroupInfoReq::set_groupid(::uint64_t value) {
-  _internal_set_groupid(value);
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getGroupInfoReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupInfoReq.groupID)
 }
-inline ::uint64_t getGroupInfoReq::_internal_groupid() const {
-  return _impl_.groupid_;
+inline std::string* getGroupInfoReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupInfoReq.groupID)
+  return _s;
 }
-inline void getGroupInfoReq::_internal_set_groupid(::uint64_t value) {
+inline const std::string& getGroupInfoReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void getGroupInfoReq::_internal_set_groupid(const std::string& value) {
   ;
-  _impl_.groupid_ = value;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getGroupInfoReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getGroupInfoReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.getGroupInfoReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void getGroupInfoReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.getGroupInfoReq.groupID)
 }
 
 // -------------------------------------------------------------------
@@ -3189,24 +3357,51 @@ getGroupListResp::_internal_mutable_groupinfo() {
 
 // getGroupMemberReq
 
-// uint64 groupID = 1;
+// string groupID = 1;
 inline void getGroupMemberReq::clear_groupid() {
-  _impl_.groupid_ = ::uint64_t{0u};
+  _impl_.groupid_.ClearToEmpty();
 }
-inline ::uint64_t getGroupMemberReq::groupid() const {
+inline const std::string& getGroupMemberReq::groupid() const {
   // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberReq.groupID)
   return _internal_groupid();
 }
-inline void getGroupMemberReq::set_groupid(::uint64_t value) {
-  _internal_set_groupid(value);
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getGroupMemberReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberReq.groupID)
 }
-inline ::uint64_t getGroupMemberReq::_internal_groupid() const {
-  return _impl_.groupid_;
+inline std::string* getGroupMemberReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberReq.groupID)
+  return _s;
 }
-inline void getGroupMemberReq::_internal_set_groupid(::uint64_t value) {
+inline const std::string& getGroupMemberReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void getGroupMemberReq::_internal_set_groupid(const std::string& value) {
   ;
-  _impl_.groupid_ = value;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getGroupMemberReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getGroupMemberReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.getGroupMemberReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void getGroupMemberReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.getGroupMemberReq.groupID)
 }
 
 // -------------------------------------------------------------------

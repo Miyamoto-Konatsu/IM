@@ -150,6 +150,18 @@ namespace odb
 
     static const id_type_ id;
 
+    // groupId
+    //
+    typedef
+    mysql::query_column<
+      mysql::value_traits<
+        ::std::string,
+        mysql::id_string >::query_type,
+      mysql::id_string >
+    groupId_type_;
+
+    static const groupId_type_ groupId;
+
     // groupName
     //
     typedef
@@ -167,6 +179,11 @@ namespace odb
   const typename query_columns< ::ChatGroup, id_mysql, A >::id_type_
   query_columns< ::ChatGroup, id_mysql, A >::
   id (A::table_name, "`id`", 0);
+
+  template <typename A>
+  const typename query_columns< ::ChatGroup, id_mysql, A >::groupId_type_
+  query_columns< ::ChatGroup, id_mysql, A >::
+  groupId (A::table_name, "`groupId`", 0);
 
   template <typename A>
   const typename query_columns< ::ChatGroup, id_mysql, A >::groupName_type_
@@ -198,6 +215,12 @@ namespace odb
       //
       unsigned long long id_value;
       my_bool id_null;
+
+      // groupId_
+      //
+      details::buffer groupId_value;
+      unsigned long groupId_size;
+      my_bool groupId_null;
 
       // groupName_
       //
@@ -247,7 +270,7 @@ namespace odb
 
     typedef mysql::query_base query_base_type;
 
-    static const std::size_t column_count = 2UL;
+    static const std::size_t column_count = 3UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 0UL;

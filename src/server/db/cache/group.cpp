@@ -1,7 +1,9 @@
 #include "group.h"
 #include "cache/common.h"
+#include "relation/group_model.h"
 #include "table/group.h"
 #include <cstdint>
+#include <cstring>
 #include <functional>
 #include <vector>
 
@@ -11,109 +13,102 @@ const std::string GroupCache::GROUP_MEMBER_IDS_HASH_PREFIX =
     "group_member_ids_hash:";
 const std::string GroupCache::GROUP_MEMBER_PREFIX = "group_member:";
 const std::string GroupCache::GROUP_OWNER_PREFIX = "group_owner:";
+const std::string GroupCache::GROUP_LIST_PREFIX = "group_list:";
+const std::string GroupCache::GROUP_ID_LIST_PREFIX = "group_id_list:";
+inline void from_json(const json &j, ChatGroup &s) {
+    s.groupName(j.at("groupName").get<std::string>());
+    s.id_ = (j.at("id").get<unsigned long>());
+    s.groupId(j.at("groupId").get<std::string>());
+}
+
+inline void to_json(nlohmann::json &j, const ChatGroup &s) {
+    j["id"] = s.id();
+    j["groupId"] = s.groupId();
+    j["groupName"] = s.groupName();
+}
+
+inline void to_json(nlohmann::json &j, const GroupMember &s) {
+    j["id"] = s.id();
+    j["user"] = *s.user();
+    j["group"] = *s.group();
+    j["role"] = s.roler();
+}
+inline void from_json(const nlohmann::json &j, GroupMember &s) {
+    s.id_ = (j.at("id").get<unsigned long>());
+    s.roler(j.at("role").get<GroupMember::GroupMemberRoler>());
+    s.user(std::make_shared<User>(j.at("user").get<User>()));
+    s.group(std::make_shared<ChatGroup>(j.at("group").get<ChatGroup>()));
+}
+
+inline void to_json(nlohmann::json &j, const GroupInfoStruct &groupInfo) {
+    j["group"] = groupInfo.group;
+    j["members"] = groupInfo.members;
+}
+
+inline void from_json(const nlohmann::json &j, GroupInfoStruct &groupInfo) {
+    j.at("group").get_to(groupInfo.group);
+    j.at("members").get_to(groupInfo.members);
+}
 
 GroupCache::GroupCache(std::shared_ptr<GroupModel> db) : db(db) {
 }
 
-ChatGroup GroupCache::getGroup(const unsigned long &groupId) {
+GroupInfoStruct GroupCache::getGroup(const std::string &groupId) {
     std::string key = getGroupKey(groupId);
-    std::function<ChatGroup()> fn = [&, this]() {
+    std::function<GroupInfoStruct()> fn = [&, this]() {
         auto group = this->db->findGroup(groupId);
         return group;
     };
     return getCache(key, shared_from_this(), 10, std::move(fn));
 }
 
-std::vector<GroupMember>
-GroupCache::getGroupMembers(const unsigned long &groupId) {
-    auto ids = getGroupMemberIds(groupId);
-
-    std::function<std::vector<GroupMember>()> fn = [&, this]() {
-        auto members = this->db->findGroupMembers(groupId);
-        return members;
-        // std::vector<GroupMemberRpc> membersRpc;
-        // for (auto &member : members) {
-        //     GroupMemberRpc memberRpc;
-        //     copyField(*memberRpc.mutable_user(), *member.user());
-        //     memberRpc.set_groupid(member.group()->id());
-        //     if (member.roler() == GroupMember::GroupMemberRoler::owner) {
-        //         memberRpc.groupMemberRole_Name(
-        //             GroupMemberRpc::groupMemberRole::
-        //                 groupMember_groupMemberRole_owner);
-        //     } else if (member.roler()
-        //                == GroupMember::GroupMemberRoler::member) {
-        //         memberRpc.groupMemberRole_Name(
-        //             GroupMemberRpc::groupMemberRole::
-        //                 groupMember_groupMemberRole_member);
-        //     }
-        // }
-        // return membersRpc;
-    };
-
-    std::function<std::string(const GroupMember &)> keyFn =
-        [this](const GroupMember &groupMember) {
-            return getGroupMemberKey(groupMember.id(),
-                                     groupMember.user()->userId());
-        };
-
-    std::function<int(const GroupMember &, const std::vector<std::string>)>
-        indexFn = [this](const GroupMember &groupMember,
-                         const std::vector<std::string> keys) {
-            for (int i = 0; i < keys.size(); i++) {
-                if (keys[i]
-                    == getGroupMemberKey(groupMember.id(),
-                                         groupMember.user()->userId())) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-
-    return batchGetCache(ids, shared_from_this(), 100, keyFn, indexFn,
-                         std::move(fn));
-}
-
-std::vector<std::string>
-GroupCache::getGroupMemberIds(const unsigned long &groupId) {
+std::vector<unsigned long>
+GroupCache::getGroupMemberIds(const std::string &groupId) {
     std::string key = getGroupMemberIdsKey(groupId);
-    std::function<std::vector<std::string>()> fn = [&, this]() {
+    std::function<std::vector<unsigned long>()> fn = [&, this]() {
         auto members = this->db->findGroupMemberIds(groupId);
         return members;
     };
     return getCache(key, shared_from_this(), 100, std::move(fn));
 }
 
-uint64_t GroupCache::getGroupMemberIdsHash(const unsigned long &groupId) {
+uint64_t GroupCache::getGroupMemberIdsHash(const std::string &groupId) {
     std::string key = getGroupMemberIdsHashKey(groupId);
     std::function<uint64_t()> fn = [&, this]() {
         auto userIds = this->getGroupMemberIds(groupId);
         uint64_t hash = 0;
         for (auto &userId : userIds) {
-            hash += std::hash<std::string>{}(userId);
+            hash += std::hash<unsigned long>{}(userId);
         }
         return hash;
     };
     return getCache(key, shared_from_this(), 100, std::move(fn));
 }
 
-GroupMember GroupCache::getGroupOwner(const unsigned long &groupId) {
-    std::string key = getGroupOwnerKey(groupId);
-    std::function<GroupMember()> fn = [&, this]() {
-        auto owner = this->db->findGroupOwner(groupId);
-        return owner;
-        // GroupMemberRpc ownerRpc;
-        // copyField(*ownerRpc.mutable_user(), *owner.user());
-        // ownerRpc.set_groupid(owner.group()->id());
-        // if (owner.roler() == GroupMember::GroupMemberRoler::owner) {
-        //     ownerRpc.groupMemberRole_Name(
-        //         GroupMemberRpc::groupMemberRole::
-        //             groupMember_groupMemberRole_owner);
-        // } else if (owner.roler() == GroupMember::GroupMemberRoler::member) {
-        //     ownerRpc.groupMemberRole_Name(
-        //         GroupMemberRpc::groupMemberRole::
-        //             groupMember_groupMemberRole_member);
-        // }
-        // return ownerRpc;
+std::vector<std::string> GroupCache::getGroupIdList(const std::string &userId) {
+    std::string key = getGroupIdListKey(userId);
+    std::function<std::vector<std::string>()> fn = [&, this]() {
+        auto groups = this->db->findGroupIdList(userId);
+        return groups;
     };
     return getCache(key, shared_from_this(), 100, std::move(fn));
+}
+
+std::vector<ChatGroup> GroupCache::getGroupList(const std::string &userId) {
+    std::string key = getGroupListKey(userId);
+    std::function<std::vector<ChatGroup>()> fn = [&, this]() {
+        auto groups = this->db->findGroupList(userId);
+        return groups;
+    };
+    return getCache(key, shared_from_this(), 100, std::move(fn));
+}
+
+void GroupCache::deleteGroupList(const std::string &userId) {
+    std::string key = getGroupListKey(userId);
+    del(key);
+}
+
+void GroupCache::deleteGroupInfo(const std::string &groupId) {
+    std::string key = getGroupKey(groupId);
+    del(key);
 }

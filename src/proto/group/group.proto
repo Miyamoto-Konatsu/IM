@@ -6,33 +6,35 @@ import "user.proto";
 
 message groupMember{
     user.user user = 1;
-    uint64 groupID = 2;
+    string groupID = 2;
     enum groupMemberRole{
-       owner = 0;
+        owner = 0;
         member = 1;
     }
+    groupMemberRole role = 3;
 }
 
 message groupInfo{
     string groupName = 1;
     string groupDesc = 2;
     string groupOwnerId = 3;
-    repeated groupMember groupMembers = 4;
+    string groupId = 4;
+    repeated groupMember groupMembers = 5;
 }
 
 message createGroupReq {
     string groupName = 1;
     string groupDesc = 2;
     string groupOwnerId = 3;
-    repeated string groupMemberIds = 4;
+    string groupId = 4;
+    repeated string groupMemberIds = 5;
 }
 
 message createGroupResp {
-    groupInfo groupInfo = 2;
 }
 
 message joinGroupReq {
-    uint64 groupID = 1;
+    string groupID = 1;
     string userID = 2;
 }
 
@@ -40,7 +42,7 @@ message joinGroupResp {
 }
 
 message getGroupInfoReq {
-    uint64 groupID = 1;
+    string groupID = 1;
 }
 
 message getGroupInfoResp {
@@ -56,7 +58,7 @@ message getGroupListResp {
 }
 
 message getGroupMemberReq {
-    uint64 groupID = 1;
+    string groupID = 1;
 }
 
 message getGroupMemberResp {

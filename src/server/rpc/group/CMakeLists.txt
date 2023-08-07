@@ -9,5 +9,5 @@ add_executable(groupServer group.cpp )
 # 链接 gRPC 库
 target_link_libraries(groupServer user_grpc_proto_lib group_grpc_proto_lib user_grpc_proto_lib)
 # 链接 redis ,yaml库
-target_link_libraries(groupServer cpp_redis yaml-cpp tacopie server_common_lib server_mq_lib server_db_lib )
+target_link_libraries(groupServer cpp_redis yaml-cpp tacopie server_common_lib server_mq_lib server_db_lib muduo_base )
  

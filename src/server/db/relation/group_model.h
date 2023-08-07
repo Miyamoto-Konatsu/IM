@@ -6,6 +6,7 @@
 #include <odb/transaction.hxx>
 #include <odb/session.hxx>
 #include <odb/mysql/database.hxx>
+#include <string>
 #include <vector>
 
 #include "table/group-odb.hxx"
@@ -13,6 +14,14 @@
 #include "table/user.h"
 #include "utils.h"
 #include "common.h"
+#include "json.hpp"
+#include "cache/common.h"
+
+using json = nlohmann::json;
+struct GroupInfoStruct {
+    ChatGroup group;
+    std::vector<GroupMember> members;
+};
 
 class GroupModel {
 public:
@@ -20,81 +29,118 @@ public:
     }
 
     // 创建 Group 对象
-    void createGroup( ChatGroup &group, const std::string &ownerId) {
+    void createGroup(ChatGroup &group, const std::string &ownerId) {
         odb::session s;
         odb::transaction t(db->begin());
-        auto existingGroup = db->load<ChatGroup>(group.id());
+        auto existingGroup = db->query_one(odb::query<ChatGroup>(
+            odb::query<ChatGroup>::groupId == group.groupId()));
         if (existingGroup) {
             throw DatabaseLookupError("Group already exists");
         }
-        db->persist(group); // 将对象插入数据库
+        auto id = db->persist(group); // 将对象插入数据库
+        std::shared_ptr<ChatGroup> groupPtr(db->load<ChatGroup>(id));
 
-        auto groupPtr = std::make_shared<ChatGroup>(std::move(*existingGroup));
-
-        auto existingUser = db->query_one(
-            odb::query<User>(odb::query<User>::userId == ownerId));
+        std::shared_ptr<User> existingUser(db->query_one(
+            odb::query<User>(odb::query<User>::userId == ownerId)));
         if (!existingUser) { throw DatabaseLookupError("User not found"); }
-        std::shared_ptr<User> user =
-            std::make_shared<User>(std::move(*existingUser));
-        GroupMember member(user, groupPtr);
+
+        GroupMember member(existingUser, groupPtr);
         member.roler(GroupMember::GroupMemberRoler::owner);
         db->persist(member);
         t.commit(); // 提交事务
     }
 
-    // 查询 Group 对象
-    ChatGroup findGroup(const unsigned long &groupId) {
-        odb::transaction t(db->begin());
-        odb::query<ChatGroup> query(odb::query<ChatGroup>::id == groupId);
-        ChatGroup result;
-
-        auto isFound = db->query_one(query, result);
-        t.commit(); // 提交事务
-        if (isFound) {
-            return result;
-        } else {
-            throw DatabaseLookupError("Group not found");
-        }
-    }
-
-    GroupMember findGroupOwner(const unsigned long &groupId) {
+    void joinGroup(const std::string &groupId, const std::string &userId) {
         odb::session s;
         odb::transaction t(db->begin());
-        odb::query<GroupMember> query(
-            odb::query<GroupMember>::id == groupId
-            && odb::query<GroupMember>::roler
-                   == GroupMember::GroupMemberRoler::owner);
-        GroupMember result;
 
-        auto isFound = db->query_one(query, result);
-        t.commit(); // 提交事务
-        if (isFound) {
-            return result;
-        } else {
-            throw DatabaseLookupError("Group not found");
+        std::shared_ptr<ChatGroup> existingGroup(db->query_one(
+            odb::query<ChatGroup>(odb::query<ChatGroup>::groupId == groupId)));
+        if (!existingGroup) { throw DatabaseLookupError("Group not exists"); }
+
+        std::shared_ptr<User> existingUser(db->query_one(
+            odb::query<User>(odb::query<User>::userId == userId)));
+        if (!existingUser) { throw DatabaseLookupError("User not found"); }
+
+        std::shared_ptr<GroupMember> existingGroupMember(
+            db->query_one(odb::query<GroupMember>(
+                odb::query<GroupMember>::user->userId == userId
+                && odb::query<GroupMember>::group->groupId == groupId)));
+        if (existingGroupMember) {
+            throw DatabaseLookupError("User already in group");
         }
+        GroupMember member(existingUser, existingGroup);
+        member.roler(GroupMember::GroupMemberRoler::member);
+        db->persist(member);
+        t.commit(); // 提交事务
+    }
+    // 查询 Group 对象
+    GroupInfoStruct findGroup(const std::string &groupId) {
+        odb::session s;
+        odb::transaction t(db->begin());
+        odb::query<ChatGroup> query(odb::query<ChatGroup>::groupId == groupId);
+        ChatGroup group;
+
+        auto isFound = db->query_one(query, group);
+        if (!isFound) { throw DatabaseLookupError("Group not found"); }
+
+        auto queryMember = odb::query<GroupMember>(
+            odb::query<GroupMember>::group->id == group.id());
+        std::vector<GroupMember> members;
+        auto queryResult = db->query(queryMember);
+        for (auto &item : queryResult) { members.push_back(std::move(item)); }
+        t.commit(); // 提交事务
+        return {group, members};
     }
 
-    std::vector<GroupMember> findGroupMembers(const unsigned long &groupId) {
+    std::vector<unsigned long> findGroupMemberIds(const std::string &groupId) {
         odb::transaction t(db->begin());
-        odb::query<GroupMember> query(odb::query<GroupMember>::id == groupId);
-        std::vector<GroupMember> result;
+        odb::query<ChatGroup> queryGroup(odb::query<ChatGroup>::groupId
+                                         == groupId);
+        ChatGroup group;
 
-        auto queryResult = db->query(query);
-        for (auto &item : queryResult) { result.push_back(std::move(item)); }
+        auto isFound = db->query_one(queryGroup, group);
+        if (!isFound) { throw DatabaseLookupError("Group not found"); }
+
+        odb::query<GroupMember> queryMember(odb::query<GroupMember>::id
+                                            == group.id());
+        std::vector<unsigned long> result;
+
+        auto queryGroupResult = db->query(queryMember);
+        for (auto &item : queryGroupResult) {
+            result.push_back(item.user()->id());
+        }
         t.commit();
         return result;
     }
 
-    std::vector<std::string> findGroupMemberIds(const unsigned long &groupId) {
+    // return group id list
+    std::vector<std::string> findGroupIdList(const std::string &userId) {
+        odb::session s;
         odb::transaction t(db->begin());
-        odb::query<GroupMember> query(odb::query<GroupMember>::id == groupId);
+        std::shared_ptr<User> existingUser(db->query_one(
+            odb::query<User>(odb::query<User>::userId == userId)));
+        if (!existingUser) { throw DatabaseLookupError("User not found"); }
+        auto groupMembers = db->query<GroupMember>(
+            odb::query<GroupMember>::user->id == existingUser->id());
         std::vector<std::string> result;
-
-        auto queryResult = db->query(query);
-        for (auto &item : queryResult) {
-            result.push_back(item.user()->userId());
+        for (auto &item : groupMembers) {
+            result.push_back(item.group()->groupId());
         }
+        t.commit();
+        return result;
+    }
+
+    std::vector<ChatGroup> findGroupList(const std::string &userId) {
+        odb::session s;
+        odb::transaction t(db->begin());
+        std::shared_ptr<User> existingUser(db->query_one(
+            odb::query<User>(odb::query<User>::userId == userId)));
+        if (!existingUser) { throw DatabaseLookupError("User not found"); }
+        auto groupMembers = db->query<GroupMember>(
+            odb::query<GroupMember>::user->id == existingUser->id());
+        std::vector<ChatGroup> result;
+        for (auto &item : groupMembers) { result.push_back(*item.group()); }
         t.commit();
         return result;
     }

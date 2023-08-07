@@ -73,16 +73,6 @@ inline void from_json(const nlohmann::json &j, Conversation &s) {
     s.toUserId(j.at("toUserId").get<std::string>());
 }
 
-inline void to_json(nlohmann::json &j, const ChatGroup &s) {
-    j["id"] = s.id();
-    j["groupName"] = s.groupName();
-}
-
-inline void from_json(const json &j, ChatGroup &s) {
-    s.groupName(j.at("groupName").get<std::string>());
-    s.id_ = (j.at("id").get<unsigned long>());
-}
-
 inline void to_json(nlohmann::json &j, const UserRpc &s) {
     j["userId"] = s.userid();
     j["nickname"] = s.nickname();
@@ -117,7 +107,6 @@ inline void to_json(nlohmann::json &j, const User &s) {
     j["password"] = s.password();
     j["id"] = s.id();
 }
-
 inline void from_json(const nlohmann::json &j, User &s) {
     s.userId(j.at("userId").get<std::string>());
     s.nickname(j.at("nickname").get<std::string>());
@@ -125,19 +114,6 @@ inline void from_json(const nlohmann::json &j, User &s) {
     s.id_ = (j.at("id").get<unsigned long>());
 }
 
-inline void to_json(nlohmann::json &j, const GroupMember &s) {
-    j["id"] = s.id();
-    j["user"] = *s.user();
-    j["group"] = *s.group();
-    j["role"] = s.roler();
-}
-
-inline void from_json(const nlohmann::json &j, GroupMember &s) {
-    s.id_ = (j.at("id").get<unsigned long>());
-    s.roler(j.at("role").get<GroupMember::GroupMemberRoler>());
-    s.user(std::make_shared<User>(j.at("user").get<User>()));
-    s.group(std::make_shared<ChatGroup>(j.at("group").get<ChatGroup>()));
-}
 template <typename T>
 T getCache(const std::string &key, std::shared_ptr<Cache> redisClient,
            int expire, const std::function<T()> fn) {

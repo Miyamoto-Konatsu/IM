@@ -26,38 +26,44 @@ public:
     GroupClient(std::shared_ptr<Channel> channel) :
         stub_(Group::NewStub(channel)) {
     }
-    ~GroupClient(){}
-    GroupClient(const GroupClient &) = delete;
-    GroupClient &operator=(const GroupClient &) = delete;
-
-    Status createGroup(const createGroupReq &request,
-                       createGroupResp &response) {
-        ClientContext context;
-        return stub_->createGroup(&context, request, &response);
+    
+    ~GroupClient() {
     }
 
-    Status joinGroup(const joinGroupReq &request, joinGroupResp &response) {
+    Status createGroup(const createGroupReq *request,
+                       createGroupResp *response) {
         ClientContext context;
-        return stub_->joinGroup(&context, request, &response);
+        return stub_->createGroup(&context, *request, response);
     }
 
-    Status getGroupInfo(const getGroupInfoReq &request,
-                        getGroupInfoResp &response) {
+    Status joinGroup(const joinGroupReq *request, joinGroupResp *response) {
         ClientContext context;
-        return stub_->getGroupInfo(&context, request, &response);
+        return stub_->joinGroup(&context, *request, response);
     }
 
-    Status getGroupList(const getGroupListReq &request,
-                        getGroupListResp &response) {
+    Status getGroupInfo(const getGroupInfoReq *request,
+                        getGroupInfoResp *response) {
         ClientContext context;
-        return stub_->getGroupList(&context, request, &response);
+        return stub_->getGroupInfo(&context, *request, response);
     }
 
-    Status getGroupMember(const getGroupMemberReq &request,
-                          getGroupMemberResp &response) {
+    Status getGroupList(const getGroupListReq *request,
+                        getGroupListResp *response) {
         ClientContext context;
-        return stub_->getGroupMember(&context, request, &response);
+        return stub_->getGroupList(&context, *request, response);
     }
+
+    Status getGroupMember(const getGroupMemberReq *request,
+                          getGroupMemberResp *response) {
+        ClientContext context;
+        return stub_->getGroupMember(&context, *request, response);
+    }
+
+    static GroupClient getGroupClient() {
+        return GroupClient(grpc::CreateChannel(
+            "localhost:50056", grpc::InsecureChannelCredentials()));
+    }
+
 private:
     std::unique_ptr<Group::Stub> stub_;
 };

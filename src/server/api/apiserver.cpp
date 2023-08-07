@@ -1,5 +1,4 @@
 #include "apiserver.h"
-#include "auth.h"
 #include <httplib.h>
 #include <memory>
 #include <muduo/base/Logging.h>
@@ -7,6 +6,9 @@
 #include <functional>
 #include "conversation.h"
 #include "user.h"
+#include "auth.h"
+#include "group.h"
+
 ApiServer::ApiServer(unsigned short port, int threadNum) :
     port_(port), server_(new httplib::Server()), numThreads_(threadNum) {
     // server_->setHttpCallback(std::bind(&ApiServer::onRequest, this,
@@ -36,7 +38,8 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
     server_->set_pre_routing_handler(
         [authApi](const httplib::Request &req,
                   httplib::Response &res) -> httplib::Server::HandlerResponse {
-            if (req.path != "/auth/userToken" && req.path != "/user/createUser") {
+            if (req.path != "/auth/userToken"
+                && req.path != "/user/createUser") {
                 std::string token = req.get_header_value("token");
                 if (token.empty()) {
                     LOG_DEBUG << "ip: " << req.remote_addr
@@ -127,7 +130,33 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
         std::bind(&UserApi::checkUser, userApi, std::placeholders::_1,
                   std::placeholders::_2);
     server_->Post("/user/checkUser", checkUserFunc);
+
     // ********* group api register *********
+    std::shared_ptr<GroupApi> groupApi = std::make_shared<GroupApi>();
+    funcBind createGroupFunc =
+        std::bind(&GroupApi::createGroup, groupApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/group/createGroup", createGroupFunc);
+
+    funcBind joinGroupFunc =
+        std::bind(&GroupApi::joinGroup, groupApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/group/joinGroup", joinGroupFunc);
+
+    funcBind getGroupInfoFunc =
+        std::bind(&GroupApi::getGroupInfo, groupApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/group/getGroupInfo", getGroupInfoFunc);
+
+    funcBind getGroupMemberFunc =
+        std::bind(&GroupApi::getGroupMember, groupApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/group/getGroupMember", getGroupMemberFunc);
+
+    funcBind getGroupListFunc =
+        std::bind(&GroupApi::getGroupList, groupApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/group/getGroupList", getGroupListFunc);
 }
 
 ApiServer::~ApiServer() {

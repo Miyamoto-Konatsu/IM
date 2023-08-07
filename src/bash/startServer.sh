@@ -21,12 +21,13 @@ authRpcPath="$server_dir/rpc/auth/authServer"
 conversationRpcPath="$server_dir/rpc/conversation/conversationServer"
 msgRpcPath="$server_dir/rpc/msg/msgServer"
 userRpcPath="$server_dir/rpc/user/userServer"
+groupRpcPath="$server_dir/rpc/group/groupServer"
 # 启动rpc服务
 $authRpcPath &
 $conversationRpcPath &
 $msgRpcPath &
 $userRpcPath &
-
+$groupRpcPath &
 
 # 获取http服务的绝对路径
 httpServerPath="$server_dir/api/api"

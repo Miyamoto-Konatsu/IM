@@ -94,9 +94,17 @@ namespace odb
     //
     t[0UL] = 0;
 
-    // groupName_
+    // groupId_
     //
     if (t[1UL])
+    {
+      i.groupId_value.capacity (i.groupId_size);
+      grew = true;
+    }
+
+    // groupName_
+    //
+    if (t[2UL])
     {
       i.groupName_value.capacity (i.groupName_size);
       grew = true;
@@ -126,6 +134,16 @@ namespace odb
       b[n].is_null = &i.id_null;
       n++;
     }
+
+    // groupId_
+    //
+    b[n].buffer_type = MYSQL_TYPE_STRING;
+    b[n].buffer = i.groupId_value.data ();
+    b[n].buffer_length = static_cast<unsigned long> (
+      i.groupId_value.capacity ());
+    b[n].length = &i.groupId_size;
+    b[n].is_null = &i.groupId_null;
+    n++;
 
     // groupName_
     //
@@ -176,6 +194,27 @@ namespace odb
       i.id_null = is_null;
     }
 
+    // groupId_
+    //
+    {
+      ::std::string const& v =
+        o.groupId_;
+
+      bool is_null (false);
+      std::size_t size (0);
+      std::size_t cap (i.groupId_value.capacity ());
+      mysql::value_traits<
+          ::std::string,
+          mysql::id_string >::set_image (
+        i.groupId_value,
+        size,
+        is_null,
+        v);
+      i.groupId_null = is_null;
+      i.groupId_size = static_cast<unsigned long> (size);
+      grew = grew || (cap != i.groupId_value.capacity ());
+    }
+
     // groupName_
     //
     {
@@ -223,6 +262,21 @@ namespace odb
         i.id_null);
     }
 
+    // groupId_
+    //
+    {
+      ::std::string& v =
+        o.groupId_;
+
+      mysql::value_traits<
+          ::std::string,
+          mysql::id_string >::set_value (
+        v,
+        i.groupId_value,
+        i.groupId_size,
+        i.groupId_null);
+    }
+
     // groupName_
     //
     {
@@ -255,13 +309,15 @@ namespace odb
   const char access::object_traits_impl< ::ChatGroup, id_mysql >::persist_statement[] =
   "INSERT INTO `Group` "
   "(`id`, "
+  "`groupId`, "
   "`groupName`) "
   "VALUES "
-  "(?, ?)";
+  "(?, ?, ?)";
 
   const char access::object_traits_impl< ::ChatGroup, id_mysql >::find_statement[] =
   "SELECT "
   "`Group`.`id`, "
+  "`Group`.`groupId`, "
   "`Group`.`groupName` "
   "FROM `Group` "
   "WHERE `Group`.`id`=?";
@@ -269,6 +325,7 @@ namespace odb
   const char access::object_traits_impl< ::ChatGroup, id_mysql >::update_statement[] =
   "UPDATE `Group` "
   "SET "
+  "`groupId`=?, "
   "`groupName`=? "
   "WHERE `id`=?";
 
@@ -279,6 +336,7 @@ namespace odb
   const char access::object_traits_impl< ::ChatGroup, id_mysql >::query_statement[] =
   "SELECT "
   "`Group`.`id`, "
+  "`Group`.`groupId`, "
   "`Group`.`groupName` "
   "FROM `Group`";
 

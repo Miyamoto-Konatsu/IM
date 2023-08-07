@@ -26,6 +26,14 @@ public:
         groupName_ = groupName;
     }
 
+    const std::string &groupId() const {
+        return groupId_;
+    }
+
+    void groupId(const std::string &groupId) {
+        groupId_ = groupId;
+    }
+
     const unsigned long &id() const {
         return id_;
     }
@@ -35,6 +43,8 @@ public:
 
 #pragma db id auto
     unsigned long id_;
+#pragma db index unique member(groupId_, "(32)")
+    std::string groupId_;
 #pragma db not_null
     std::string groupName_;
 };
@@ -59,7 +69,7 @@ public:
     GroupMember &operator=(const GroupMember &groupMember) = default;
 
     GroupMember &operator=(GroupMember &&groupMember) = default;
-    
+
     const unsigned long &id() const {
         return id_;
     }

@@ -5,7 +5,8 @@
 #include "grpcpp/grpcpp.h"
 #include <grpcpp/server.h>
 #include <grpcpp/support/status.h>
-
+#include <memory>
+#include "controller/groupDatabase.h"
 using grpc::ServerContext;
 using grpc::Status;
 using ServerRpc::group::createGroupReq;
@@ -30,10 +31,10 @@ public:
                         getGroupInfoResp *response) override;
     Status getGroupList(ServerContext *context, const getGroupListReq *request,
                         getGroupListResp *response) override;
-    Status getGroupMember(ServerContext *context,
-                          const getGroupMemberReq *request,
-                          getGroupMemberResp *response) override;
     GroupServiceImpl();
     ~GroupServiceImpl();
+
+private:
+    std::shared_ptr<GroupDatabase> groupDatabase_;
 };
 #endif
