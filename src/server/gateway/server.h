@@ -17,10 +17,11 @@
 #include <json.hpp>
 #include "cache/auth.h"
 #include "gateMsghandler.h"
-
+#include <csignal>
 using namespace muduo;
 using namespace muduo::net;
 using json = nlohmann::json;
+
 
 class ChatServer : public std::enable_shared_from_this<ChatServer> {
 public:
@@ -32,6 +33,7 @@ public:
             std::bind(&ChatServer::onConnection, this, _1));
         server_.setMessageCallback(
             std::bind(&LengthHeaderCodec::onMessage, &codec_, _1, _2, _3));
+        
     }
 
     void setThreadNum(int numThreads) {

@@ -25,7 +25,10 @@ public:
 
     void erase(const muduo::net::TcpConnectionPtr &conn) {
         std::lock_guard<mutex> lock(mutex_);
-        auto client = find(conn);
+        auto it = connToClient_.find(conn);
+        if(it == connToClient_.end()) { return; }
+        auto client = it->second;
+                
         if (client != nullptr) {
             auto &clients = clients_[client->getClinetId()];
             for (auto it = clients.begin(); it != clients.end(); ++it) {

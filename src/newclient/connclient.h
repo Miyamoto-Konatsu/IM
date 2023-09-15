@@ -17,13 +17,13 @@ public:
                const muduo::net::InetAddress &serverAddr,
                const std::string &name) :
         loop_(loop),
-        client_(loop_, serverAddr, name), serverAddr_(serverAddr),
+        client_(loop, serverAddr, name), serverAddr_(serverAddr),
         codec_(std::bind(&ConnClient::onMessage, this, std::placeholders::_1,
                          std::placeholders::_2, std::placeholders::_3)) {
         // client_.enableRetry();
     }
     ~ConnClient() = default;
-
+    bool connected();
     void connect();
     void disconnect();
     void stop();

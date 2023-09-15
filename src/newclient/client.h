@@ -1,6 +1,7 @@
 #ifndef CLIENT_NEWCLIENT_H
 #define CLIENT_NEWCLIENT_H
 
+#include <atomic>
 #include <httplib.h>
 #include <memory>
 #include <muduo/net/TcpConnection.h>
@@ -29,16 +30,23 @@ public:
     void login();
 
     void sendMsg();
-    
+
     void main();
 
     void registerClient();
 
+    void login(std::string userID, std::string password, int platform);
+    void sendMsg(std::string toUserID, std::string content, int msgType);
+
+    bool isConnect() {
+        return isConnect_;
+    }
 private:
     std::shared_ptr<ApiClient> apiClient_;
     std::shared_ptr<ConnClient> connClient_;
     User user_;
     int platform_;
     std::thread mainThread_;
+    std::atomic<bool> isConnect_;
 };
 #endif

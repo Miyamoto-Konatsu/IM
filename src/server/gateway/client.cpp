@@ -24,7 +24,6 @@ void Client::handlerMsg(const std::string &msg) {
     json data = msgData["data"];
 
     int type = msgData["type"];
-    std::cout << type << std::endl;
     std::string resDataStr;
     json retData;
     switch (type) {

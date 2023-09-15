@@ -1,4 +1,6 @@
 #include "connclient.h"
+#include "muduo/net/Callbacks.h"
+#include <cassert>
 #include <thread>
 
 void ConnClient::connect() {
@@ -33,4 +35,8 @@ void ConnClient::onMessage(const muduo::net::TcpConnectionPtr &conn,
                            const std::string &message,
                            muduo::Timestamp receiveTime) {
     mcb_(conn, message, receiveTime);
+}
+
+bool ConnClient::connected() {
+    return muduo::get_pointer(client_.connection()) != nullptr;
 }

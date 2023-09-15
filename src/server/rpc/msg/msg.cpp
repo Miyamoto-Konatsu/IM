@@ -56,18 +56,18 @@ Status MsgServiceImpl::produce(const sendMsgReq *request) {
     auto requestString = request->SerializeAsString();
 
     auto key = getKey(msg);
-    std::promise<ErrorCode> p;
-    auto f = p.get_future();
+    // std::promise<ErrorCode> p;
+    // auto f = p.get_future();
     // std::cout << msg.fromuserid() << ' ' << msg.touserid() << std::endl;
 
-    auto code = producer->produce(requestString, key, &p);
+    auto code = producer->produce(requestString, key, nullptr);
     if (code != RdKafka::ERR_NO_ERROR) {
         return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
     }
-    code = f.get();
-    if (code != RdKafka::ERR_NO_ERROR) {
-        return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
-    }
+    // code = f.get();
+    // if (code != RdKafka::ERR_NO_ERROR) {
+    //     return Status(grpc::StatusCode::INTERNAL, "failed to push to mq");
+    // }
     return Status::OK;
 }
 
@@ -77,6 +77,7 @@ int main() {
     ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
+    
     std::unique_ptr<Server> server(builder.BuildAndStart());
     std::cout << "MsgServer listening on " << server_address << std::endl;
     server->Wait();
