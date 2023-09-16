@@ -148,10 +148,10 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
                   std::placeholders::_2);
     server_->Post("/group/getGroupInfo", getGroupInfoFunc);
 
-    funcBind getGroupMemberFunc =
-        std::bind(&GroupApi::getGroupMember, groupApi, std::placeholders::_1,
-                  std::placeholders::_2);
-    server_->Post("/group/getGroupMember", getGroupMemberFunc);
+    // funcBind getGroupMemberFunc =
+    //     std::bind(&GroupApi::getGroupMember, groupApi, std::placeholders::_1,
+    //               std::placeholders::_2);
+    // server_->Post("/group/getGroupMember", getGroupMemberFunc);
 
     funcBind getGroupListFunc =
         std::bind(&GroupApi::getGroupList, groupApi, std::placeholders::_1,

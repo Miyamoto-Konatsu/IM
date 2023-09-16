@@ -5,6 +5,7 @@
 #include "utils/commonUtils.h"
 #include "msg.pb.h"
 #include "gateway/gateway.h"
+#include "localcache/groupLocal.h"
 
 using ServerRpc::msg::msg;
 
@@ -24,5 +25,6 @@ public:
 
 private:
     GatewayClient gatewayClient_;
+    GroupLocalCache groupLocalCache_;
 };
 #endif

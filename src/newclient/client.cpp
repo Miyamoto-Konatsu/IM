@@ -85,7 +85,7 @@ void Client::sendMsg() {
         std::cin.get();
         std::getline(std::cin, content);
         json data;
-        data["groupID"] = toUserID;
+        data["groupID"] = groupID;
         data["content"] = content;
         data["msgType"] = TCP_MSG_GROUP_CHAT_TYPE;
         data["fromUserID"] = user_.getUserID();

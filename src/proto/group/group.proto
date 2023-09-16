@@ -57,12 +57,20 @@ message getGroupListResp {
     repeated groupInfo groupInfo = 2;
 }
 
-message getGroupMemberReq {
+message getGroupMemberIdReq {
     string groupID = 1;
 }
 
-message getGroupMemberResp {
-    repeated groupMember groupMembers = 2;
+message getGroupMemberIdResp {
+    repeated string groupMemberIds = 2;
+}
+
+message getGroupMemberIdHashReq {
+    string groupID = 1;
+}
+
+message getGroupMemberIdHashResp {
+    uint64 groupMemberIdHash = 2;
 }
 
 service Group {
@@ -70,5 +78,6 @@ service Group {
     rpc joinGroup(joinGroupReq) returns (joinGroupResp);
     rpc getGroupInfo(getGroupInfoReq) returns (getGroupInfoResp);
     rpc getGroupList(getGroupListReq) returns (getGroupListResp);
-    rpc getGroupMember(getGroupMemberReq) returns (getGroupMemberResp);
+    rpc getGroupMemberId(getGroupMemberIdReq) returns (getGroupMemberIdResp);
+    rpc getGroupMemberIdHash(getGroupMemberIdHashReq) returns (getGroupMemberIdHashResp);
 }

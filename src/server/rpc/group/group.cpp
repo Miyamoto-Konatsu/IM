@@ -1,6 +1,7 @@
 #include "group.h"
 #include "muduo/base/Logging.h"
 #include <grpcpp/server.h>
+#include <grpcpp/support/status.h>
 #include <math.h>
 #include "group.grpc.pb.h"
 #include "group.pb.h"
@@ -103,6 +104,39 @@ Status GroupServiceImpl::getGroupList(ServerContext *context,
 //                                         getGroupMemberResp *response) {
 //     return Status::OK;
 // }
+
+Status GroupServiceImpl::getGroupMemberId(ServerContext *context,
+                                          const getGroupMemberIdReq *request,
+                                          getGroupMemberIdResp *response) {
+    std::string groupId = request->groupid();
+    try {
+        auto members = groupDatabase_->getGroupMemberId(groupId);
+        for(auto &member : members) {
+            response->add_groupmemberids(member);
+        }
+    } catch (const exception &e) {
+        LOG_DEBUG << "get group member ids failed. " << e.what()
+                  << "groupid: " << groupId;
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    return Status::OK;
+}
+
+Status
+GroupServiceImpl::getGroupMemberIdHash(ServerContext *context,
+                                       const getGroupMemberIdHashReq *request,
+                                       getGroupMemberIdHashResp *response) {
+    std::string groupId = request->groupid();
+    try {
+        auto hash = groupDatabase_->getGroupMemberIdHash(groupId);
+        response->set_groupmemberidhash(hash);
+    } catch (const exception &e) {
+        LOG_DEBUG << "get group member ids hash failed. " << e.what()
+                  << "groupid: " << groupId;
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    return grpc::Status::OK;
+}
 
 GroupServiceImpl::GroupServiceImpl() :
     groupDatabase_(std::make_shared<GroupDatabase>()) {

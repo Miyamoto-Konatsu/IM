@@ -18,8 +18,10 @@ using ServerRpc::group::getGroupInfoResp;
 using ServerRpc::group::getGroupInfoReq;
 using ServerRpc::group::getGroupListReq;
 using ServerRpc::group::getGroupListResp;
-using ServerRpc::group::getGroupMemberReq;
-using ServerRpc::group::getGroupMemberResp;
+using ServerRpc::group::getGroupMemberIdReq;
+using ServerRpc::group::getGroupMemberIdResp;
+using ServerRpc::group::getGroupMemberIdHashReq;
+using ServerRpc::group::getGroupMemberIdHashResp;
 
 class GroupServiceImpl : public Group::Service {
 public:
@@ -31,6 +33,12 @@ public:
                         getGroupInfoResp *response) override;
     Status getGroupList(ServerContext *context, const getGroupListReq *request,
                         getGroupListResp *response) override;
+    Status getGroupMemberId(ServerContext *context,
+                            const getGroupMemberIdReq *request,
+                            getGroupMemberIdResp *response) override;
+    Status getGroupMemberIdHash(ServerContext *context,
+                                const getGroupMemberIdHashReq *request,
+                                getGroupMemberIdHashResp *response) override;
     GroupServiceImpl();
     ~GroupServiceImpl();
 

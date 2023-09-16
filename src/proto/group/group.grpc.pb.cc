@@ -27,7 +27,8 @@ static const char* Group_method_names[] = {
   "/ServerRpc.group.Group/joinGroup",
   "/ServerRpc.group.Group/getGroupInfo",
   "/ServerRpc.group.Group/getGroupList",
-  "/ServerRpc.group.Group/getGroupMember",
+  "/ServerRpc.group.Group/getGroupMemberId",
+  "/ServerRpc.group.Group/getGroupMemberIdHash",
 };
 
 std::unique_ptr< Group::Stub> Group::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -41,7 +42,8 @@ Group::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, con
   , rpcmethod_joinGroup_(Group_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_getGroupInfo_(Group_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_getGroupList_(Group_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_getGroupMember_(Group_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_getGroupMemberId_(Group_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_getGroupMemberIdHash_(Group_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status Group::Stub::createGroup(::grpc::ClientContext* context, const ::ServerRpc::group::createGroupReq& request, ::ServerRpc::group::createGroupResp* response) {
@@ -136,25 +138,48 @@ void Group::Stub::async::getGroupList(::grpc::ClientContext* context, const ::Se
   return result;
 }
 
-::grpc::Status Group::Stub::getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::ServerRpc::group::getGroupMemberResp* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_getGroupMember_, context, request, response);
+::grpc::Status Group::Stub::getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::ServerRpc::group::getGroupMemberIdResp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_getGroupMemberId_, context, request, response);
 }
 
-void Group::Stub::async::getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMember_, context, request, response, std::move(f));
+void Group::Stub::async::getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMemberId_, context, request, response, std::move(f));
 }
 
-void Group::Stub::async::getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMember_, context, request, response, reactor);
+void Group::Stub::async::getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMemberId_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>* Group::Stub::PrepareAsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::group::getGroupMemberResp, ::ServerRpc::group::getGroupMemberReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_getGroupMember_, context, request);
+::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>* Group::Stub::PrepareAsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::group::getGroupMemberIdResp, ::ServerRpc::group::getGroupMemberIdReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_getGroupMemberId_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>* Group::Stub::AsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>* Group::Stub::AsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
   auto* result =
-    this->PrepareAsyncgetGroupMemberRaw(context, request, cq);
+    this->PrepareAsyncgetGroupMemberIdRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status Group::Stub::getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::ServerRpc::group::getGroupMemberIdHashResp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_getGroupMemberIdHash_, context, request, response);
+}
+
+void Group::Stub::async::getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMemberIdHash_, context, request, response, std::move(f));
+}
+
+void Group::Stub::async::getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getGroupMemberIdHash_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>* Group::Stub::PrepareAsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::group::getGroupMemberIdHashResp, ::ServerRpc::group::getGroupMemberIdHashReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_getGroupMemberIdHash_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>* Group::Stub::AsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncgetGroupMemberIdHashRaw(context, request, cq);
   result->StartCall();
   return result;
 }
@@ -203,12 +228,22 @@ Group::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       Group_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< Group::Service, ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< Group::Service, ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](Group::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::ServerRpc::group::getGroupMemberReq* req,
-             ::ServerRpc::group::getGroupMemberResp* resp) {
-               return service->getGroupMember(ctx, req, resp);
+             const ::ServerRpc::group::getGroupMemberIdReq* req,
+             ::ServerRpc::group::getGroupMemberIdResp* resp) {
+               return service->getGroupMemberId(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      Group_method_names[5],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< Group::Service, ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](Group::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::ServerRpc::group::getGroupMemberIdHashReq* req,
+             ::ServerRpc::group::getGroupMemberIdHashResp* resp) {
+               return service->getGroupMemberIdHash(ctx, req, resp);
              }, this)));
 }
 
@@ -243,7 +278,14 @@ Group::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status Group::Service::getGroupMember(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response) {
+::grpc::Status Group::Service::getGroupMemberId(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status Group::Service::getGroupMemberIdHash(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response) {
   (void) context;
   (void) request;
   (void) response;

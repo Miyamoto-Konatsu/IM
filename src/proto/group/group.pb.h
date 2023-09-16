@@ -73,12 +73,18 @@ extern getGroupListReqDefaultTypeInternal _getGroupListReq_default_instance_;
 class getGroupListResp;
 struct getGroupListRespDefaultTypeInternal;
 extern getGroupListRespDefaultTypeInternal _getGroupListResp_default_instance_;
-class getGroupMemberReq;
-struct getGroupMemberReqDefaultTypeInternal;
-extern getGroupMemberReqDefaultTypeInternal _getGroupMemberReq_default_instance_;
-class getGroupMemberResp;
-struct getGroupMemberRespDefaultTypeInternal;
-extern getGroupMemberRespDefaultTypeInternal _getGroupMemberResp_default_instance_;
+class getGroupMemberIdHashReq;
+struct getGroupMemberIdHashReqDefaultTypeInternal;
+extern getGroupMemberIdHashReqDefaultTypeInternal _getGroupMemberIdHashReq_default_instance_;
+class getGroupMemberIdHashResp;
+struct getGroupMemberIdHashRespDefaultTypeInternal;
+extern getGroupMemberIdHashRespDefaultTypeInternal _getGroupMemberIdHashResp_default_instance_;
+class getGroupMemberIdReq;
+struct getGroupMemberIdReqDefaultTypeInternal;
+extern getGroupMemberIdReqDefaultTypeInternal _getGroupMemberIdReq_default_instance_;
+class getGroupMemberIdResp;
+struct getGroupMemberIdRespDefaultTypeInternal;
+extern getGroupMemberIdRespDefaultTypeInternal _getGroupMemberIdResp_default_instance_;
 class groupInfo;
 struct groupInfoDefaultTypeInternal;
 extern groupInfoDefaultTypeInternal _groupInfo_default_instance_;
@@ -107,9 +113,13 @@ template <>
 template <>
 ::ServerRpc::group::getGroupListResp* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupListResp>(Arena*);
 template <>
-::ServerRpc::group::getGroupMemberReq* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberReq>(Arena*);
+::ServerRpc::group::getGroupMemberIdHashReq* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberIdHashReq>(Arena*);
 template <>
-::ServerRpc::group::getGroupMemberResp* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberResp>(Arena*);
+::ServerRpc::group::getGroupMemberIdHashResp* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberIdHashResp>(Arena*);
+template <>
+::ServerRpc::group::getGroupMemberIdReq* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberIdReq>(Arena*);
+template <>
+::ServerRpc::group::getGroupMemberIdResp* Arena::CreateMaybeMessage<::ServerRpc::group::getGroupMemberIdResp>(Arena*);
 template <>
 ::ServerRpc::group::groupInfo* Arena::CreateMaybeMessage<::ServerRpc::group::groupInfo>(Arena*);
 template <>
@@ -1980,25 +1990,25 @@ class getGroupListResp final :
   friend struct ::TableStruct_group_2eproto;
 };// -------------------------------------------------------------------
 
-class getGroupMemberReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberReq) */ {
+class getGroupMemberIdReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberIdReq) */ {
  public:
-  inline getGroupMemberReq() : getGroupMemberReq(nullptr) {}
-  ~getGroupMemberReq() override;
+  inline getGroupMemberIdReq() : getGroupMemberIdReq(nullptr) {}
+  ~getGroupMemberIdReq() override;
   template<typename = void>
-  explicit PROTOBUF_CONSTEXPR getGroupMemberReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR getGroupMemberIdReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  getGroupMemberReq(const getGroupMemberReq& from);
-  getGroupMemberReq(getGroupMemberReq&& from) noexcept
-    : getGroupMemberReq() {
+  getGroupMemberIdReq(const getGroupMemberIdReq& from);
+  getGroupMemberIdReq(getGroupMemberIdReq&& from) noexcept
+    : getGroupMemberIdReq() {
     *this = ::std::move(from);
   }
 
-  inline getGroupMemberReq& operator=(const getGroupMemberReq& from) {
+  inline getGroupMemberIdReq& operator=(const getGroupMemberIdReq& from) {
     CopyFrom(from);
     return *this;
   }
-  inline getGroupMemberReq& operator=(getGroupMemberReq&& from) noexcept {
+  inline getGroupMemberIdReq& operator=(getGroupMemberIdReq&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2028,20 +2038,20 @@ class getGroupMemberReq final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const getGroupMemberReq& default_instance() {
+  static const getGroupMemberIdReq& default_instance() {
     return *internal_default_instance();
   }
-  static inline const getGroupMemberReq* internal_default_instance() {
-    return reinterpret_cast<const getGroupMemberReq*>(
-               &_getGroupMemberReq_default_instance_);
+  static inline const getGroupMemberIdReq* internal_default_instance() {
+    return reinterpret_cast<const getGroupMemberIdReq*>(
+               &_getGroupMemberIdReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     10;
 
-  friend void swap(getGroupMemberReq& a, getGroupMemberReq& b) {
+  friend void swap(getGroupMemberIdReq& a, getGroupMemberIdReq& b) {
     a.Swap(&b);
   }
-  inline void Swap(getGroupMemberReq* other) {
+  inline void Swap(getGroupMemberIdReq* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2054,7 +2064,7 @@ class getGroupMemberReq final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(getGroupMemberReq* other) {
+  void UnsafeArenaSwap(getGroupMemberIdReq* other) {
     if (other == this) return;
     ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2062,14 +2072,14 @@ class getGroupMemberReq final :
 
   // implements Message ----------------------------------------------
 
-  getGroupMemberReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<getGroupMemberReq>(arena);
+  getGroupMemberIdReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getGroupMemberIdReq>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const getGroupMemberReq& from);
+  void CopyFrom(const getGroupMemberIdReq& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const getGroupMemberReq& from) {
-    getGroupMemberReq::MergeImpl(*this, from);
+  void MergeFrom( const getGroupMemberIdReq& from) {
+    getGroupMemberIdReq::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2087,15 +2097,15 @@ class getGroupMemberReq final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(getGroupMemberReq* other);
+  void InternalSwap(getGroupMemberIdReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "ServerRpc.group.getGroupMemberReq";
+    return "ServerRpc.group.getGroupMemberIdReq";
   }
   protected:
-  explicit getGroupMemberReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  explicit getGroupMemberIdReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   static const ClassData _class_data_;
@@ -2130,7 +2140,7 @@ class getGroupMemberReq final :
   std::string* _internal_mutable_groupid();
 
   public:
-  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberReq)
+  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberIdReq)
  private:
   class _Internal;
 
@@ -2145,25 +2155,25 @@ class getGroupMemberReq final :
   friend struct ::TableStruct_group_2eproto;
 };// -------------------------------------------------------------------
 
-class getGroupMemberResp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberResp) */ {
+class getGroupMemberIdResp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberIdResp) */ {
  public:
-  inline getGroupMemberResp() : getGroupMemberResp(nullptr) {}
-  ~getGroupMemberResp() override;
+  inline getGroupMemberIdResp() : getGroupMemberIdResp(nullptr) {}
+  ~getGroupMemberIdResp() override;
   template<typename = void>
-  explicit PROTOBUF_CONSTEXPR getGroupMemberResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR getGroupMemberIdResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  getGroupMemberResp(const getGroupMemberResp& from);
-  getGroupMemberResp(getGroupMemberResp&& from) noexcept
-    : getGroupMemberResp() {
+  getGroupMemberIdResp(const getGroupMemberIdResp& from);
+  getGroupMemberIdResp(getGroupMemberIdResp&& from) noexcept
+    : getGroupMemberIdResp() {
     *this = ::std::move(from);
   }
 
-  inline getGroupMemberResp& operator=(const getGroupMemberResp& from) {
+  inline getGroupMemberIdResp& operator=(const getGroupMemberIdResp& from) {
     CopyFrom(from);
     return *this;
   }
-  inline getGroupMemberResp& operator=(getGroupMemberResp&& from) noexcept {
+  inline getGroupMemberIdResp& operator=(getGroupMemberIdResp&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2193,20 +2203,20 @@ class getGroupMemberResp final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const getGroupMemberResp& default_instance() {
+  static const getGroupMemberIdResp& default_instance() {
     return *internal_default_instance();
   }
-  static inline const getGroupMemberResp* internal_default_instance() {
-    return reinterpret_cast<const getGroupMemberResp*>(
-               &_getGroupMemberResp_default_instance_);
+  static inline const getGroupMemberIdResp* internal_default_instance() {
+    return reinterpret_cast<const getGroupMemberIdResp*>(
+               &_getGroupMemberIdResp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     11;
 
-  friend void swap(getGroupMemberResp& a, getGroupMemberResp& b) {
+  friend void swap(getGroupMemberIdResp& a, getGroupMemberIdResp& b) {
     a.Swap(&b);
   }
-  inline void Swap(getGroupMemberResp* other) {
+  inline void Swap(getGroupMemberIdResp* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2219,7 +2229,7 @@ class getGroupMemberResp final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(getGroupMemberResp* other) {
+  void UnsafeArenaSwap(getGroupMemberIdResp* other) {
     if (other == this) return;
     ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2227,14 +2237,14 @@ class getGroupMemberResp final :
 
   // implements Message ----------------------------------------------
 
-  getGroupMemberResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<getGroupMemberResp>(arena);
+  getGroupMemberIdResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getGroupMemberIdResp>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const getGroupMemberResp& from);
+  void CopyFrom(const getGroupMemberIdResp& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const getGroupMemberResp& from) {
-    getGroupMemberResp::MergeImpl(*this, from);
+  void MergeFrom( const getGroupMemberIdResp& from) {
+    getGroupMemberIdResp::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2252,15 +2262,15 @@ class getGroupMemberResp final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(getGroupMemberResp* other);
+  void InternalSwap(getGroupMemberIdResp* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "ServerRpc.group.getGroupMemberResp";
+    return "ServerRpc.group.getGroupMemberIdResp";
   }
   protected:
-  explicit getGroupMemberResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  explicit getGroupMemberIdResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   static const ClassData _class_data_;
@@ -2273,29 +2283,39 @@ class getGroupMemberResp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGroupMembersFieldNumber = 2,
+    kGroupMemberIdsFieldNumber = 2,
   };
-  // repeated .ServerRpc.group.groupMember groupMembers = 2;
-  int groupmembers_size() const;
+  // repeated string groupMemberIds = 2;
+  int groupmemberids_size() const;
   private:
-  int _internal_groupmembers_size() const;
+  int _internal_groupmemberids_size() const;
 
   public:
-  void clear_groupmembers() ;
-  ::ServerRpc::group::groupMember* mutable_groupmembers(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::group::groupMember >*
-      mutable_groupmembers();
+  void clear_groupmemberids() ;
+  const std::string& groupmemberids(int index) const;
+  std::string* mutable_groupmemberids(int index);
+  void set_groupmemberids(int index, const std::string& value);
+  void set_groupmemberids(int index, std::string&& value);
+  void set_groupmemberids(int index, const char* value);
+  void set_groupmemberids(int index, const char* value, std::size_t size);
+  void set_groupmemberids(int index, absl::string_view value);
+  std::string* add_groupmemberids();
+  void add_groupmemberids(const std::string& value);
+  void add_groupmemberids(std::string&& value);
+  void add_groupmemberids(const char* value);
+  void add_groupmemberids(const char* value, std::size_t size);
+  void add_groupmemberids(absl::string_view value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& groupmemberids() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_groupmemberids();
+
   private:
-  const ::ServerRpc::group::groupMember& _internal_groupmembers(int index) const;
-  ::ServerRpc::group::groupMember* _internal_add_groupmembers();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::group::groupMember>& _internal_groupmembers() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::group::groupMember>* _internal_mutable_groupmembers();
+  const std::string& _internal_groupmemberids(int index) const;
+  std::string* _internal_add_groupmemberids();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& _internal_groupmemberids() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* _internal_mutable_groupmemberids();
+
   public:
-  const ::ServerRpc::group::groupMember& groupmembers(int index) const;
-  ::ServerRpc::group::groupMember* add_groupmembers();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::group::groupMember >&
-      groupmembers() const;
-  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberResp)
+  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberIdResp)
  private:
   class _Internal;
 
@@ -2303,7 +2323,327 @@ class getGroupMemberResp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::group::groupMember > groupmembers_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> groupmemberids_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_group_2eproto;
+};// -------------------------------------------------------------------
+
+class getGroupMemberIdHashReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberIdHashReq) */ {
+ public:
+  inline getGroupMemberIdHashReq() : getGroupMemberIdHashReq(nullptr) {}
+  ~getGroupMemberIdHashReq() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR getGroupMemberIdHashReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  getGroupMemberIdHashReq(const getGroupMemberIdHashReq& from);
+  getGroupMemberIdHashReq(getGroupMemberIdHashReq&& from) noexcept
+    : getGroupMemberIdHashReq() {
+    *this = ::std::move(from);
+  }
+
+  inline getGroupMemberIdHashReq& operator=(const getGroupMemberIdHashReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline getGroupMemberIdHashReq& operator=(getGroupMemberIdHashReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const getGroupMemberIdHashReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const getGroupMemberIdHashReq* internal_default_instance() {
+    return reinterpret_cast<const getGroupMemberIdHashReq*>(
+               &_getGroupMemberIdHashReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(getGroupMemberIdHashReq& a, getGroupMemberIdHashReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(getGroupMemberIdHashReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(getGroupMemberIdHashReq* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  getGroupMemberIdHashReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getGroupMemberIdHashReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const getGroupMemberIdHashReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const getGroupMemberIdHashReq& from) {
+    getGroupMemberIdHashReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(getGroupMemberIdHashReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.group.getGroupMemberIdHashReq";
+  }
+  protected:
+  explicit getGroupMemberIdHashReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGroupIDFieldNumber = 1,
+  };
+  // string groupID = 1;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberIdHashReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_group_2eproto;
+};// -------------------------------------------------------------------
+
+class getGroupMemberIdHashResp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.group.getGroupMemberIdHashResp) */ {
+ public:
+  inline getGroupMemberIdHashResp() : getGroupMemberIdHashResp(nullptr) {}
+  ~getGroupMemberIdHashResp() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR getGroupMemberIdHashResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  getGroupMemberIdHashResp(const getGroupMemberIdHashResp& from);
+  getGroupMemberIdHashResp(getGroupMemberIdHashResp&& from) noexcept
+    : getGroupMemberIdHashResp() {
+    *this = ::std::move(from);
+  }
+
+  inline getGroupMemberIdHashResp& operator=(const getGroupMemberIdHashResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline getGroupMemberIdHashResp& operator=(getGroupMemberIdHashResp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const getGroupMemberIdHashResp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const getGroupMemberIdHashResp* internal_default_instance() {
+    return reinterpret_cast<const getGroupMemberIdHashResp*>(
+               &_getGroupMemberIdHashResp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(getGroupMemberIdHashResp& a, getGroupMemberIdHashResp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(getGroupMemberIdHashResp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(getGroupMemberIdHashResp* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  getGroupMemberIdHashResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getGroupMemberIdHashResp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const getGroupMemberIdHashResp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const getGroupMemberIdHashResp& from) {
+    getGroupMemberIdHashResp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(getGroupMemberIdHashResp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.group.getGroupMemberIdHashResp";
+  }
+  protected:
+  explicit getGroupMemberIdHashResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGroupMemberIdHashFieldNumber = 2,
+  };
+  // uint64 groupMemberIdHash = 2;
+  void clear_groupmemberidhash() ;
+  ::uint64_t groupmemberidhash() const;
+  void set_groupmemberidhash(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_groupmemberidhash() const;
+  void _internal_set_groupmemberidhash(::uint64_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.group.getGroupMemberIdHashResp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::uint64_t groupmemberidhash_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3355,105 +3695,225 @@ getGroupListResp::_internal_mutable_groupinfo() {
 
 // -------------------------------------------------------------------
 
-// getGroupMemberReq
+// getGroupMemberIdReq
 
 // string groupID = 1;
-inline void getGroupMemberReq::clear_groupid() {
+inline void getGroupMemberIdReq::clear_groupid() {
   _impl_.groupid_.ClearToEmpty();
 }
-inline const std::string& getGroupMemberReq::groupid() const {
-  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberReq.groupID)
+inline const std::string& getGroupMemberIdReq::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberIdReq.groupID)
   return _internal_groupid();
 }
 template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void getGroupMemberReq::set_groupid(Arg_&& arg,
+inline PROTOBUF_ALWAYS_INLINE void getGroupMemberIdReq::set_groupid(Arg_&& arg,
                                                      Args_... args) {
   ;
   _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberReq.groupID)
+  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberIdReq.groupID)
 }
-inline std::string* getGroupMemberReq::mutable_groupid() {
+inline std::string* getGroupMemberIdReq::mutable_groupid() {
   std::string* _s = _internal_mutable_groupid();
-  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberReq.groupID)
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberIdReq.groupID)
   return _s;
 }
-inline const std::string& getGroupMemberReq::_internal_groupid() const {
+inline const std::string& getGroupMemberIdReq::_internal_groupid() const {
   return _impl_.groupid_.Get();
 }
-inline void getGroupMemberReq::_internal_set_groupid(const std::string& value) {
+inline void getGroupMemberIdReq::_internal_set_groupid(const std::string& value) {
   ;
 
 
   _impl_.groupid_.Set(value, GetArenaForAllocation());
 }
-inline std::string* getGroupMemberReq::_internal_mutable_groupid() {
+inline std::string* getGroupMemberIdReq::_internal_mutable_groupid() {
   ;
   return _impl_.groupid_.Mutable( GetArenaForAllocation());
 }
-inline std::string* getGroupMemberReq::release_groupid() {
-  // @@protoc_insertion_point(field_release:ServerRpc.group.getGroupMemberReq.groupID)
+inline std::string* getGroupMemberIdReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.getGroupMemberIdReq.groupID)
   return _impl_.groupid_.Release();
 }
-inline void getGroupMemberReq::set_allocated_groupid(std::string* value) {
+inline void getGroupMemberIdReq::set_allocated_groupid(std::string* value) {
   _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         if (_impl_.groupid_.IsDefault()) {
           _impl_.groupid_.Set("", GetArenaForAllocation());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.getGroupMemberReq.groupID)
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.getGroupMemberIdReq.groupID)
 }
 
 // -------------------------------------------------------------------
 
-// getGroupMemberResp
+// getGroupMemberIdResp
 
-// repeated .ServerRpc.group.groupMember groupMembers = 2;
-inline int getGroupMemberResp::_internal_groupmembers_size() const {
-  return _impl_.groupmembers_.size();
+// repeated string groupMemberIds = 2;
+inline int getGroupMemberIdResp::_internal_groupmemberids_size() const {
+  return _impl_.groupmemberids_.size();
 }
-inline int getGroupMemberResp::groupmembers_size() const {
-  return _internal_groupmembers_size();
+inline int getGroupMemberIdResp::groupmemberids_size() const {
+  return _internal_groupmemberids_size();
 }
-inline void getGroupMemberResp::clear_groupmembers() {
-  _internal_mutable_groupmembers()->Clear();
+inline void getGroupMemberIdResp::clear_groupmemberids() {
+  _internal_mutable_groupmemberids()->Clear();
 }
-inline ::ServerRpc::group::groupMember* getGroupMemberResp::mutable_groupmembers(int index) {
-  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberResp.groupMembers)
-  return _internal_mutable_groupmembers()->Mutable(index);
+inline std::string* getGroupMemberIdResp::add_groupmemberids() {
+  std::string* _s = _internal_add_groupmemberids();
+  // @@protoc_insertion_point(field_add_mutable:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+  return _s;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::group::groupMember >*
-getGroupMemberResp::mutable_groupmembers() {
-  // @@protoc_insertion_point(field_mutable_list:ServerRpc.group.getGroupMemberResp.groupMembers)
-  return _internal_mutable_groupmembers();
+inline const std::string& getGroupMemberIdResp::groupmemberids(int index) const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+  return _internal_groupmemberids(index);
 }
-inline const ::ServerRpc::group::groupMember& getGroupMemberResp::_internal_groupmembers(int index) const {
-  return _internal_groupmembers().Get(index);
+inline std::string* getGroupMemberIdResp::mutable_groupmemberids(int index) {
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+  return _internal_mutable_groupmemberids()->Mutable(index);
 }
-inline const ::ServerRpc::group::groupMember& getGroupMemberResp::groupmembers(int index) const {
-  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberResp.groupMembers)
-  return _internal_groupmembers(index);
+inline void getGroupMemberIdResp::set_groupmemberids(int index, const std::string& value) {
+  _internal_mutable_groupmemberids()->Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
 }
-inline ::ServerRpc::group::groupMember* getGroupMemberResp::_internal_add_groupmembers() {
-  return _internal_mutable_groupmembers()->Add();
+inline void getGroupMemberIdResp::set_groupmemberids(int index, std::string&& value) {
+  _internal_mutable_groupmemberids()->Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
 }
-inline ::ServerRpc::group::groupMember* getGroupMemberResp::add_groupmembers() {
-  ::ServerRpc::group::groupMember* _add = _internal_add_groupmembers();
-  // @@protoc_insertion_point(field_add:ServerRpc.group.getGroupMemberResp.groupMembers)
-  return _add;
+inline void getGroupMemberIdResp::set_groupmemberids(int index, const char* value) {
+  ABSL_DCHECK(value != nullptr);
+  _internal_mutable_groupmemberids()->Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerRpc::group::groupMember >&
-getGroupMemberResp::groupmembers() const {
-  // @@protoc_insertion_point(field_list:ServerRpc.group.getGroupMemberResp.groupMembers)
-  return _internal_groupmembers();
+inline void getGroupMemberIdResp::set_groupmemberids(int index, const char* value,
+                              std::size_t size) {
+  _internal_mutable_groupmemberids()->Mutable(index)->assign(
+      reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::group::groupMember>&
-getGroupMemberResp::_internal_groupmembers() const {
-  return _impl_.groupmembers_;
+inline void getGroupMemberIdResp::set_groupmemberids(int index, absl::string_view value) {
+  _internal_mutable_groupmemberids()->Mutable(index)->assign(value.data(),
+                                                     value.size());
+  // @@protoc_insertion_point(field_set_string_piece:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::group::groupMember>*
-getGroupMemberResp::_internal_mutable_groupmembers() {
-  return &_impl_.groupmembers_;
+inline void getGroupMemberIdResp::add_groupmemberids(const std::string& value) {
+  _internal_mutable_groupmemberids()->Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+}
+inline void getGroupMemberIdResp::add_groupmemberids(std::string&& value) {
+  _internal_mutable_groupmemberids()->Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+}
+inline void getGroupMemberIdResp::add_groupmemberids(const char* value) {
+  ABSL_DCHECK(value != nullptr);
+  _internal_mutable_groupmemberids()->Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+}
+inline void getGroupMemberIdResp::add_groupmemberids(const char* value, std::size_t size) {
+  _internal_mutable_groupmemberids()->Add()->assign(
+      reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+}
+inline void getGroupMemberIdResp::add_groupmemberids(absl::string_view value) {
+  _internal_mutable_groupmemberids()->Add()->assign(value.data(), value.size());
+  // @@protoc_insertion_point(field_add_string_piece:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+getGroupMemberIdResp::groupmemberids() const {
+  // @@protoc_insertion_point(field_list:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+  return _internal_groupmemberids();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* getGroupMemberIdResp::mutable_groupmemberids() {
+  // @@protoc_insertion_point(field_mutable_list:ServerRpc.group.getGroupMemberIdResp.groupMemberIds)
+  return _internal_mutable_groupmemberids();
+}
+inline const std::string& getGroupMemberIdResp::_internal_groupmemberids(int index) const {
+  return _internal_groupmemberids().Get(index);
+}
+inline std::string* getGroupMemberIdResp::_internal_add_groupmemberids() {
+  return _internal_mutable_groupmemberids()->Add();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+getGroupMemberIdResp::_internal_groupmemberids() const {
+  return _impl_.groupmemberids_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+getGroupMemberIdResp::_internal_mutable_groupmemberids() {
+  return &_impl_.groupmemberids_;
+}
+
+// -------------------------------------------------------------------
+
+// getGroupMemberIdHashReq
+
+// string groupID = 1;
+inline void getGroupMemberIdHashReq::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& getGroupMemberIdHashReq::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberIdHashReq.groupID)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getGroupMemberIdHashReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberIdHashReq.groupID)
+}
+inline std::string* getGroupMemberIdHashReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.group.getGroupMemberIdHashReq.groupID)
+  return _s;
+}
+inline const std::string& getGroupMemberIdHashReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void getGroupMemberIdHashReq::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getGroupMemberIdHashReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getGroupMemberIdHashReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.group.getGroupMemberIdHashReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void getGroupMemberIdHashReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.group.getGroupMemberIdHashReq.groupID)
+}
+
+// -------------------------------------------------------------------
+
+// getGroupMemberIdHashResp
+
+// uint64 groupMemberIdHash = 2;
+inline void getGroupMemberIdHashResp::clear_groupmemberidhash() {
+  _impl_.groupmemberidhash_ = ::uint64_t{0u};
+}
+inline ::uint64_t getGroupMemberIdHashResp::groupmemberidhash() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.group.getGroupMemberIdHashResp.groupMemberIdHash)
+  return _internal_groupmemberidhash();
+}
+inline void getGroupMemberIdHashResp::set_groupmemberidhash(::uint64_t value) {
+  _internal_set_groupmemberidhash(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.group.getGroupMemberIdHashResp.groupMemberIdHash)
+}
+inline ::uint64_t getGroupMemberIdHashResp::_internal_groupmemberidhash() const {
+  return _impl_.groupmemberidhash_;
+}
+inline void getGroupMemberIdHashResp::_internal_set_groupmemberidhash(::uint64_t value) {
+  ;
+  _impl_.groupmemberidhash_ = value;
 }
 
 #ifdef __GNUC__

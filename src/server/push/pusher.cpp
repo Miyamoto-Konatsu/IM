@@ -5,8 +5,7 @@
 #include "utils/commonUtils.h"
 #include "utils/msgutils.h"
 #include <string>
-Pusher::Pusher() :
-    gatewayClient_(GatewayClient::getGatewayClient()) {
+Pusher::Pusher() : gatewayClient_(GatewayClient::getGatewayClient()) {
 }
 
 Pusher::~Pusher() {
@@ -23,6 +22,14 @@ bool Pusher::pushMsg2User(const msg &msg) {
 bool Pusher::pushMsg2Group(const msg &msg) {
     std::cout << msg.fromuserid() << ' ' << msg.groupid() << ' '
               << msg.content() << std::endl;
+    std::vector<std::string> userIds;
+    try {
+        userIds = groupLocalCache_.getGroupMemberIds(msg.groupid());
+    } catch (std::runtime_error &e) {
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    getConnsAndOnlinePush(userIds, msg);
     return true;
 }
 

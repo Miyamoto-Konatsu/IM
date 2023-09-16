@@ -70,7 +70,7 @@ void ChatServer::send(muduo::net::TcpConnection *conn, const string &message) {
 
 int main(int argc, char *argv[]) {
     signal(SIGPIPE, SIG_IGN);
-    muduo::Logger::setLogLevel(muduo::Logger::LogLevel::INFO);
+    muduo::Logger::setLogLevel(muduo::Logger::LogLevel::DEBUG);
     EventLoop loop;
     uint16_t port = static_cast<uint16_t>(8081);
     std::cout << "TcpServer listening on 0.0.0.0:8081" << std::endl;

@@ -22,9 +22,9 @@ public:
 
     GroupInfoStruct getGroup(const std::string &groupId);
 
-    std::vector<GroupMember> getGroupMember(const std::string &groupId);
+   // std::vector<GroupMember> getGroupMember(const std::string &groupId);
 
-    std::vector<unsigned long> getGroupMemberIds(const std::string &groupId);
+    std::vector<std::string> getGroupMemberIds(const std::string &groupId);
 
     GroupMember getGroupOwner(const std::string &groupId);
 
@@ -37,6 +37,10 @@ public:
     void deleteGroupList(const std::string &userId);
 
     void deleteGroupInfo(const std::string &groupId);
+
+    void deleteGroupMemberIds(const std::string &groupId);
+
+    void deleteGroupMemberIdsHash(const std::string &groupId);
 
     std::string getGroupKey(const std::string &groupId) {
         return GROUP_PREFIX + (groupId);

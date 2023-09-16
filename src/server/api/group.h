@@ -31,13 +31,13 @@ public:
             req, resp);
     }
 
-    void getGroupMember(const HttpRequest &req, HttpResponse &resp) {
-        api2rpc<ServerRpc::group::getGroupMemberReq,
-                ServerRpc::group::getGroupMemberResp>(
-            std::bind(&GroupClient::getGroupMember, &groupClient_,
-                      std::placeholders::_1, std::placeholders::_2),
-            req, resp);
-    }
+    // void getGroupMember(const HttpRequest &req, HttpResponse &resp) {
+    //     api2rpc<ServerRpc::group::getGroupMemberReq,
+    //             ServerRpc::group::getGroupMemberResp>(
+    //         std::bind(&GroupClient::getGroupMember, &groupClient_,
+    //                   std::placeholders::_1, std::placeholders::_2),
+    //         req, resp);
+    // }
 
     void getGroupInfo(const HttpRequest &req, HttpResponse &resp) {
         api2rpc<ServerRpc::group::getGroupInfoReq,

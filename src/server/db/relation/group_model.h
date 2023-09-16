@@ -93,7 +93,7 @@ public:
         return {group, members};
     }
 
-    std::vector<unsigned long> findGroupMemberIds(const std::string &groupId) {
+    std::vector<std::string> findGroupMemberIds(const std::string &groupId) {
         odb::transaction t(db->begin());
         odb::query<ChatGroup> queryGroup(odb::query<ChatGroup>::groupId
                                          == groupId);
@@ -102,13 +102,13 @@ public:
         auto isFound = db->query_one(queryGroup, group);
         if (!isFound) { throw DatabaseLookupError("Group not found"); }
 
-        odb::query<GroupMember> queryMember(odb::query<GroupMember>::id
+        odb::query<GroupMember> queryMember(odb::query<GroupMember>::group
                                             == group.id());
-        std::vector<unsigned long> result;
+        std::vector<std::string> result;
 
         auto queryGroupResult = db->query(queryMember);
         for (auto &item : queryGroupResult) {
-            result.push_back(item.user()->id());
+            result.push_back(item.user()->userId());
         }
         t.commit();
         return result;

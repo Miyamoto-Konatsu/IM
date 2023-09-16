@@ -64,12 +64,19 @@ class Group final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupListResp>> PrepareAsyncgetGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupListResp>>(PrepareAsyncgetGroupListRaw(context, request, cq));
     }
-    virtual ::grpc::Status getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::ServerRpc::group::getGroupMemberResp* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>> AsyncgetGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>>(AsyncgetGroupMemberRaw(context, request, cq));
+    virtual ::grpc::Status getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::ServerRpc::group::getGroupMemberIdResp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>> AsyncgetGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>>(AsyncgetGroupMemberIdRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>> PrepareAsyncgetGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>>(PrepareAsyncgetGroupMemberRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>> PrepareAsyncgetGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>>(PrepareAsyncgetGroupMemberIdRaw(context, request, cq));
+    }
+    virtual ::grpc::Status getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::ServerRpc::group::getGroupMemberIdHashResp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>> AsyncgetGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>>(AsyncgetGroupMemberIdHashRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>> PrepareAsyncgetGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>>(PrepareAsyncgetGroupMemberIdHashRaw(context, request, cq));
     }
     class async_interface {
      public:
@@ -82,8 +89,10 @@ class Group final {
       virtual void getGroupInfo(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupInfoReq* request, ::ServerRpc::group::getGroupInfoResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void getGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq* request, ::ServerRpc::group::getGroupListResp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void getGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq* request, ::ServerRpc::group::getGroupListResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -97,8 +106,10 @@ class Group final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupInfoResp>* PrepareAsyncgetGroupInfoRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupInfoReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupListResp>* AsyncgetGroupListRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupListResp>* PrepareAsyncgetGroupListRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>* AsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberResp>* PrepareAsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>* AsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdResp>* PrepareAsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>* AsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::group::getGroupMemberIdHashResp>* PrepareAsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -131,12 +142,19 @@ class Group final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupListResp>> PrepareAsyncgetGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupListResp>>(PrepareAsyncgetGroupListRaw(context, request, cq));
     }
-    ::grpc::Status getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::ServerRpc::group::getGroupMemberResp* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>> AsyncgetGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>>(AsyncgetGroupMemberRaw(context, request, cq));
+    ::grpc::Status getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::ServerRpc::group::getGroupMemberIdResp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>> AsyncgetGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>>(AsyncgetGroupMemberIdRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>> PrepareAsyncgetGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>>(PrepareAsyncgetGroupMemberRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>> PrepareAsyncgetGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>>(PrepareAsyncgetGroupMemberIdRaw(context, request, cq));
+    }
+    ::grpc::Status getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::ServerRpc::group::getGroupMemberIdHashResp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>> AsyncgetGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>>(AsyncgetGroupMemberIdHashRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>> PrepareAsyncgetGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>>(PrepareAsyncgetGroupMemberIdHashRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
@@ -149,8 +167,10 @@ class Group final {
       void getGroupInfo(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupInfoReq* request, ::ServerRpc::group::getGroupInfoResp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void getGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq* request, ::ServerRpc::group::getGroupListResp* response, std::function<void(::grpc::Status)>) override;
       void getGroupList(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq* request, ::ServerRpc::group::getGroupListResp* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, std::function<void(::grpc::Status)>) override;
-      void getGroupMember(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, std::function<void(::grpc::Status)>) override;
+      void getGroupMemberId(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, std::function<void(::grpc::Status)>) override;
+      void getGroupMemberIdHash(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -170,13 +190,16 @@ class Group final {
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupInfoResp>* PrepareAsyncgetGroupInfoRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupInfoReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupListResp>* AsyncgetGroupListRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupListResp>* PrepareAsyncgetGroupListRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupListReq& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>* AsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberResp>* PrepareAsyncgetGroupMemberRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>* AsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdResp>* PrepareAsyncgetGroupMemberIdRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>* AsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::group::getGroupMemberIdHashResp>* PrepareAsyncgetGroupMemberIdHashRaw(::grpc::ClientContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_createGroup_;
     const ::grpc::internal::RpcMethod rpcmethod_joinGroup_;
     const ::grpc::internal::RpcMethod rpcmethod_getGroupInfo_;
     const ::grpc::internal::RpcMethod rpcmethod_getGroupList_;
-    const ::grpc::internal::RpcMethod rpcmethod_getGroupMember_;
+    const ::grpc::internal::RpcMethod rpcmethod_getGroupMemberId_;
+    const ::grpc::internal::RpcMethod rpcmethod_getGroupMemberIdHash_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -188,7 +211,8 @@ class Group final {
     virtual ::grpc::Status joinGroup(::grpc::ServerContext* context, const ::ServerRpc::group::joinGroupReq* request, ::ServerRpc::group::joinGroupResp* response);
     virtual ::grpc::Status getGroupInfo(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupInfoReq* request, ::ServerRpc::group::getGroupInfoResp* response);
     virtual ::grpc::Status getGroupList(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupListReq* request, ::ServerRpc::group::getGroupListResp* response);
-    virtual ::grpc::Status getGroupMember(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response);
+    virtual ::grpc::Status getGroupMemberId(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response);
+    virtual ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_createGroup : public BaseClass {
@@ -271,26 +295,46 @@ class Group final {
     }
   };
   template <class BaseClass>
-  class WithAsyncMethod_getGroupMember : public BaseClass {
+  class WithAsyncMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithAsyncMethod_getGroupMember() {
+    WithAsyncMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodAsync(4);
     }
-    ~WithAsyncMethod_getGroupMember() override {
+    ~WithAsyncMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestgetGroupMember(::grpc::ServerContext* context, ::ServerRpc::group::getGroupMemberReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::group::getGroupMemberResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestgetGroupMemberId(::grpc::ServerContext* context, ::ServerRpc::group::getGroupMemberIdReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::group::getGroupMemberIdResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_createGroup<WithAsyncMethod_joinGroup<WithAsyncMethod_getGroupInfo<WithAsyncMethod_getGroupList<WithAsyncMethod_getGroupMember<Service > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodAsync(5);
+    }
+    ~WithAsyncMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestgetGroupMemberIdHash(::grpc::ServerContext* context, ::ServerRpc::group::getGroupMemberIdHashReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::group::getGroupMemberIdHashResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_createGroup<WithAsyncMethod_joinGroup<WithAsyncMethod_getGroupInfo<WithAsyncMethod_getGroupList<WithAsyncMethod_getGroupMemberId<WithAsyncMethod_getGroupMemberIdHash<Service > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_createGroup : public BaseClass {
    private:
@@ -400,33 +444,60 @@ class Group final {
       ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::group::getGroupListReq* /*request*/, ::ServerRpc::group::getGroupListResp* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithCallbackMethod_getGroupMember : public BaseClass {
+  class WithCallbackMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithCallbackMethod_getGroupMember() {
+    WithCallbackMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodCallback(4,
-          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp>(
+          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::ServerRpc::group::getGroupMemberReq* request, ::ServerRpc::group::getGroupMemberResp* response) { return this->getGroupMember(context, request, response); }));}
-    void SetMessageAllocatorFor_getGroupMember(
-        ::grpc::MessageAllocator< ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp>* allocator) {
+                   ::grpc::CallbackServerContext* context, const ::ServerRpc::group::getGroupMemberIdReq* request, ::ServerRpc::group::getGroupMemberIdResp* response) { return this->getGroupMemberId(context, request, response); }));}
+    void SetMessageAllocatorFor_getGroupMemberId(
+        ::grpc::MessageAllocator< ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~WithCallbackMethod_getGroupMember() override {
+    ~WithCallbackMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* getGroupMember(
-      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/)  { return nullptr; }
+    virtual ::grpc::ServerUnaryReactor* getGroupMemberId(
+      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_createGroup<WithCallbackMethod_joinGroup<WithCallbackMethod_getGroupInfo<WithCallbackMethod_getGroupList<WithCallbackMethod_getGroupMember<Service > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::ServerRpc::group::getGroupMemberIdHashReq* request, ::ServerRpc::group::getGroupMemberIdHashResp* response) { return this->getGroupMemberIdHash(context, request, response); }));}
+    void SetMessageAllocatorFor_getGroupMemberIdHash(
+        ::grpc::MessageAllocator< ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* getGroupMemberIdHash(
+      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_createGroup<WithCallbackMethod_joinGroup<WithCallbackMethod_getGroupInfo<WithCallbackMethod_getGroupList<WithCallbackMethod_getGroupMemberId<WithCallbackMethod_getGroupMemberIdHash<Service > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_createGroup : public BaseClass {
@@ -497,18 +568,35 @@ class Group final {
     }
   };
   template <class BaseClass>
-  class WithGenericMethod_getGroupMember : public BaseClass {
+  class WithGenericMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithGenericMethod_getGroupMember() {
+    WithGenericMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodGeneric(4);
     }
-    ~WithGenericMethod_getGroupMember() override {
+    ~WithGenericMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodGeneric(5);
+    }
+    ~WithGenericMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -594,23 +682,43 @@ class Group final {
     }
   };
   template <class BaseClass>
-  class WithRawMethod_getGroupMember : public BaseClass {
+  class WithRawMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawMethod_getGroupMember() {
+    WithRawMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodRaw(4);
     }
-    ~WithRawMethod_getGroupMember() override {
+    ~WithRawMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestgetGroupMember(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestgetGroupMemberId(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodRaw(5);
+    }
+    ~WithRawMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestgetGroupMemberIdHash(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -702,25 +810,47 @@ class Group final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_getGroupMember : public BaseClass {
+  class WithRawCallbackMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawCallbackMethod_getGroupMember() {
+    WithRawCallbackMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->getGroupMember(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->getGroupMemberId(context, request, response); }));
     }
-    ~WithRawCallbackMethod_getGroupMember() override {
+    ~WithRawCallbackMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* getGroupMember(
+    virtual ::grpc::ServerUnaryReactor* getGroupMemberId(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodRawCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->getGroupMemberIdHash(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* getGroupMemberIdHash(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -832,35 +962,62 @@ class Group final {
     virtual ::grpc::Status StreamedgetGroupList(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::group::getGroupListReq,::ServerRpc::group::getGroupListResp>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
-  class WithStreamedUnaryMethod_getGroupMember : public BaseClass {
+  class WithStreamedUnaryMethod_getGroupMemberId : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithStreamedUnaryMethod_getGroupMember() {
+    WithStreamedUnaryMethod_getGroupMemberId() {
       ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp>(
+          ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::ServerRpc::group::getGroupMemberReq, ::ServerRpc::group::getGroupMemberResp>* streamer) {
-                       return this->StreamedgetGroupMember(context,
+                     ::ServerRpc::group::getGroupMemberIdReq, ::ServerRpc::group::getGroupMemberIdResp>* streamer) {
+                       return this->StreamedgetGroupMemberId(context,
                          streamer);
                   }));
     }
-    ~WithStreamedUnaryMethod_getGroupMember() override {
+    ~WithStreamedUnaryMethod_getGroupMemberId() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status getGroupMember(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberReq* /*request*/, ::ServerRpc::group::getGroupMemberResp* /*response*/) override {
+    ::grpc::Status getGroupMemberId(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdReq* /*request*/, ::ServerRpc::group::getGroupMemberIdResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedgetGroupMember(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::group::getGroupMemberReq,::ServerRpc::group::getGroupMemberResp>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedgetGroupMemberId(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::group::getGroupMemberIdReq,::ServerRpc::group::getGroupMemberIdResp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_createGroup<WithStreamedUnaryMethod_joinGroup<WithStreamedUnaryMethod_getGroupInfo<WithStreamedUnaryMethod_getGroupList<WithStreamedUnaryMethod_getGroupMember<Service > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_getGroupMemberIdHash : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_getGroupMemberIdHash() {
+      ::grpc::Service::MarkMethodStreamed(5,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::ServerRpc::group::getGroupMemberIdHashReq, ::ServerRpc::group::getGroupMemberIdHashResp>* streamer) {
+                       return this->StreamedgetGroupMemberIdHash(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_getGroupMemberIdHash() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status getGroupMemberIdHash(::grpc::ServerContext* /*context*/, const ::ServerRpc::group::getGroupMemberIdHashReq* /*request*/, ::ServerRpc::group::getGroupMemberIdHashResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedgetGroupMemberIdHash(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::group::getGroupMemberIdHashReq,::ServerRpc::group::getGroupMemberIdHashResp>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_createGroup<WithStreamedUnaryMethod_joinGroup<WithStreamedUnaryMethod_getGroupInfo<WithStreamedUnaryMethod_getGroupList<WithStreamedUnaryMethod_getGroupMemberId<WithStreamedUnaryMethod_getGroupMemberIdHash<Service > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_createGroup<WithStreamedUnaryMethod_joinGroup<WithStreamedUnaryMethod_getGroupInfo<WithStreamedUnaryMethod_getGroupList<WithStreamedUnaryMethod_getGroupMember<Service > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_createGroup<WithStreamedUnaryMethod_joinGroup<WithStreamedUnaryMethod_getGroupInfo<WithStreamedUnaryMethod_getGroupList<WithStreamedUnaryMethod_getGroupMemberId<WithStreamedUnaryMethod_getGroupMemberIdHash<Service > > > > > > StreamedService;
 };
 
 }  // namespace group

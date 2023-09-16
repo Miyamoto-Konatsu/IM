@@ -45,7 +45,7 @@ std::string MsgServiceImpl::getKey(const msg &request) {
     if (request.msgtype() == SINGLE_CHAT_TYPE) {
         return getSingleChatKey(request.fromuserid(), request.touserid());
     } else if (request.msgtype() == GROUP_CHAT_TYPE) {
-        return getGroupChatKey(request.touserid());
+        return getGroupChatKey(request.groupid());
     } else {
         throw std::invalid_argument("invalid msg type");
     }

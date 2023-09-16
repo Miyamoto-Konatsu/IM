@@ -6,6 +6,7 @@
 #include <cstring>
 #include <functional>
 #include <vector>
+#include <random>
 
 const std::string GroupCache::GROUP_PREFIX = "group:";
 const std::string GroupCache::GROUP_MEMBER_IDS_PREFIX = "group_member_ids:";
@@ -33,6 +34,7 @@ inline void to_json(nlohmann::json &j, const GroupMember &s) {
     j["group"] = *s.group();
     j["role"] = s.roler();
 }
+
 inline void from_json(const nlohmann::json &j, GroupMember &s) {
     s.id_ = (j.at("id").get<unsigned long>());
     s.roler(j.at("role").get<GroupMember::GroupMemberRoler>());
@@ -62,10 +64,10 @@ GroupInfoStruct GroupCache::getGroup(const std::string &groupId) {
     return getCache(key, shared_from_this(), 10, std::move(fn));
 }
 
-std::vector<unsigned long>
+std::vector<std::string>
 GroupCache::getGroupMemberIds(const std::string &groupId) {
     std::string key = getGroupMemberIdsKey(groupId);
-    std::function<std::vector<unsigned long>()> fn = [&, this]() {
+    std::function<std::vector<std::string>()> fn = [&, this]() {
         auto members = this->db->findGroupMemberIds(groupId);
         return members;
     };
@@ -76,9 +78,19 @@ uint64_t GroupCache::getGroupMemberIdsHash(const std::string &groupId) {
     std::string key = getGroupMemberIdsHashKey(groupId);
     std::function<uint64_t()> fn = [&, this]() {
         auto userIds = this->getGroupMemberIds(groupId);
+
+        std::random_device rd;
+        std::mt19937 generator(rd()); // 使用 Mersenne Twister 引擎
+        // 定义随机数分布范围
+        int min = 1;
+        uint64_t max = UINT64_MAX;
+        std::uniform_int_distribution<uint64_t> distribution(min, max);
+        // 生成随机整数
         uint64_t hash = 0;
+        auto hashfn = std::hash<std::string>{};
         for (auto &userId : userIds) {
-            hash += std::hash<unsigned long>{}(userId);
+            uint64_t randomValue = distribution(generator);
+            hash += hashfn(userId) + randomValue;
         }
         return hash;
     };
@@ -110,5 +122,15 @@ void GroupCache::deleteGroupList(const std::string &userId) {
 
 void GroupCache::deleteGroupInfo(const std::string &groupId) {
     std::string key = getGroupKey(groupId);
+    del(key);
+}
+
+void GroupCache::deleteGroupMemberIds(const std::string &groupId) {
+    std::string key = getGroupMemberIdsKey(groupId);
+    del(key);
+}
+
+void GroupCache::deleteGroupMemberIdsHash(const std::string &groupId) {
+    std::string key = getGroupMemberIdsHashKey(groupId);
     del(key);
 }

@@ -18,9 +18,10 @@ using ServerRpc::group::getGroupInfoResp;
 using ServerRpc::group::getGroupInfoReq;
 using ServerRpc::group::getGroupListReq;
 using ServerRpc::group::getGroupListResp;
-using ServerRpc::group::getGroupMemberReq;
-using ServerRpc::group::getGroupMemberResp;
-
+using ServerRpc::group::getGroupMemberIdReq;
+using ServerRpc::group::getGroupMemberIdResp;
+using ServerRpc::group::getGroupMemberIdHashReq;
+using ServerRpc::group::getGroupMemberIdHashResp;
 class GroupClient {
 public:
     GroupClient(std::shared_ptr<Channel> channel) :
@@ -53,10 +54,16 @@ public:
         return stub_->getGroupList(&context, *request, response);
     }
 
-    Status getGroupMember(const getGroupMemberReq *request,
-                          getGroupMemberResp *response) {
+    Status getGroupMemberId(const getGroupMemberIdReq *request,
+                          getGroupMemberIdResp *response) {
         ClientContext context;
-        return stub_->getGroupMember(&context, *request, response);
+        return stub_->getGroupMemberId(&context, *request, response);
+    }
+
+    Status getGroupMemberIdHash(const getGroupMemberIdHashReq *request,
+                              getGroupMemberIdHashResp *response) {
+        ClientContext context;
+        return stub_->getGroupMemberIdHash(&context, *request, response);
     }
 
     static GroupClient getGroupClient() {
