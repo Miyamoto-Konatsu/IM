@@ -19,16 +19,41 @@ public:
 
     void createConversations(const Conversation &conversation) {
         odb::transaction t(db->begin());
-
-        auto existingConversation =
-            db->load<Conversation>(conversation.conversationKey());
-        if (existingConversation) {
+        auto query = odb::query<Conversation>(
+            odb::query<Conversation>::conversationKey.conversationId
+                == conversation.conversationKey().conversationId_
+            && odb::query<Conversation>::conversationKey.ownerId
+                   == conversation.conversationKey().ownerId_);
+        Conversation result;
+        auto isFound = db->query_one(query, result);
+        if (isFound) {
             throw DatabaseLookupError("Conversation already exists");
         }
+
+        // auto existingConversation =
+        //     db->load<Conversation>(conversation.conversationKey());
+        // if (existingConversation) {
+        //     throw DatabaseLookupError("Conversation already exists");
+        // }
         db->persist(conversation); // 将对象插入数据库
         t.commit();                // 提交事务
     }
 
+    void createConversations(const std::vector<Conversation> conversations) {
+        odb::transaction t(db->begin());
+        for (auto &conversation : conversations) {
+            auto query = odb::query<Conversation>(
+                odb::query<Conversation>::conversationKey.conversationId
+                    == conversation.conversationKey().conversationId_
+                && odb::query<Conversation>::conversationKey.ownerId
+                       == conversation.conversationKey().ownerId_);
+            Conversation result;
+            auto isFound = db->query_one(query, result);
+            if (isFound) { continue; }
+            db->persist(conversation); // 将对象插入数据库
+        }
+        t.commit();
+    }
     // 查询 Conversation 对象
     Conversation findConversation(const std::string &ownerId,
                                   const std::string &conversationId) {

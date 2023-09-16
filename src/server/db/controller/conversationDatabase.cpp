@@ -10,9 +10,9 @@ ConversationDatabase::ConversationDatabase() {
 
 bool ConversationDatabase::createConversations(
     const std::vector<Conversation> &conversations) {
-    for (auto &conversation : conversations) {
-        db->createConversations(conversation);
-    }
+    //for (auto &conversation : conversations) {
+        db->createConversations(conversations);
+  //  }
 
     std::vector<std::string> keys;
     std::set<std::string> users;

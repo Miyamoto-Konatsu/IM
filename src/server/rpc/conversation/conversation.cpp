@@ -95,7 +95,26 @@ Status ConversationServiceImp::batchSetConversations(
 Status ConversationServiceImp::createGroupChatConversations(
     ServerContext *context, const createGroupChatConversationsReq *request,
     createGroupChatConversationsResp *response) {
-    throw std::runtime_error("not implemented");
+    auto userIds = request->userids();
+    auto groupId = request->groupid();
+    std::vector<Conversation> conversations;
+    for (auto &userId : userIds) {
+        Conversation conversation;
+        conversation.ownerId(userId);
+        conversation.toUserId("");
+        conversation.conversationId(getGroupChatKey(groupId));
+        conversation.conversationType(GROUP_CHAT_TYPE);
+        conversation.maxSeq(0);
+        conversation.minSeq(0);
+        conversation.groupId(groupId);
+        conversations.push_back(conversation);
+    }
+    try {
+        db.createConversations(conversations);
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
     return Status::OK;
 }
 
@@ -111,12 +130,16 @@ Status ConversationServiceImp::createSingleChatConversations(
     std::string conversationId = getConversationIdForSingle(sendid, recvid);
     conversation1.conversationId(conversationId);
     conversation1.conversationType(SINGLE_CHAT_TYPE);
+    conversation1.maxSeq(0);
+    conversation1.minSeq(0);
 
     Conversation conversation2;
     conversation2.ownerId(recvid);
     conversation2.toUserId(sendid);
     conversation2.conversationId(conversationId);
     conversation2.conversationType(SINGLE_CHAT_TYPE);
+    conversation2.maxSeq(0);
+    conversation2.minSeq(0);
     try {
         db.createConversations({conversation1, conversation2});
     } catch (std::exception &e) {
@@ -125,6 +148,7 @@ Status ConversationServiceImp::createSingleChatConversations(
     }
     return Status::OK;
 }
+
 Status ConversationServiceImp::setConversationMaxSeq(
     ServerContext *context, const setConversationMaxSeqReq *request,
     setConversationMaxSeqResp *response) {

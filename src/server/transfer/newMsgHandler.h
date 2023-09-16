@@ -11,6 +11,7 @@
 #include "condition_variable"
 #include "controller/msgDatabase.h"
 #include "producer.h"
+#include "conversation/conversation.h"
 
 class NewMsgHandler : public MsgHandler {
 public:
@@ -35,6 +36,9 @@ private:
     MsgDatabase msgDatabase;
 
     std::unique_ptr<ProducerMQ> msgToPushProducer;
+
+    ConversationClient conversationClient;
+
 };
 
 #endif // NEWMSGHANDLER_TRANSFER_H

@@ -1,4 +1,6 @@
 #include "group.h"
+#include "conversation.pb.h"
+#include "conversation/conversation.h"
 #include "muduo/base/Logging.h"
 #include <grpcpp/server.h>
 #include <grpcpp/support/status.h>
@@ -16,6 +18,12 @@ Status GroupServiceImpl::createGroup(ServerContext *context,
     std::string groupownerId = request->groupownerid();
     try {
         groupDatabase_->createGroup(*request);
+        ServerRpc::conversation::createGroupChatConversationsReq req;
+        ServerRpc::conversation::createGroupChatConversationsResp resp;
+        req.set_groupid(request->groupid());
+        req.add_userids(groupownerId);
+        conversationClient_.createGroupChatConversations(&req, &resp);
+
     } catch (std::exception &e) {
         LOG_DEBUG << "create group failed. " << e.what()
                   << "groupname: " << groupname
@@ -37,6 +45,13 @@ Status GroupServiceImpl::joinGroup(ServerContext *context,
     std::string userid = request->userid();
     try {
         groupDatabase_->joinGroup(*request);
+        ServerRpc::conversation::createGroupChatConversationsReq req;
+        ServerRpc::conversation::createGroupChatConversationsResp resp;
+        req.set_groupid(groupid);
+        req.add_userids(userid);
+
+        conversationClient_.createGroupChatConversations(&req, &resp);
+
     } catch (std::exception &e) {
         LOG_DEBUG << "join group failed. " << e.what() << "groupid: " << groupid
                   << "userid: " << userid;
@@ -111,9 +126,7 @@ Status GroupServiceImpl::getGroupMemberId(ServerContext *context,
     std::string groupId = request->groupid();
     try {
         auto members = groupDatabase_->getGroupMemberId(groupId);
-        for(auto &member : members) {
-            response->add_groupmemberids(member);
-        }
+        for (auto &member : members) { response->add_groupmemberids(member); }
     } catch (const exception &e) {
         LOG_DEBUG << "get group member ids failed. " << e.what()
                   << "groupid: " << groupId;
@@ -139,7 +152,8 @@ GroupServiceImpl::getGroupMemberIdHash(ServerContext *context,
 }
 
 GroupServiceImpl::GroupServiceImpl() :
-    groupDatabase_(std::make_shared<GroupDatabase>()) {
+    groupDatabase_(std::make_shared<GroupDatabase>()),
+    conversationClient_(ConversationClient::getConversationClient()) {
 }
 
 GroupServiceImpl::~GroupServiceImpl() {

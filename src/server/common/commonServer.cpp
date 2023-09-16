@@ -2,6 +2,8 @@
 #include <memory>
 #include <thread>
 
+volatile int CommonServer::running = 0;
+
 CommonServer::CommonServer(std::unique_ptr<MsgHandler> handler) :
     msgHandler(std::move(handler)) {
 }

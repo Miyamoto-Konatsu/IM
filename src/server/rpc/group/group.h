@@ -7,6 +7,7 @@
 #include <grpcpp/support/status.h>
 #include <memory>
 #include "controller/groupDatabase.h"
+#include "conversation/conversation.h"
 using grpc::ServerContext;
 using grpc::Status;
 using ServerRpc::group::createGroupReq;
@@ -44,5 +45,6 @@ public:
 
 private:
     std::shared_ptr<GroupDatabase> groupDatabase_;
+    ConversationClient conversationClient_;
 };
 #endif

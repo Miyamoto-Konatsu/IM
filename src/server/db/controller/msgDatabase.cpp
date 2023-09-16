@@ -1,6 +1,7 @@
 #include "msgDatabase.h"
 #include "msg.pb.h"
 #include "utils/msgutils.h"
+#include <cstdint>
 #include <protobuf/message.h>
 #include "msg.grpc.pb.h"
 
@@ -29,10 +30,12 @@ bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
         isNewConversation = true;
         maxId = 0;
     }
+    std::unordered_map<std::string, int64_t> userHasRead;
 
     for (auto &msgReq : msgReqs) {
         auto &msg = *msgReq.mutable_msg_data();
         msg.set_seq(++maxId);
+        userHasRead[msg.fromuserid()] = maxId;
     }
 
     if (!msgCache.setConversationMaxId(conversationId, maxId)) {
@@ -40,6 +43,8 @@ bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
     } else {
         std::cerr << "setConversationMaxId success" << std::endl;
     }
+
+    msgCache.setHasReadSeqs(conversationId, userHasRead);
 
     return isNewConversation;
 }

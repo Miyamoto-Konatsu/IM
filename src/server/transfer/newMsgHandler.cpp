@@ -1,7 +1,11 @@
 #include "newMsgHandler.h"
 #include <iostream>
 #include <memory>
+#include "constant.h"
+#include "conversation.pb.h"
+#include "conversation/conversation.h"
 #include "kafka.h"
+#include <muduo/base/Logging.h>
 #include <ostream>
 #include <stdexcept>
 #include <unordered_map>
@@ -15,7 +19,9 @@
 #include <atomic>
 using ServerRpc::msg::sendMsgReq;
 
-NewMsgHandler::NewMsgHandler() : channels(std::thread::hardware_concurrency()) {
+NewMsgHandler::NewMsgHandler() :
+    channels(std::thread::hardware_concurrency()),
+    conversationClient(ConversationClient::getConversationClient()) {
     auto producerFactory = std::make_unique<MsgToPushProducerFactory>();
     msgToPushProducer = producerFactory->getProducer();
 
@@ -73,8 +79,21 @@ void NewMsgHandler::msgHandler(int index) {
 
         if (isNewConversation) {
             //在关系数据库里创建新的会话
+            auto &msg = msgReqs[0].msg_data();
+            if (msg.msgtype() == SINGLE_CHAT_TYPE) {
+                createSingleChatConversationsResp resp;
+                createSingleChatConversationsReq req;
+                req.set_sendid(msg.fromuserid());
+                req.set_recvid(msg.touserid());
+                auto status = conversationClient.createSingleChatConversations(
+                    &req, &resp);
+                if (!status.ok()) {
+                    LOG_WARN << "createSingleChatConversations failed" << ' '
+                             << msg.fromuserid() << ' ' << msg.touserid();
+                    continue;
+                }
+            }
         }
-
         // push到mq，给push模块消费
         msgToPush(key, msgReqs);
     }

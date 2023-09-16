@@ -5,14 +5,14 @@
 #include "newMsgHandler.h"
 #include <csignal>
 
-CommonServer
-    serverTransfer(std::make_unique<NewMsgHandler>());
 
 static void stop(int sig) {
-    serverTransfer.stop();
+    CommonServer::stop();
 }
 
 int main() {
+    CommonServer serverTransfer(std::make_unique<NewMsgHandler>());
+
     serverTransfer.run();
     //注册信号处理函数
     signal(SIGINT, stop);

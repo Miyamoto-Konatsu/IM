@@ -11,10 +11,10 @@ public:
     CommonServer &operator=(const CommonServer &) = delete;
     void run();
     void loop();
-    void stop();
+    static void stop();
 
 private:
-    volatile int running = 0;
+    volatile static int running;
     std::unique_ptr<MsgHandler> msgHandler;
 };
 #endif
