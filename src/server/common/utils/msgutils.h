@@ -3,12 +3,15 @@
 
 #include <string>
 #include "msg.pb.h"
+#include "constant.h"
 
 std::string getSingleChatKey(const std::string &from, const std::string &to);
 std::string getGroupChatKey(const std::string &groupId);
 
 std::string getConversationIdForSingle(const std::string &from,
                                        const std::string &to);
+
+std::string getConversationIdForGroup(const std::string &groupId);
 
 std::string getConversationId(const ServerRpc::msg::msg &msg);
 #endif // MSGUTILS_UTILS_H

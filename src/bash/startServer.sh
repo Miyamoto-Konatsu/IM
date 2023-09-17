@@ -45,6 +45,11 @@ transferPath="$server_dir/transfer/transferServer"
 # 启动transfer服务
 $transferPath &
 
+# 获取persist目录的绝对路径
+persistPath="$server_dir/persist/persistServer"
+# 启动persist服务
+$persistPath &
+
 # 获取push目录的绝对路径
 pushPath="$server_dir/push/pushServer"
 # 启动push服务

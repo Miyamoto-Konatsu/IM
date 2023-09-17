@@ -24,6 +24,7 @@ namespace msg {
 
 static const char* Msg_method_names[] = {
   "/ServerRpc.msg.Msg/sendMsg",
+  "/ServerRpc.msg.Msg/syncMsgs",
 };
 
 std::unique_ptr< Msg::Stub> Msg::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -34,6 +35,7 @@ std::unique_ptr< Msg::Stub> Msg::NewStub(const std::shared_ptr< ::grpc::ChannelI
 
 Msg::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_sendMsg_(Msg_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_syncMsgs_(Msg_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status Msg::Stub::sendMsg(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq& request, ::ServerRpc::msg::sendMsgResp* response) {
@@ -59,6 +61,29 @@ void Msg::Stub::async::sendMsg(::grpc::ClientContext* context, const ::ServerRpc
   return result;
 }
 
+::grpc::Status Msg::Stub::syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::ServerRpc::msg::syncMsgsResp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::msg::syncMsgsReq, ::ServerRpc::msg::syncMsgsResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_syncMsgs_, context, request, response);
+}
+
+void Msg::Stub::async::syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::msg::syncMsgsReq, ::ServerRpc::msg::syncMsgsResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_syncMsgs_, context, request, response, std::move(f));
+}
+
+void Msg::Stub::async::syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_syncMsgs_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>* Msg::Stub::PrepareAsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::msg::syncMsgsResp, ::ServerRpc::msg::syncMsgsReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_syncMsgs_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>* Msg::Stub::AsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncsyncMsgsRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 Msg::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       Msg_method_names[0],
@@ -70,12 +95,29 @@ Msg::Service::Service() {
              ::ServerRpc::msg::sendMsgResp* resp) {
                return service->sendMsg(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      Msg_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< Msg::Service, ::ServerRpc::msg::syncMsgsReq, ::ServerRpc::msg::syncMsgsResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](Msg::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::ServerRpc::msg::syncMsgsReq* req,
+             ::ServerRpc::msg::syncMsgsResp* resp) {
+               return service->syncMsgs(ctx, req, resp);
+             }, this)));
 }
 
 Msg::Service::~Service() {
 }
 
 ::grpc::Status Msg::Service::sendMsg(::grpc::ServerContext* context, const ::ServerRpc::msg::sendMsgReq* request, ::ServerRpc::msg::sendMsgResp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status Msg::Service::syncMsgs(::grpc::ServerContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response) {
   (void) context;
   (void) request;
   (void) response;

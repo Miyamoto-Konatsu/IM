@@ -37,4 +37,8 @@ public:
     std::unique_ptr<ConsumerMQ> getConsumer() override;
 };
 
+class MsgToMysqlConsumerFactory : public MqConsumerFactory {
+public:
+    std::unique_ptr<ConsumerMQ> getConsumer() override;
+};
 #endif // KAFKA_MQ_H

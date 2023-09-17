@@ -24,6 +24,12 @@ public:
         return stub_->sendMsg(&context, *request, response);
     }
 
+    Status syncMsgs(const ServerRpc::msg::syncMsgsReq *request,
+                    ServerRpc::msg::syncMsgsResp *response) {
+        ClientContext context;
+        return stub_->syncMsgs(&context,* request, response);
+    }
+
     static MsgClient getMsgClient() {
         return MsgClient(grpc::CreateChannel(
             "localhost:50053", grpc::InsecureChannelCredentials()));

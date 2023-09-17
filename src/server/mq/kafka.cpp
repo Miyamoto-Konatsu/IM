@@ -32,3 +32,10 @@ std::unique_ptr<ConsumerMQ> MsgToPushConsumerFactory::getConsumer() {
     consumer->setTopic("msgToPush");
     return consumer;
 }
+
+std::unique_ptr<ConsumerMQ> MsgToMysqlConsumerFactory::getConsumer() {
+    std::unique_ptr<ConsumerMQ> consumer =
+        std::make_unique<ConsumerMQ>("msgToMysqlGroup");
+    consumer->setTopic("msgToPush");
+    return consumer;
+}

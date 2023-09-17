@@ -2,7 +2,7 @@
 #include "constant.h"
 #include "constant/msg.h"
 std::string getSingleChatKey(const std::string &from, const std::string &to) {
-    if (from > to) return "SingleChat:" + to + "_" + from;
+    if (from > to) return "mq_sc:" + to + "_" + from;
     return "mq_sc:" + from + "_" + to;
 }
 
@@ -15,6 +15,10 @@ std::string getConversationIdForSingle(const std::string &from,
     static const std::string prefix = "conid_sc:";
     if (from > to) return prefix + to + "_" + from;
     return prefix + from + "_" + to;
+}
+
+std::string getConversationIdForGroup(const std::string &groupId) {
+    return "conid_gc:" + groupId;
 }
 
 std::string getConversationId(const ServerRpc::msg::msg &msg) {

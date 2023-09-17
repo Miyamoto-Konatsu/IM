@@ -46,7 +46,7 @@ void ConsumerMQ::run() {
     consumerThread = std::thread([this]() {
         consumer->subscribe({topic});
         while (runnning) {
-            auto msgs = consumeBatch(100, 100);
+            auto msgs = consumeBatch(100, 10);
             if (msgs.size() > 0) {
                 msgCall(std::move(msgs));
             }

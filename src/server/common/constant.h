@@ -1,5 +1,6 @@
 #ifndef CONSTANT_SERVER_H
 #define CONSTANT_SERVER_H
+
 #include "constant/msg.h"
 #define SERVER_PORT 50051
 #define SERVER_ADDRESS "0.0.0.0"

@@ -17,6 +17,7 @@ kafka:
   groupid:
     newMsgGroup: "newMsgGroup"
     msgToPushGroup: "msgToPushGroup"
+    msgToMysqlGroup: "msgToMysqlGroup"
     
 mysql:
   host: "127.0.0.1"

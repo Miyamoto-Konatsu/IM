@@ -8,6 +8,7 @@
 #include "user.h"
 #include "auth.h"
 #include "group.h"
+#include "msg.h"
 
 ApiServer::ApiServer(unsigned short port, int threadNum) :
     port_(port), server_(new httplib::Server()), numThreads_(threadNum) {
@@ -157,6 +158,14 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
         std::bind(&GroupApi::getGroupList, groupApi, std::placeholders::_1,
                   std::placeholders::_2);
     server_->Post("/group/getGroupList", getGroupListFunc);
+
+
+    // ********* msg api register *********
+    std::shared_ptr<MsgApi> msgApi = std::make_shared<MsgApi>();
+    funcBind syncMsgsFunc =
+        std::bind(&MsgApi::syncMsgs, msgApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/msg/syncMsgs", syncMsgsFunc);
 }
 
 ApiServer::~ApiServer() {

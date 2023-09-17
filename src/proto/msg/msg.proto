@@ -25,6 +25,20 @@ message pullMsgs {
     repeated msg msgs = 1;
 }
 
+message syncMsgsReq {
+    string fromUserID = 1;
+    string toUserID = 2;
+    string groupID = 3;
+    int32 msgType =4;
+    int64 startSeq = 5;
+    int64 endSeq = 6;
+}
+
+message syncMsgsResp {
+    pullMsgs msgs = 1;
+}
+
 service Msg {
     rpc sendMsg(sendMsgReq) returns (sendMsgResp);
+    rpc syncMsgs(syncMsgsReq) returns (syncMsgsResp);
 }
