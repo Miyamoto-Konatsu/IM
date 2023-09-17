@@ -52,6 +52,12 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable
     descriptor_table_msg_2eproto;
 namespace ServerRpc {
 namespace msg {
+class getHasReadSeqAndMaxSeqReq;
+struct getHasReadSeqAndMaxSeqReqDefaultTypeInternal;
+extern getHasReadSeqAndMaxSeqReqDefaultTypeInternal _getHasReadSeqAndMaxSeqReq_default_instance_;
+class getHasReadSeqAndMaxSeqResp;
+struct getHasReadSeqAndMaxSeqRespDefaultTypeInternal;
+extern getHasReadSeqAndMaxSeqRespDefaultTypeInternal _getHasReadSeqAndMaxSeqResp_default_instance_;
 class msg;
 struct msgDefaultTypeInternal;
 extern msgDefaultTypeInternal _msg_default_instance_;
@@ -64,6 +70,12 @@ extern sendMsgReqDefaultTypeInternal _sendMsgReq_default_instance_;
 class sendMsgResp;
 struct sendMsgRespDefaultTypeInternal;
 extern sendMsgRespDefaultTypeInternal _sendMsgResp_default_instance_;
+class setHasReadSeqReq;
+struct setHasReadSeqReqDefaultTypeInternal;
+extern setHasReadSeqReqDefaultTypeInternal _setHasReadSeqReq_default_instance_;
+class setHasReadSeqResp;
+struct setHasReadSeqRespDefaultTypeInternal;
+extern setHasReadSeqRespDefaultTypeInternal _setHasReadSeqResp_default_instance_;
 class syncMsgsReq;
 struct syncMsgsReqDefaultTypeInternal;
 extern syncMsgsReqDefaultTypeInternal _syncMsgsReq_default_instance_;
@@ -74,6 +86,10 @@ extern syncMsgsRespDefaultTypeInternal _syncMsgsResp_default_instance_;
 }  // namespace ServerRpc
 PROTOBUF_NAMESPACE_OPEN
 template <>
+::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* Arena::CreateMaybeMessage<::ServerRpc::msg::getHasReadSeqAndMaxSeqReq>(Arena*);
+template <>
+::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* Arena::CreateMaybeMessage<::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>(Arena*);
+template <>
 ::ServerRpc::msg::msg* Arena::CreateMaybeMessage<::ServerRpc::msg::msg>(Arena*);
 template <>
 ::ServerRpc::msg::pullMsgs* Arena::CreateMaybeMessage<::ServerRpc::msg::pullMsgs>(Arena*);
@@ -81,6 +97,10 @@ template <>
 ::ServerRpc::msg::sendMsgReq* Arena::CreateMaybeMessage<::ServerRpc::msg::sendMsgReq>(Arena*);
 template <>
 ::ServerRpc::msg::sendMsgResp* Arena::CreateMaybeMessage<::ServerRpc::msg::sendMsgResp>(Arena*);
+template <>
+::ServerRpc::msg::setHasReadSeqReq* Arena::CreateMaybeMessage<::ServerRpc::msg::setHasReadSeqReq>(Arena*);
+template <>
+::ServerRpc::msg::setHasReadSeqResp* Arena::CreateMaybeMessage<::ServerRpc::msg::setHasReadSeqResp>(Arena*);
 template <>
 ::ServerRpc::msg::syncMsgsReq* Arena::CreateMaybeMessage<::ServerRpc::msg::syncMsgsReq>(Arena*);
 template <>
@@ -854,6 +874,782 @@ class pullMsgs final :
   friend struct ::TableStruct_msg_2eproto;
 };// -------------------------------------------------------------------
 
+class setHasReadSeqReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.setHasReadSeqReq) */ {
+ public:
+  inline setHasReadSeqReq() : setHasReadSeqReq(nullptr) {}
+  ~setHasReadSeqReq() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR setHasReadSeqReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  setHasReadSeqReq(const setHasReadSeqReq& from);
+  setHasReadSeqReq(setHasReadSeqReq&& from) noexcept
+    : setHasReadSeqReq() {
+    *this = ::std::move(from);
+  }
+
+  inline setHasReadSeqReq& operator=(const setHasReadSeqReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline setHasReadSeqReq& operator=(setHasReadSeqReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const setHasReadSeqReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const setHasReadSeqReq* internal_default_instance() {
+    return reinterpret_cast<const setHasReadSeqReq*>(
+               &_setHasReadSeqReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(setHasReadSeqReq& a, setHasReadSeqReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(setHasReadSeqReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(setHasReadSeqReq* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  setHasReadSeqReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<setHasReadSeqReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const setHasReadSeqReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const setHasReadSeqReq& from) {
+    setHasReadSeqReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(setHasReadSeqReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.msg.setHasReadSeqReq";
+  }
+  protected:
+  explicit setHasReadSeqReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFromUserIDFieldNumber = 1,
+    kToUserIDFieldNumber = 2,
+    kGroupIDFieldNumber = 3,
+    kSeqFieldNumber = 5,
+    kMsgTypeFieldNumber = 4,
+  };
+  // string fromUserID = 1;
+  void clear_fromuserid() ;
+  const std::string& fromuserid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_fromuserid(Arg_&& arg, Args_... args);
+  std::string* mutable_fromuserid();
+  PROTOBUF_NODISCARD std::string* release_fromuserid();
+  void set_allocated_fromuserid(std::string* ptr);
+
+  private:
+  const std::string& _internal_fromuserid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fromuserid(
+      const std::string& value);
+  std::string* _internal_mutable_fromuserid();
+
+  public:
+  // string toUserID = 2;
+  void clear_touserid() ;
+  const std::string& touserid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_touserid(Arg_&& arg, Args_... args);
+  std::string* mutable_touserid();
+  PROTOBUF_NODISCARD std::string* release_touserid();
+  void set_allocated_touserid(std::string* ptr);
+
+  private:
+  const std::string& _internal_touserid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_touserid(
+      const std::string& value);
+  std::string* _internal_mutable_touserid();
+
+  public:
+  // string groupID = 3;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
+  // int64 seq = 5;
+  void clear_seq() ;
+  ::int64_t seq() const;
+  void set_seq(::int64_t value);
+
+  private:
+  ::int64_t _internal_seq() const;
+  void _internal_set_seq(::int64_t value);
+
+  public:
+  // int32 msgType = 4;
+  void clear_msgtype() ;
+  ::int32_t msgtype() const;
+  void set_msgtype(::int32_t value);
+
+  private:
+  ::int32_t _internal_msgtype() const;
+  void _internal_set_msgtype(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.msg.setHasReadSeqReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fromuserid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr touserid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
+    ::int64_t seq_;
+    ::int32_t msgtype_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_msg_2eproto;
+};// -------------------------------------------------------------------
+
+class setHasReadSeqResp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.setHasReadSeqResp) */ {
+ public:
+  inline setHasReadSeqResp() : setHasReadSeqResp(nullptr) {}
+  ~setHasReadSeqResp() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR setHasReadSeqResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  setHasReadSeqResp(const setHasReadSeqResp& from);
+  setHasReadSeqResp(setHasReadSeqResp&& from) noexcept
+    : setHasReadSeqResp() {
+    *this = ::std::move(from);
+  }
+
+  inline setHasReadSeqResp& operator=(const setHasReadSeqResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline setHasReadSeqResp& operator=(setHasReadSeqResp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const setHasReadSeqResp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const setHasReadSeqResp* internal_default_instance() {
+    return reinterpret_cast<const setHasReadSeqResp*>(
+               &_setHasReadSeqResp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(setHasReadSeqResp& a, setHasReadSeqResp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(setHasReadSeqResp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(setHasReadSeqResp* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  setHasReadSeqResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<setHasReadSeqResp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const setHasReadSeqResp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const setHasReadSeqResp& from) {
+    setHasReadSeqResp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(setHasReadSeqResp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.msg.setHasReadSeqResp";
+  }
+  protected:
+  explicit setHasReadSeqResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSendTimeFieldNumber = 1,
+  };
+  // int64 sendTime = 1;
+  void clear_sendtime() ;
+  ::int64_t sendtime() const;
+  void set_sendtime(::int64_t value);
+
+  private:
+  ::int64_t _internal_sendtime() const;
+  void _internal_set_sendtime(::int64_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.msg.setHasReadSeqResp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::int64_t sendtime_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_msg_2eproto;
+};// -------------------------------------------------------------------
+
+class getHasReadSeqAndMaxSeqReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.getHasReadSeqAndMaxSeqReq) */ {
+ public:
+  inline getHasReadSeqAndMaxSeqReq() : getHasReadSeqAndMaxSeqReq(nullptr) {}
+  ~getHasReadSeqAndMaxSeqReq() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR getHasReadSeqAndMaxSeqReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  getHasReadSeqAndMaxSeqReq(const getHasReadSeqAndMaxSeqReq& from);
+  getHasReadSeqAndMaxSeqReq(getHasReadSeqAndMaxSeqReq&& from) noexcept
+    : getHasReadSeqAndMaxSeqReq() {
+    *this = ::std::move(from);
+  }
+
+  inline getHasReadSeqAndMaxSeqReq& operator=(const getHasReadSeqAndMaxSeqReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline getHasReadSeqAndMaxSeqReq& operator=(getHasReadSeqAndMaxSeqReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const getHasReadSeqAndMaxSeqReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const getHasReadSeqAndMaxSeqReq* internal_default_instance() {
+    return reinterpret_cast<const getHasReadSeqAndMaxSeqReq*>(
+               &_getHasReadSeqAndMaxSeqReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(getHasReadSeqAndMaxSeqReq& a, getHasReadSeqAndMaxSeqReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(getHasReadSeqAndMaxSeqReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(getHasReadSeqAndMaxSeqReq* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  getHasReadSeqAndMaxSeqReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getHasReadSeqAndMaxSeqReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const getHasReadSeqAndMaxSeqReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const getHasReadSeqAndMaxSeqReq& from) {
+    getHasReadSeqAndMaxSeqReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(getHasReadSeqAndMaxSeqReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.msg.getHasReadSeqAndMaxSeqReq";
+  }
+  protected:
+  explicit getHasReadSeqAndMaxSeqReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFromUserIDFieldNumber = 1,
+    kToUserIDFieldNumber = 2,
+    kGroupIDFieldNumber = 3,
+    kMsgTypeFieldNumber = 4,
+  };
+  // string fromUserID = 1;
+  void clear_fromuserid() ;
+  const std::string& fromuserid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_fromuserid(Arg_&& arg, Args_... args);
+  std::string* mutable_fromuserid();
+  PROTOBUF_NODISCARD std::string* release_fromuserid();
+  void set_allocated_fromuserid(std::string* ptr);
+
+  private:
+  const std::string& _internal_fromuserid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fromuserid(
+      const std::string& value);
+  std::string* _internal_mutable_fromuserid();
+
+  public:
+  // string toUserID = 2;
+  void clear_touserid() ;
+  const std::string& touserid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_touserid(Arg_&& arg, Args_... args);
+  std::string* mutable_touserid();
+  PROTOBUF_NODISCARD std::string* release_touserid();
+  void set_allocated_touserid(std::string* ptr);
+
+  private:
+  const std::string& _internal_touserid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_touserid(
+      const std::string& value);
+  std::string* _internal_mutable_touserid();
+
+  public:
+  // string groupID = 3;
+  void clear_groupid() ;
+  const std::string& groupid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_groupid(Arg_&& arg, Args_... args);
+  std::string* mutable_groupid();
+  PROTOBUF_NODISCARD std::string* release_groupid();
+  void set_allocated_groupid(std::string* ptr);
+
+  private:
+  const std::string& _internal_groupid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_groupid(
+      const std::string& value);
+  std::string* _internal_mutable_groupid();
+
+  public:
+  // int32 msgType = 4;
+  void clear_msgtype() ;
+  ::int32_t msgtype() const;
+  void set_msgtype(::int32_t value);
+
+  private:
+  ::int32_t _internal_msgtype() const;
+  void _internal_set_msgtype(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.msg.getHasReadSeqAndMaxSeqReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fromuserid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr touserid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr groupid_;
+    ::int32_t msgtype_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_msg_2eproto;
+};// -------------------------------------------------------------------
+
+class getHasReadSeqAndMaxSeqResp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.getHasReadSeqAndMaxSeqResp) */ {
+ public:
+  inline getHasReadSeqAndMaxSeqResp() : getHasReadSeqAndMaxSeqResp(nullptr) {}
+  ~getHasReadSeqAndMaxSeqResp() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR getHasReadSeqAndMaxSeqResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  getHasReadSeqAndMaxSeqResp(const getHasReadSeqAndMaxSeqResp& from);
+  getHasReadSeqAndMaxSeqResp(getHasReadSeqAndMaxSeqResp&& from) noexcept
+    : getHasReadSeqAndMaxSeqResp() {
+    *this = ::std::move(from);
+  }
+
+  inline getHasReadSeqAndMaxSeqResp& operator=(const getHasReadSeqAndMaxSeqResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline getHasReadSeqAndMaxSeqResp& operator=(getHasReadSeqAndMaxSeqResp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const getHasReadSeqAndMaxSeqResp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const getHasReadSeqAndMaxSeqResp* internal_default_instance() {
+    return reinterpret_cast<const getHasReadSeqAndMaxSeqResp*>(
+               &_getHasReadSeqAndMaxSeqResp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(getHasReadSeqAndMaxSeqResp& a, getHasReadSeqAndMaxSeqResp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(getHasReadSeqAndMaxSeqResp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(getHasReadSeqAndMaxSeqResp* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  getHasReadSeqAndMaxSeqResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<getHasReadSeqAndMaxSeqResp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const getHasReadSeqAndMaxSeqResp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const getHasReadSeqAndMaxSeqResp& from) {
+    getHasReadSeqAndMaxSeqResp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(getHasReadSeqAndMaxSeqResp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.msg.getHasReadSeqAndMaxSeqResp";
+  }
+  protected:
+  explicit getHasReadSeqAndMaxSeqResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kHasReadSeqFieldNumber = 1,
+    kMaxSeqFieldNumber = 2,
+  };
+  // int64 hasReadSeq = 1;
+  void clear_hasreadseq() ;
+  ::int64_t hasreadseq() const;
+  void set_hasreadseq(::int64_t value);
+
+  private:
+  ::int64_t _internal_hasreadseq() const;
+  void _internal_set_hasreadseq(::int64_t value);
+
+  public:
+  // int64 maxSeq = 2;
+  void clear_maxseq() ;
+  ::int64_t maxseq() const;
+  void set_maxseq(::int64_t value);
+
+  private:
+  ::int64_t _internal_maxseq() const;
+  void _internal_set_maxseq(::int64_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.msg.getHasReadSeqAndMaxSeqResp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::int64_t hasreadseq_;
+    ::int64_t maxseq_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_msg_2eproto;
+};// -------------------------------------------------------------------
+
 class syncMsgsReq final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.msg.syncMsgsReq) */ {
  public:
@@ -910,7 +1706,7 @@ class syncMsgsReq final :
                &_syncMsgsReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    8;
 
   friend void swap(syncMsgsReq& a, syncMsgsReq& b) {
     a.Swap(&b);
@@ -1155,7 +1951,7 @@ class syncMsgsResp final :
                &_syncMsgsResp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    9;
 
   friend void swap(syncMsgsResp& a, syncMsgsResp& b) {
     a.Swap(&b);
@@ -1708,6 +2504,424 @@ pullMsgs::_internal_msgs() const {
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::ServerRpc::msg::msg>*
 pullMsgs::_internal_mutable_msgs() {
   return &_impl_.msgs_;
+}
+
+// -------------------------------------------------------------------
+
+// setHasReadSeqReq
+
+// string fromUserID = 1;
+inline void setHasReadSeqReq::clear_fromuserid() {
+  _impl_.fromuserid_.ClearToEmpty();
+}
+inline const std::string& setHasReadSeqReq::fromuserid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqReq.fromUserID)
+  return _internal_fromuserid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void setHasReadSeqReq::set_fromuserid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.fromuserid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqReq.fromUserID)
+}
+inline std::string* setHasReadSeqReq::mutable_fromuserid() {
+  std::string* _s = _internal_mutable_fromuserid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.setHasReadSeqReq.fromUserID)
+  return _s;
+}
+inline const std::string& setHasReadSeqReq::_internal_fromuserid() const {
+  return _impl_.fromuserid_.Get();
+}
+inline void setHasReadSeqReq::_internal_set_fromuserid(const std::string& value) {
+  ;
+
+
+  _impl_.fromuserid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::_internal_mutable_fromuserid() {
+  ;
+  return _impl_.fromuserid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::release_fromuserid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.setHasReadSeqReq.fromUserID)
+  return _impl_.fromuserid_.Release();
+}
+inline void setHasReadSeqReq::set_allocated_fromuserid(std::string* value) {
+  _impl_.fromuserid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.fromuserid_.IsDefault()) {
+          _impl_.fromuserid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.setHasReadSeqReq.fromUserID)
+}
+
+// string toUserID = 2;
+inline void setHasReadSeqReq::clear_touserid() {
+  _impl_.touserid_.ClearToEmpty();
+}
+inline const std::string& setHasReadSeqReq::touserid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqReq.toUserID)
+  return _internal_touserid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void setHasReadSeqReq::set_touserid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.touserid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqReq.toUserID)
+}
+inline std::string* setHasReadSeqReq::mutable_touserid() {
+  std::string* _s = _internal_mutable_touserid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.setHasReadSeqReq.toUserID)
+  return _s;
+}
+inline const std::string& setHasReadSeqReq::_internal_touserid() const {
+  return _impl_.touserid_.Get();
+}
+inline void setHasReadSeqReq::_internal_set_touserid(const std::string& value) {
+  ;
+
+
+  _impl_.touserid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::_internal_mutable_touserid() {
+  ;
+  return _impl_.touserid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::release_touserid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.setHasReadSeqReq.toUserID)
+  return _impl_.touserid_.Release();
+}
+inline void setHasReadSeqReq::set_allocated_touserid(std::string* value) {
+  _impl_.touserid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.touserid_.IsDefault()) {
+          _impl_.touserid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.setHasReadSeqReq.toUserID)
+}
+
+// string groupID = 3;
+inline void setHasReadSeqReq::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& setHasReadSeqReq::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqReq.groupID)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void setHasReadSeqReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqReq.groupID)
+}
+inline std::string* setHasReadSeqReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.setHasReadSeqReq.groupID)
+  return _s;
+}
+inline const std::string& setHasReadSeqReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void setHasReadSeqReq::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* setHasReadSeqReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.setHasReadSeqReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void setHasReadSeqReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.setHasReadSeqReq.groupID)
+}
+
+// int32 msgType = 4;
+inline void setHasReadSeqReq::clear_msgtype() {
+  _impl_.msgtype_ = 0;
+}
+inline ::int32_t setHasReadSeqReq::msgtype() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqReq.msgType)
+  return _internal_msgtype();
+}
+inline void setHasReadSeqReq::set_msgtype(::int32_t value) {
+  _internal_set_msgtype(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqReq.msgType)
+}
+inline ::int32_t setHasReadSeqReq::_internal_msgtype() const {
+  return _impl_.msgtype_;
+}
+inline void setHasReadSeqReq::_internal_set_msgtype(::int32_t value) {
+  ;
+  _impl_.msgtype_ = value;
+}
+
+// int64 seq = 5;
+inline void setHasReadSeqReq::clear_seq() {
+  _impl_.seq_ = ::int64_t{0};
+}
+inline ::int64_t setHasReadSeqReq::seq() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqReq.seq)
+  return _internal_seq();
+}
+inline void setHasReadSeqReq::set_seq(::int64_t value) {
+  _internal_set_seq(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqReq.seq)
+}
+inline ::int64_t setHasReadSeqReq::_internal_seq() const {
+  return _impl_.seq_;
+}
+inline void setHasReadSeqReq::_internal_set_seq(::int64_t value) {
+  ;
+  _impl_.seq_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// setHasReadSeqResp
+
+// int64 sendTime = 1;
+inline void setHasReadSeqResp::clear_sendtime() {
+  _impl_.sendtime_ = ::int64_t{0};
+}
+inline ::int64_t setHasReadSeqResp::sendtime() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.setHasReadSeqResp.sendTime)
+  return _internal_sendtime();
+}
+inline void setHasReadSeqResp::set_sendtime(::int64_t value) {
+  _internal_set_sendtime(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.setHasReadSeqResp.sendTime)
+}
+inline ::int64_t setHasReadSeqResp::_internal_sendtime() const {
+  return _impl_.sendtime_;
+}
+inline void setHasReadSeqResp::_internal_set_sendtime(::int64_t value) {
+  ;
+  _impl_.sendtime_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// getHasReadSeqAndMaxSeqReq
+
+// string fromUserID = 1;
+inline void getHasReadSeqAndMaxSeqReq::clear_fromuserid() {
+  _impl_.fromuserid_.ClearToEmpty();
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::fromuserid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.fromUserID)
+  return _internal_fromuserid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getHasReadSeqAndMaxSeqReq::set_fromuserid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.fromuserid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.fromUserID)
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::mutable_fromuserid() {
+  std::string* _s = _internal_mutable_fromuserid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.fromUserID)
+  return _s;
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::_internal_fromuserid() const {
+  return _impl_.fromuserid_.Get();
+}
+inline void getHasReadSeqAndMaxSeqReq::_internal_set_fromuserid(const std::string& value) {
+  ;
+
+
+  _impl_.fromuserid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::_internal_mutable_fromuserid() {
+  ;
+  return _impl_.fromuserid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::release_fromuserid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.fromUserID)
+  return _impl_.fromuserid_.Release();
+}
+inline void getHasReadSeqAndMaxSeqReq::set_allocated_fromuserid(std::string* value) {
+  _impl_.fromuserid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.fromuserid_.IsDefault()) {
+          _impl_.fromuserid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.fromUserID)
+}
+
+// string toUserID = 2;
+inline void getHasReadSeqAndMaxSeqReq::clear_touserid() {
+  _impl_.touserid_.ClearToEmpty();
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::touserid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.toUserID)
+  return _internal_touserid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getHasReadSeqAndMaxSeqReq::set_touserid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.touserid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.toUserID)
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::mutable_touserid() {
+  std::string* _s = _internal_mutable_touserid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.toUserID)
+  return _s;
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::_internal_touserid() const {
+  return _impl_.touserid_.Get();
+}
+inline void getHasReadSeqAndMaxSeqReq::_internal_set_touserid(const std::string& value) {
+  ;
+
+
+  _impl_.touserid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::_internal_mutable_touserid() {
+  ;
+  return _impl_.touserid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::release_touserid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.toUserID)
+  return _impl_.touserid_.Release();
+}
+inline void getHasReadSeqAndMaxSeqReq::set_allocated_touserid(std::string* value) {
+  _impl_.touserid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.touserid_.IsDefault()) {
+          _impl_.touserid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.toUserID)
+}
+
+// string groupID = 3;
+inline void getHasReadSeqAndMaxSeqReq::clear_groupid() {
+  _impl_.groupid_.ClearToEmpty();
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::groupid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.groupID)
+  return _internal_groupid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void getHasReadSeqAndMaxSeqReq::set_groupid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.groupid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.groupID)
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::mutable_groupid() {
+  std::string* _s = _internal_mutable_groupid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.groupID)
+  return _s;
+}
+inline const std::string& getHasReadSeqAndMaxSeqReq::_internal_groupid() const {
+  return _impl_.groupid_.Get();
+}
+inline void getHasReadSeqAndMaxSeqReq::_internal_set_groupid(const std::string& value) {
+  ;
+
+
+  _impl_.groupid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::_internal_mutable_groupid() {
+  ;
+  return _impl_.groupid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* getHasReadSeqAndMaxSeqReq::release_groupid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.groupID)
+  return _impl_.groupid_.Release();
+}
+inline void getHasReadSeqAndMaxSeqReq::set_allocated_groupid(std::string* value) {
+  _impl_.groupid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.groupid_.IsDefault()) {
+          _impl_.groupid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.groupID)
+}
+
+// int32 msgType = 4;
+inline void getHasReadSeqAndMaxSeqReq::clear_msgtype() {
+  _impl_.msgtype_ = 0;
+}
+inline ::int32_t getHasReadSeqAndMaxSeqReq::msgtype() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.msgType)
+  return _internal_msgtype();
+}
+inline void getHasReadSeqAndMaxSeqReq::set_msgtype(::int32_t value) {
+  _internal_set_msgtype(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqReq.msgType)
+}
+inline ::int32_t getHasReadSeqAndMaxSeqReq::_internal_msgtype() const {
+  return _impl_.msgtype_;
+}
+inline void getHasReadSeqAndMaxSeqReq::_internal_set_msgtype(::int32_t value) {
+  ;
+  _impl_.msgtype_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// getHasReadSeqAndMaxSeqResp
+
+// int64 hasReadSeq = 1;
+inline void getHasReadSeqAndMaxSeqResp::clear_hasreadseq() {
+  _impl_.hasreadseq_ = ::int64_t{0};
+}
+inline ::int64_t getHasReadSeqAndMaxSeqResp::hasreadseq() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqResp.hasReadSeq)
+  return _internal_hasreadseq();
+}
+inline void getHasReadSeqAndMaxSeqResp::set_hasreadseq(::int64_t value) {
+  _internal_set_hasreadseq(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqResp.hasReadSeq)
+}
+inline ::int64_t getHasReadSeqAndMaxSeqResp::_internal_hasreadseq() const {
+  return _impl_.hasreadseq_;
+}
+inline void getHasReadSeqAndMaxSeqResp::_internal_set_hasreadseq(::int64_t value) {
+  ;
+  _impl_.hasreadseq_ = value;
+}
+
+// int64 maxSeq = 2;
+inline void getHasReadSeqAndMaxSeqResp::clear_maxseq() {
+  _impl_.maxseq_ = ::int64_t{0};
+}
+inline ::int64_t getHasReadSeqAndMaxSeqResp::maxseq() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.msg.getHasReadSeqAndMaxSeqResp.maxSeq)
+  return _internal_maxseq();
+}
+inline void getHasReadSeqAndMaxSeqResp::set_maxseq(::int64_t value) {
+  _internal_set_maxseq(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.msg.getHasReadSeqAndMaxSeqResp.maxSeq)
+}
+inline ::int64_t getHasReadSeqAndMaxSeqResp::_internal_maxseq() const {
+  return _impl_.maxseq_;
+}
+inline void getHasReadSeqAndMaxSeqResp::_internal_set_maxseq(::int64_t value) {
+  ;
+  _impl_.maxseq_ = value;
 }
 
 // -------------------------------------------------------------------

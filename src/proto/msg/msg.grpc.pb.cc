@@ -25,6 +25,8 @@ namespace msg {
 static const char* Msg_method_names[] = {
   "/ServerRpc.msg.Msg/sendMsg",
   "/ServerRpc.msg.Msg/syncMsgs",
+  "/ServerRpc.msg.Msg/setHasReadSeq",
+  "/ServerRpc.msg.Msg/getHasReadSeqAndMaxSeq",
 };
 
 std::unique_ptr< Msg::Stub> Msg::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -36,6 +38,8 @@ std::unique_ptr< Msg::Stub> Msg::NewStub(const std::shared_ptr< ::grpc::ChannelI
 Msg::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_sendMsg_(Msg_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_syncMsgs_(Msg_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_setHasReadSeq_(Msg_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_getHasReadSeqAndMaxSeq_(Msg_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status Msg::Stub::sendMsg(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq& request, ::ServerRpc::msg::sendMsgResp* response) {
@@ -84,6 +88,52 @@ void Msg::Stub::async::syncMsgs(::grpc::ClientContext* context, const ::ServerRp
   return result;
 }
 
+::grpc::Status Msg::Stub::setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::ServerRpc::msg::setHasReadSeqResp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_setHasReadSeq_, context, request, response);
+}
+
+void Msg::Stub::async::setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_setHasReadSeq_, context, request, response, std::move(f));
+}
+
+void Msg::Stub::async::setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_setHasReadSeq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>* Msg::Stub::PrepareAsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::msg::setHasReadSeqResp, ::ServerRpc::msg::setHasReadSeqReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_setHasReadSeq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>* Msg::Stub::AsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncsetHasReadSeqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status Msg::Stub::getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_getHasReadSeqAndMaxSeq_, context, request, response);
+}
+
+void Msg::Stub::async::getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getHasReadSeqAndMaxSeq_, context, request, response, std::move(f));
+}
+
+void Msg::Stub::async::getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_getHasReadSeqAndMaxSeq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* Msg::Stub::PrepareAsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp, ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_getHasReadSeqAndMaxSeq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* Msg::Stub::AsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncgetHasReadSeqAndMaxSeqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 Msg::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       Msg_method_names[0],
@@ -105,6 +155,26 @@ Msg::Service::Service() {
              ::ServerRpc::msg::syncMsgsResp* resp) {
                return service->syncMsgs(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      Msg_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< Msg::Service, ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](Msg::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::ServerRpc::msg::setHasReadSeqReq* req,
+             ::ServerRpc::msg::setHasReadSeqResp* resp) {
+               return service->setHasReadSeq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      Msg_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< Msg::Service, ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](Msg::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* req,
+             ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* resp) {
+               return service->getHasReadSeqAndMaxSeq(ctx, req, resp);
+             }, this)));
 }
 
 Msg::Service::~Service() {
@@ -118,6 +188,20 @@ Msg::Service::~Service() {
 }
 
 ::grpc::Status Msg::Service::syncMsgs(::grpc::ServerContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status Msg::Service::setHasReadSeq(::grpc::ServerContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status Msg::Service::getHasReadSeqAndMaxSeq(::grpc::ServerContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response) {
   (void) context;
   (void) request;
   (void) response;

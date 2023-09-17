@@ -16,7 +16,8 @@ using grpc::ServerBuilder;
 using grpc::Server;
 
 MsgServiceImpl::MsgServiceImpl() :
-    chatLogDatabase(std::make_shared<ChatLogController>()) {
+    chatLogDatabase(std::make_shared<ChatLogController>()),
+    msgDatabase(std::make_shared<MsgDatabase>()) {
     std::unique_ptr<MqProducerFactory> factory =
         std::make_unique<NewMsgMqProducerFactory>();
     producer = factory->getProducer();
@@ -81,8 +82,8 @@ Status MsgServiceImpl::syncMsgs(ServerContext *context,
     auto seqEnd = request->endseq();
     auto msgType = request->msgtype();
     auto groupId = request->groupid();
-    auto msgs = chatLogDatabase->findChatLog(fromUserId, toUserId,groupId, seqStart,
-                                             seqEnd, msgType);
+    auto msgs = chatLogDatabase->findChatLog(fromUserId, toUserId, groupId,
+                                             seqStart, seqEnd, msgType);
     for (auto &msg : msgs) {
         auto msgData = response->mutable_msgs()->add_msgs();
         msgData->set_fromuserid(msg.fromUserId());
@@ -95,6 +96,48 @@ Status MsgServiceImpl::syncMsgs(ServerContext *context,
     }
     return Status::OK;
 }
+
+Status MsgServiceImpl::setHasReadSeq(ServerContext *context,
+                                     const setHasReadSeqReq *request,
+                                     setHasReadSeqResp *response) {
+    auto fromUserId = request->fromuserid();
+    auto toUserId = request->touserid();
+    auto groupId = request->groupid();
+    auto seq = request->seq();
+    auto msgType = request->msgtype();
+    if (msgType == SINGLE_CHAT_TYPE) {
+        auto conversationId = getConversationIdForSingle(fromUserId, toUserId);
+        msgDatabase->setHasReadSeq(conversationId, fromUserId, seq);
+    } else {
+        auto conversationId = getConversationIdForGroup(groupId);
+        msgDatabase->setHasReadSeq(conversationId, fromUserId, seq);
+    }
+    return Status::OK;
+}
+
+Status MsgServiceImpl ::getHasReadSeqAndMaxSeq(
+    ServerContext *context, const getHasReadSeqAndMaxSeqReq *request,
+    getHasReadSeqAndMaxSeqResp *response) {
+    auto fromUserId = request->fromuserid();
+    auto toUserId = request->touserid();
+    auto groupId = request->groupid();
+    auto msgType = request->msgtype();
+    if (msgType == SINGLE_CHAT_TYPE) {
+        auto conversationId = getConversationIdForSingle(fromUserId, toUserId);
+        auto seqs = msgDatabase->getHasReadSeqAndMaxSeq(conversationId,
+                                                        fromUserId);
+        response->set_hasreadseq(seqs.first);
+        response->set_maxseq(seqs.second);
+    } else {
+        auto conversationId = getConversationIdForGroup(groupId);
+        auto seqs = msgDatabase->getHasReadSeqAndMaxSeq(conversationId,
+                                                        fromUserId);
+        response->set_hasreadseq(seqs.first);
+        response->set_maxseq(seqs.second);
+    }
+    return Status::OK;
+}
+
 int main() {
     std::string server_address("0.0.0.0:50053");
     MsgServiceImpl service;

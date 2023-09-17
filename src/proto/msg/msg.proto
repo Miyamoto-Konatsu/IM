@@ -25,6 +25,30 @@ message pullMsgs {
     repeated msg msgs = 1;
 }
 
+message setHasReadSeqReq {
+    string fromUserID = 1;
+    string toUserID = 2;
+    string groupID = 3;
+    int32 msgType =4;
+    int64 seq = 5;
+}
+
+message setHasReadSeqResp {
+    int64 sendTime = 1;
+}
+
+message getHasReadSeqAndMaxSeqReq {
+    string fromUserID = 1;
+    string toUserID = 2;
+    string groupID = 3;
+    int32 msgType =4;
+}
+
+message getHasReadSeqAndMaxSeqResp {
+    int64 hasReadSeq = 1;
+    int64 maxSeq = 2;
+}
+
 message syncMsgsReq {
     string fromUserID = 1;
     string toUserID = 2;
@@ -41,4 +65,6 @@ message syncMsgsResp {
 service Msg {
     rpc sendMsg(sendMsgReq) returns (sendMsgResp);
     rpc syncMsgs(syncMsgsReq) returns (syncMsgsResp);
+    rpc setHasReadSeq(setHasReadSeqReq) returns (setHasReadSeqResp);
+    rpc getHasReadSeqAndMaxSeq(getHasReadSeqAndMaxSeqReq) returns (getHasReadSeqAndMaxSeqResp);
 }

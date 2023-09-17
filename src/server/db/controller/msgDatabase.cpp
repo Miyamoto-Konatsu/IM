@@ -48,3 +48,13 @@ bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
 
     return isNewConversation;
 }
+
+void MsgDatabase::setHasReadSeq(const std::string &key,
+                                const std::string &userid, int64_t seq) {
+    msgCache.setHasReadSeqs(key, {{userid, seq}});
+}
+
+std::pair<int64_t, int64_t> MsgDatabase::getHasReadSeqAndMaxSeq(
+    const std::string &conversationId, const std::string &userid) {
+    return msgCache.getHasReadSeqAndMaxSeq(conversationId, userid);
+}

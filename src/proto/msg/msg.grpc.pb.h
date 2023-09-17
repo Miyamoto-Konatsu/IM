@@ -50,6 +50,20 @@ class Msg final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::syncMsgsResp>> PrepareAsyncsyncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::syncMsgsResp>>(PrepareAsyncsyncMsgsRaw(context, request, cq));
     }
+    virtual ::grpc::Status setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::ServerRpc::msg::setHasReadSeqResp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>> AsyncsetHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>>(AsyncsetHasReadSeqRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>> PrepareAsyncsetHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>>(PrepareAsyncsetHasReadSeqRaw(context, request, cq));
+    }
+    virtual ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>> AsyncgetHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>>(AsyncgetHasReadSeqAndMaxSeqRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>> PrepareAsyncgetHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>>(PrepareAsyncgetHasReadSeqAndMaxSeqRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -57,6 +71,10 @@ class Msg final {
       virtual void sendMsg(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq* request, ::ServerRpc::msg::sendMsgResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -66,6 +84,10 @@ class Msg final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::sendMsgResp>* PrepareAsyncsendMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::syncMsgsResp>* AsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::syncMsgsResp>* PrepareAsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>* AsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::setHasReadSeqResp>* PrepareAsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* AsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* PrepareAsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -84,6 +106,20 @@ class Msg final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>> PrepareAsyncsyncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>>(PrepareAsyncsyncMsgsRaw(context, request, cq));
     }
+    ::grpc::Status setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::ServerRpc::msg::setHasReadSeqResp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>> AsyncsetHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>>(AsyncsetHasReadSeqRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>> PrepareAsyncsetHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>>(PrepareAsyncsetHasReadSeqRaw(context, request, cq));
+    }
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>> AsyncgetHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>>(AsyncgetHasReadSeqAndMaxSeqRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>> PrepareAsyncgetHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>>(PrepareAsyncgetHasReadSeqAndMaxSeqRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -91,6 +127,10 @@ class Msg final {
       void sendMsg(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq* request, ::ServerRpc::msg::sendMsgResp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, std::function<void(::grpc::Status)>) override;
       void syncMsgs(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, std::function<void(::grpc::Status)>) override;
+      void setHasReadSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, std::function<void(::grpc::Status)>) override;
+      void getHasReadSeqAndMaxSeq(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -106,8 +146,14 @@ class Msg final {
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::sendMsgResp>* PrepareAsyncsendMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::sendMsgReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>* AsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::syncMsgsResp>* PrepareAsyncsyncMsgsRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::syncMsgsReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>* AsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::setHasReadSeqResp>* PrepareAsyncsetHasReadSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::setHasReadSeqReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* AsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* PrepareAsyncgetHasReadSeqAndMaxSeqRaw(::grpc::ClientContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_sendMsg_;
     const ::grpc::internal::RpcMethod rpcmethod_syncMsgs_;
+    const ::grpc::internal::RpcMethod rpcmethod_setHasReadSeq_;
+    const ::grpc::internal::RpcMethod rpcmethod_getHasReadSeqAndMaxSeq_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -117,6 +163,8 @@ class Msg final {
     virtual ~Service();
     virtual ::grpc::Status sendMsg(::grpc::ServerContext* context, const ::ServerRpc::msg::sendMsgReq* request, ::ServerRpc::msg::sendMsgResp* response);
     virtual ::grpc::Status syncMsgs(::grpc::ServerContext* context, const ::ServerRpc::msg::syncMsgsReq* request, ::ServerRpc::msg::syncMsgsResp* response);
+    virtual ::grpc::Status setHasReadSeq(::grpc::ServerContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response);
+    virtual ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_sendMsg : public BaseClass {
@@ -158,7 +206,47 @@ class Msg final {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_sendMsg<WithAsyncMethod_syncMsgs<Service > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestsetHasReadSeq(::grpc::ServerContext* context, ::ServerRpc::msg::setHasReadSeqReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::msg::setHasReadSeqResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestgetHasReadSeqAndMaxSeq(::grpc::ServerContext* context, ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_sendMsg<WithAsyncMethod_syncMsgs<WithAsyncMethod_setHasReadSeq<WithAsyncMethod_getHasReadSeqAndMaxSeq<Service > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_sendMsg : public BaseClass {
    private:
@@ -213,7 +301,61 @@ class Msg final {
     virtual ::grpc::ServerUnaryReactor* syncMsgs(
       ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::msg::syncMsgsReq* /*request*/, ::ServerRpc::msg::syncMsgsResp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_sendMsg<WithCallbackMethod_syncMsgs<Service > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::ServerRpc::msg::setHasReadSeqReq* request, ::ServerRpc::msg::setHasReadSeqResp* response) { return this->setHasReadSeq(context, request, response); }));}
+    void SetMessageAllocatorFor_setHasReadSeq(
+        ::grpc::MessageAllocator< ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* setHasReadSeq(
+      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* request, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* response) { return this->getHasReadSeqAndMaxSeq(context, request, response); }));}
+    void SetMessageAllocatorFor_getHasReadSeqAndMaxSeq(
+        ::grpc::MessageAllocator< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* getHasReadSeqAndMaxSeq(
+      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_sendMsg<WithCallbackMethod_syncMsgs<WithCallbackMethod_setHasReadSeq<WithCallbackMethod_getHasReadSeqAndMaxSeq<Service > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_sendMsg : public BaseClass {
@@ -245,6 +387,40 @@ class Msg final {
     }
     // disable synchronous version of this method
     ::grpc::Status syncMsgs(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::syncMsgsReq* /*request*/, ::ServerRpc::msg::syncMsgsResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -290,6 +466,46 @@ class Msg final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestsetHasReadSeq(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestgetHasReadSeqAndMaxSeq(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_sendMsg : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -331,6 +547,50 @@ class Msg final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* syncMsgs(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->setHasReadSeq(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* setHasReadSeq(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodRawCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->getHasReadSeqAndMaxSeq(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* getHasReadSeqAndMaxSeq(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -387,9 +647,63 @@ class Msg final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedsyncMsgs(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::msg::syncMsgsReq,::ServerRpc::msg::syncMsgsResp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_sendMsg<WithStreamedUnaryMethod_syncMsgs<Service > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_setHasReadSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_setHasReadSeq() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::ServerRpc::msg::setHasReadSeqReq, ::ServerRpc::msg::setHasReadSeqResp>* streamer) {
+                       return this->StreamedsetHasReadSeq(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_setHasReadSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status setHasReadSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::setHasReadSeqReq* /*request*/, ::ServerRpc::msg::setHasReadSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedsetHasReadSeq(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::msg::setHasReadSeqReq,::ServerRpc::msg::setHasReadSeqResp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_getHasReadSeqAndMaxSeq : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_getHasReadSeqAndMaxSeq() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* streamer) {
+                       return this->StreamedgetHasReadSeqAndMaxSeq(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_getHasReadSeqAndMaxSeq() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status getHasReadSeqAndMaxSeq(::grpc::ServerContext* /*context*/, const ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq* /*request*/, ::ServerRpc::msg::getHasReadSeqAndMaxSeqResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedgetHasReadSeqAndMaxSeq(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::msg::getHasReadSeqAndMaxSeqReq,::ServerRpc::msg::getHasReadSeqAndMaxSeqResp>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_sendMsg<WithStreamedUnaryMethod_syncMsgs<WithStreamedUnaryMethod_setHasReadSeq<WithStreamedUnaryMethod_getHasReadSeqAndMaxSeq<Service > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_sendMsg<WithStreamedUnaryMethod_syncMsgs<Service > > StreamedService;
+  typedef WithStreamedUnaryMethod_sendMsg<WithStreamedUnaryMethod_syncMsgs<WithStreamedUnaryMethod_setHasReadSeq<WithStreamedUnaryMethod_getHasReadSeqAndMaxSeq<Service > > > > StreamedService;
 };
 
 }  // namespace msg

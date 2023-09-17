@@ -166,6 +166,20 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
         std::bind(&MsgApi::syncMsgs, msgApi, std::placeholders::_1,
                   std::placeholders::_2);
     server_->Post("/msg/syncMsgs", syncMsgsFunc);
+
+    funcBind sendMsgFunc = std::bind(
+        &MsgApi::sendMsg, msgApi, std::placeholders::_1, std::placeholders::_2);
+    server_->Post("/msg/sendMsg", sendMsgFunc);
+
+    funcBind setHasReadSeqFunc =
+        std::bind(&MsgApi::setHasReadSeq, msgApi, std::placeholders::_1,
+                  std::placeholders::_2);
+    server_->Post("/msg/setHasReadSeq", setHasReadSeqFunc);
+
+    funcBind getHasReadSeqAndMaxSeqFunc =
+        std::bind(&MsgApi::getHasReadSeqAndMaxSeq, msgApi,
+                  std::placeholders::_1, std::placeholders::_2);
+    server_->Post("/msg/getHasReadSeqAndMaxSeq", getHasReadSeqAndMaxSeqFunc);
 }
 
 ApiServer::~ApiServer() {

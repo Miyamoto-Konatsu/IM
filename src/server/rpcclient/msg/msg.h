@@ -12,6 +12,10 @@ using grpc::Status;
 using ServerRpc::msg::sendMsgReq;
 using ServerRpc::msg::sendMsgResp;
 using ServerRpc::msg::Msg;
+using ServerRpc::msg::setHasReadSeqReq;
+using ServerRpc::msg::setHasReadSeqResp;
+using ServerRpc::msg::getHasReadSeqAndMaxSeqReq;
+using ServerRpc::msg::getHasReadSeqAndMaxSeqResp;
 
 class MsgClient {
 public:
@@ -30,10 +34,22 @@ public:
         return stub_->syncMsgs(&context,* request, response);
     }
 
+    Status setHasReadSeq(const setHasReadSeqReq *request,
+                         setHasReadSeqResp *response) {
+        ClientContext context;
+        return stub_->setHasReadSeq(&context, *request, response);
+    }
+
+    Status getHasReadSeqAndMaxSeq(const getHasReadSeqAndMaxSeqReq *request,
+                                  getHasReadSeqAndMaxSeqResp *response) {
+        ClientContext context;
+        return stub_->getHasReadSeqAndMaxSeq(&context, *request, response);
+    }
     static MsgClient getMsgClient() {
         return MsgClient(grpc::CreateChannel(
             "localhost:50053", grpc::InsecureChannelCredentials()));
     }
+
 
 private:
     std::unique_ptr<Msg::Stub> stub_;
