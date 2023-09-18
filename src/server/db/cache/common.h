@@ -166,6 +166,7 @@ std::vector<T> batchGetCache(
         json j = item;
         keyValues.push_back(std::make_pair(keyFn(item), j.dump()));
     }
+    if(keyValues.size() == 0) return result;
     auto setReply = redisClient->batchSet(keyValues);
     if (setReply.ko()) {
         std::cout << "batchSet error: " << setReply.error() << std::endl;

@@ -31,11 +31,29 @@ public:
 
     void sendMsg();
 
+    // string fromUserID = 1;
+    // string toUserID = 2;
+    // string groupID = 3;
+    // int32 msgType = 4;
+    // int64 startSeq = 5;
+    // int64 endSeq = 6;
+    void syncMsgsHelper(const std::string &fromUserID,const std::string& toUserID, const std::string &groupID
+                  , int msgType, int64_t startSeq, int64_t endSeq);
+
+    void syncMsgs();
+
+    void getAllUnreadConversations();
+
+    void joinGroup();
+
+    void createGroup();
+    
     void main();
 
     void registerClient();
 
     void login(std::string userID, std::string password, int platform);
+
     void sendMsg(std::string toUserID, std::string content, int msgType);
 
     bool isConnect() {

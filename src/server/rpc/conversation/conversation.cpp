@@ -102,7 +102,7 @@ Status ConversationServiceImp::createGroupChatConversations(
         Conversation conversation;
         conversation.ownerId(userId);
         conversation.toUserId("");
-        conversation.conversationId(getGroupChatKey(groupId));
+        conversation.conversationId(getConversationIdForGroup(groupId));
         conversation.conversationType(GROUP_CHAT_TYPE);
         conversation.maxSeq(0);
         conversation.minSeq(0);

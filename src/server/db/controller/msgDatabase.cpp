@@ -26,9 +26,8 @@ bool MsgDatabase::batchInsertMsg(std::vector<sendMsgReq> &msgReqs) {
     auto conversationId = getConversationId(msg);
     int64_t maxId = getConversationMaxId(conversationId);
 
-    if (maxId == -1) {
+    if (maxId == 0) {
         isNewConversation = true;
-        maxId = 0;
     }
     std::unordered_map<std::string, int64_t> userHasRead;
 

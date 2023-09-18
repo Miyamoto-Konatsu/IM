@@ -1,6 +1,7 @@
 #include "msgutils.h"
 #include "constant.h"
 #include "constant/msg.h"
+
 std::string getSingleChatKey(const std::string &from, const std::string &to) {
     if (from > to) return "mq_sc:" + to + "_" + from;
     return "mq_sc:" + from + "_" + to;

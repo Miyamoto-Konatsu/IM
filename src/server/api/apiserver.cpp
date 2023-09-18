@@ -62,6 +62,14 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
                     res.set_content("Unauthorized", "text/plain");
                     return httplib::Server::HandlerResponse::Handled;
                 }
+                // if (respRpc.expiretimeseconds() <= 0) {
+                //     LOG_DEBUG << "ip: " << req.remote_addr
+                //               << " port: " << req.remote_port << " error: "
+                //               << " token is expired, unauthorized";
+                //     res.status = 401;
+                //     res.set_content("Unauthorized", "text/plain");
+                //     return httplib::Server::HandlerResponse::Handled;
+                // }
             }
             return httplib::Server::HandlerResponse::Unhandled;
         });
@@ -158,7 +166,6 @@ ApiServer::ApiServer(unsigned short port, int threadNum) :
         std::bind(&GroupApi::getGroupList, groupApi, std::placeholders::_1,
                   std::placeholders::_2);
     server_->Post("/group/getGroupList", getGroupListFunc);
-
 
     // ********* msg api register *********
     std::shared_ptr<MsgApi> msgApi = std::make_shared<MsgApi>();

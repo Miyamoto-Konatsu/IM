@@ -2,6 +2,7 @@
 #define APICLIENT_NEWCLIENT_H
 
 #include "json.hpp"
+#include <cstdint>
 #include <httplib.h>
 #include <string>
 #include <thread>
@@ -34,7 +35,40 @@ public:
     json getConversation(const std::string &userID, const std::string &token,
                          const std::string &conversationID);
 
-    json getAllConversations(const std::string& userID, const std::string& token);
+    json getAllConversations(const std::string &userID,
+                             const std::string &token);
+
+    // sync msgs
+
+    json syncMsgs(const std::string &userID, const std::string &token,
+                  const std::string groupID, const std::string &toUserID,
+                  int msgtype, int64_t fromSeq, int64_t toSeq);
+
+    json syncGroupMsgs(const std::string &userID, const std::string &token,
+                       const std::string &groupID, int64_t fromSeq,
+                       int64_t toSeq);
+
+    json syncSingleMsgs(const std::string &userID, const std::string &token,
+                        const std::string &toUserID, int64_t fromSeq,
+                        int64_t toSeq);
+
+    // seq
+    json getHasReadSeqAndMaxSeq(const std::string &userID,
+                                const std::string &token,
+                                const std::string &groupID,
+                                const std::string &toUserID, int msgtype);
+
+    json setHasReadSeq(const std::string &userID, const std::string &token,
+                       const std::string &groupID, const std::string &toUserID,
+                       int msgtype, int64_t seq);
+
+    // group
+
+    json createGroup(const std::string &userID, const std::string &token,
+                     const std::string &groupId);
+
+    json joinGroup(const std::string &userID, const std::string &token,
+                   const std::string &groupId);
 
 private:
     httplib::Client cli_;

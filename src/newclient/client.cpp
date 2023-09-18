@@ -2,10 +2,13 @@
 #include <cassert>
 #include <chrono>
 #include <csignal>
+#include <cstdint>
 #include <iostream>
 #include <thread>
 #include <tuple>
+#include <vector>
 #include "constant/msg.h"
+#include "json.hpp"
 #include "muduo/net/EventLoop.h"
 #include "muduo/net/EventLoopThreadPool.h"
 
@@ -146,15 +149,25 @@ void Client::main() {
     mainThread_ = std::thread([this]() {
         std::string message;
         while (true) {
-            std::cout << "input message: ";
+            std::cout << "input message: "
+                         "login,send,sync,exit,createGroup,joinGroup,showConversation"
+                      << std::endl;
             std::cin >> message;
             if (message == "login") {
                 login();
+                getAllUnreadConversations();
             } else if (message == "exit") {
-                break;
+                exit(0);
             } else if (message == "send") {
                 sendMsg();
-            }
+            } else if (message == "sync") {
+                syncMsgs();
+            } else if (message == "createGroup") {
+                createGroup();
+            } else if (message == "joinGroup") {
+                joinGroup();
+            }else if(message == "showConversation"){
+                getAllUnreadConversations();}
         }
     });
 }
@@ -171,11 +184,9 @@ void test(std::string userID, muduo::net::EventLoop *loop) {
     connClient->connect();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     if (!client.isConnect()) { return; }
-    try{
+    try {
         client.login(userID, "test", 1);
-    } catch (...) {
-        return;
-    }
+    } catch (...) { return; }
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -190,9 +201,126 @@ void test(std::string userID, muduo::net::EventLoop *loop) {
         std::string content =
             userID + "hello " + toUserID + " " + std::to_string(i++);
         client.sendMsg(toUserID, content, TCP_MSG_SINGLE_CHAT_TYPE);
-        //std::this_thread::sleep_for(std::chrono::microseconds(100));
+        // std::this_thread::sleep_for(std::chrono::microseconds(100));
     }
     while (true) { std::this_thread::sleep_for(std::chrono::seconds(1)); }
+}
+
+// string fromUserID = 1;
+// string toUserID = 2;
+// string groupID = 3;
+// int32 msgType = 4;
+// int64 startSeq = 5;
+// int64 endSeq = 6;
+void Client::syncMsgsHelper(const std::string &fromUserID,
+                            const std::string &toUserID,
+                            const std::string &groupID, int msgType,
+                            int64_t startSeq, int64_t endSeq) {
+    auto data =
+        apiClient_->syncMsgs(user_.getUserID(), user_.getToken(), groupID,
+                             toUserID, msgType, startSeq, endSeq);
+    auto msgs = data["msgs"];
+    for (auto msg : msgs["msgs"]) {
+        std::cout << "[from: " << msg["fromUserID"] << "]";
+        if (msgType == TCP_MSG_GROUP_CHAT_TYPE) {
+            std::cout << "[to: " << msg["toUserID"] << "]" << std::endl;
+        } else {
+            std::cout << "[to: " << msg["groupID"] << "]" << std::endl;
+        }
+        std::cout << msg["content"] << std::endl;
+    }
+    apiClient_->setHasReadSeq(user_.getUserID(), user_.getToken(), groupID,
+                              toUserID, msgType, endSeq);
+}
+
+void Client::syncMsgs() {
+    std::string toUserID, groupID;
+    int msgType;
+    std::cout << "msg type: \n single chat:1\n group chat:2" << std::endl;
+    std::cin >> msgType;
+    switch (msgType) {
+    case TCP_MSG_SINGLE_CHAT_TYPE: {
+        std::cout << "to userID: ";
+        std::cin >> toUserID;
+        const auto &seqData = apiClient_->getHasReadSeqAndMaxSeq(
+            user_.getUserID(), user_.getToken(), "", toUserID,
+            TCP_MSG_SINGLE_CHAT_TYPE);
+        int64_t hasReadSeq = stoll(seqData["hasReadSeq"].get<std::string>());
+        int64_t maxSeq = stoll(seqData["maxSeq"].get<std::string>());
+        syncMsgsHelper(user_.getUserID(), toUserID, "", msgType, hasReadSeq + 1,
+                       maxSeq);
+        break;
+    }
+    case TCP_MSG_GROUP_CHAT_TYPE: {
+        std::cout << "groupID: ";
+        std::cin >> groupID;
+        const auto &seqData = apiClient_->getHasReadSeqAndMaxSeq(
+            user_.getUserID(), user_.getToken(), groupID, "",
+            TCP_MSG_GROUP_CHAT_TYPE);
+        int64_t hasReadSeq = stoll(seqData["hasReadSeq"].get<std::string>());
+        int64_t maxSeq = stoll(seqData["maxSeq"].get<std::string>());
+        syncMsgsHelper(user_.getUserID(), "", groupID, msgType, hasReadSeq + 1,
+                       maxSeq);
+        break;
+    }
+    default: {
+        std::cout << "msg type error" << std::endl;
+        return;
+    }
+    }
+}
+void Client::getAllUnreadConversations() {
+    auto data =
+        apiClient_->getAllConversations(user_.getUserID(), user_.getToken());
+    // nlohmann::json datajson = nlohmann::json::parse(data);
+    json conversations = data["conversations"];
+    for (const auto conversation : conversations) {
+        if (conversation["conversationType"] == TCP_MSG_SINGLE_CHAT_TYPE) {
+            const auto &seqData = apiClient_->getHasReadSeqAndMaxSeq(
+                user_.getUserID(), user_.getToken(), "",
+                conversation["toUserId"], TCP_MSG_SINGLE_CHAT_TYPE);
+            int64_t hasReadSeq =
+                stoll(seqData["hasReadSeq"].get<std::string>());
+            int64_t maxSeq = stoll(seqData["maxSeq"].get<std::string>());
+            std::cout << "[好友:" << conversation["toUserId"]
+                      << "]:" << maxSeq - hasReadSeq << "条未读消息."
+                      << std::endl;
+        } else if (conversation["conversationType"]
+                   == TCP_MSG_GROUP_CHAT_TYPE) {
+            const auto &seqData = apiClient_->getHasReadSeqAndMaxSeq(
+                user_.getUserID(), user_.getToken(), conversation["groupId"],
+                "", TCP_MSG_GROUP_CHAT_TYPE);
+            int64_t hasReadSeq =
+                stoll(seqData["hasReadSeq"].get<std::string>());
+            int64_t maxSeq = stoll(seqData["maxSeq"].get<std::string>());
+            std::cout << "[群聊:" << conversation["groupId"]
+                      << "]:" << maxSeq - hasReadSeq << "条未读消息."
+                      << std::endl;
+        }
+    }
+}
+
+void Client::createGroup() {
+    std::string groupId;
+    std::cout << "groupID: ";
+    std::cin >> groupId;
+    try {
+        auto data = apiClient_->createGroup(user_.getUserID(), user_.getToken(),
+                                            groupId);
+        std::cout << "create group success, groupID is " << groupId
+                  << std::endl;
+    } catch (std::exception &e) { std::cout << e.what() << std::endl; }
+}
+
+void Client::joinGroup() {
+    std::string groupId;
+    std::cout << "groupID: ";
+    std::cin >> groupId;
+    try {
+        auto data =
+            apiClient_->joinGroup(user_.getUserID(), user_.getToken(), groupId);
+        std::cout << "join group success" << groupId << std::endl;
+    } catch (std::exception &e) { std::cout << e.what() << std::endl; }
 }
 
 int main() {

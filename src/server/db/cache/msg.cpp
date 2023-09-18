@@ -18,7 +18,7 @@ int64_t MsgCache::getConversationMaxId(const std::string &key) {
     if (res.ko()) { throw std::runtime_error("getConversationMaxId failed"); }
     std::cout << key << ' ' << res << std::endl;
     if (res.is_null())
-        return -1;
+        return 0;
     else if (res.is_string())
         return stoi(res.as_string());
     else { throw std::runtime_error("getConversationMaxId failed"); }
@@ -44,9 +44,9 @@ void MsgCache::setHasReadSeqs(
     for (auto &user : userHasRead) {
         auto key = "HasReadSeq:" + conversationId + ":" + user.first;
         auto get = client.get(key);
-        hasReadSeqs[key] = std::move(get);
+        hasReadSeqs[user.first] = std::move(get);
     }
-    client.commit();
+    client.sync_commit();
     for (auto &p : hasReadSeqs) {
         auto reply = p.second.get();
         if (reply.ko()) { throw std::runtime_error("setHasReadSeqs failed"); }
@@ -57,11 +57,12 @@ void MsgCache::setHasReadSeqs(
         } else {
             // throw std::runtime_error("setHasReadSeqs failed");
         }
+        auto key = "HasReadSeq:" + conversationId + ":" + p.first;
         if (hasReadSeqOld < userHasRead.at(p.first)) {
-            client.set(p.first, std::to_string(userHasRead.at(p.first)));
+            client.set(key, std::to_string(userHasRead.at(p.first)));
         }
     }
-    client.commit();
+    client.sync_commit();
 }
 
 std::pair<int64_t, int64_t>

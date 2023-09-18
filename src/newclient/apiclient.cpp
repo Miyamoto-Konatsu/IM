@@ -63,11 +63,190 @@ json ApiClient::getAllConversations(const std::string &userID,
         if (res->status != 200) { throw std::runtime_error(res->body); }
         nlohmann::json j = nlohmann::json::parse(res->body);
         if (j["code"] == MSG_CODE_SUCCESS) {
-            return j["data"];
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
         } else {
             std::string errerMsg = j["error_message"];
             throw std::runtime_error(errerMsg);
         }
     }
     throw std::runtime_error("get conversation failed");
+}
+
+json ApiClient::syncMsgs(const std::string &userID, const std::string &token,
+                         const std::string groupID, const std::string &toUserID,
+                         int msgtype, int64_t fromSeq, int64_t toSeq) {
+    // string fromUserID = 1;
+    // string toUserID = 2;
+    // string groupID = 3;
+    // int32 msgType = 4;
+    // int64 startSeq = 5;
+    // int64 endSeq = 6;
+    std::string path = "/msg/syncMsgs";
+    nlohmann::json data;
+    data["fromUserID"] = userID;
+    data["toUserID"] = toUserID;
+    data["groupID"] = groupID;
+    data["msgType"] = msgtype;
+    data["startSeq"] = fromSeq;
+    data["endSeq"] = toSeq;
+    std::string body = data.dump();
+    httplib::Headers parameter;
+    parameter.insert({"token", token});
+    httplib::Result res = Post(path, body, parameter);
+
+    if (res) {
+        if (res->status != 200) { throw std::runtime_error(res->body); }
+        nlohmann::json j = nlohmann::json::parse(res->body);
+        if (j["code"] == MSG_CODE_SUCCESS) {
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
+        } else {
+            std::string errerMsg = j["error_message"];
+            throw std::runtime_error(errerMsg);
+        }
+    }
+    throw std::runtime_error("sync msgs failed");
+}
+
+json ApiClient::syncSingleMsgs(const std::string &userID,
+                               const std::string &token,
+                               const std::string &toUserID, int64_t fromSeq,
+                               int64_t toSeq) {
+    return syncMsgs(userID, token, "", toUserID, TCP_MSG_SINGLE_CHAT_TYPE, fromSeq, toSeq);
+}
+
+json ApiClient::syncGroupMsgs(const std::string &userID,
+                              const std::string &token,
+                              const std::string &groupID, int64_t fromSeq,
+                              int64_t toSeq) {
+    return syncMsgs(userID, token, groupID, "", TCP_MSG_GROUP_CHAT_TYPE, fromSeq, toSeq);
+}
+
+json ApiClient::getHasReadSeqAndMaxSeq(const std::string &userID,
+                                       const std::string &token,
+                                       const std::string &groupID,
+                                       const std::string &toUserID,
+                                       int msgtype) {
+    // string fromUserID = 1;
+    // string toUserID = 2;
+    // string groupID = 3;
+    // int32 msgType = 4;
+    std::string path = "/msg/getHasReadSeqAndMaxSeq";
+    nlohmann::json data;
+    data["fromUserID"] = userID;
+    data["toUserID"] = toUserID;
+    data["groupID"] = groupID;
+    data["msgType"] = msgtype;
+    std::string body = data.dump();
+    httplib::Headers parameter;
+    parameter.insert({"token", token});
+    httplib::Result res = Post(path, body, parameter);
+
+    if (res) {
+        if (res->status != 200) { throw std::runtime_error(res->body); }
+        nlohmann::json j = nlohmann::json::parse(res->body);
+        if (j["code"] == MSG_CODE_SUCCESS) {
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
+        } else {
+            std::string errerMsg = j["error_message"];
+            throw std::runtime_error(errerMsg);
+        }
+    }
+    throw std::runtime_error("get has read seq and max seq failed");
+}
+
+json ApiClient::setHasReadSeq(const std::string &userID,
+                              const std::string &token,
+                              const std::string &groupID,
+                              const std::string &toUserID, int msgtype,
+                              int64_t seq) {
+    // string fromUserID = 1;
+    // string toUserID = 2;
+    // string groupID = 3;
+    // int32 msgType = 4;
+    // int64 seq = 5;
+    std::string path = "/msg/setHasReadSeq";
+    nlohmann::json data;
+    data["fromUserID"] = userID;
+    data["toUserID"] = toUserID;
+    data["groupID"] = groupID;
+    data["msgType"] = msgtype;
+    data["seq"] = seq;
+    std::string body = data.dump();
+    httplib::Headers parameter;
+    parameter.insert({"token", token});
+    httplib::Result res = Post(path, body, parameter);
+
+    if (res) {
+        if (res->status != 200) { throw std::runtime_error(res->body); }
+        nlohmann::json j = nlohmann::json::parse(res->body);
+        if (j["code"] == MSG_CODE_SUCCESS) {
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
+        } else {
+            std::string errerMsg = j["error_message"];
+            throw std::runtime_error(errerMsg);
+        }
+    }
+    throw std::runtime_error("set has read seq failed");
+}
+
+json ApiClient::createGroup(const std::string &userID, const std::string &token,
+                            const std::string &groupId) {
+    std::string path = "/group/createGroup";
+    nlohmann::json data;
+    data["groupOwnerId"] = userID;
+    data["groupId"] = groupId;
+    std::string body = data.dump();
+
+    httplib::Headers parameter;
+    parameter.insert({"token", token});
+    httplib::Result res = Post(path, body, parameter);
+
+    if (res) {
+        if (res->status != 200) { throw std::runtime_error(res->body); }
+        nlohmann::json j = nlohmann::json::parse(res->body);
+        if (j["code"] == MSG_CODE_SUCCESS) {
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
+        } else {
+            std::string errerMsg = j["error_message"];
+            throw std::runtime_error(errerMsg);
+        }
+    }
+    throw std::runtime_error("set has read seq failed");
+}
+
+json ApiClient::joinGroup(const std::string &userID, const std::string &token,
+                          const std::string &groupId) {
+    std::string path = "/group/joinGroup";
+    nlohmann::json data;
+    data["userID"] = userID;
+    data["groupID"] = groupId;
+    std::string body = data.dump();
+
+    httplib::Headers parameter;
+    parameter.insert({"token", token});
+    httplib::Result res = Post(path, body, parameter);
+
+    if (res) {
+        if (res->status != 200) { throw std::runtime_error(res->body); }
+        nlohmann::json j = nlohmann::json::parse(res->body);
+        if (j["code"] == MSG_CODE_SUCCESS) {
+            nlohmann::json data =
+                nlohmann::json::parse(j["data"].get<std::string>());
+            return data;
+        } else {
+            std::string errerMsg = j["error_message"];
+            throw std::runtime_error(errerMsg);
+        }
+    }
+    throw std::runtime_error("set has read seq failed");
 }
