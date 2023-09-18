@@ -93,6 +93,7 @@ Status MsgServiceImpl::syncMsgs(ServerContext *context,
         msgData->set_platformid(msg.platform());
         msgData->set_createtime(msg.time());
         msgData->set_seq(msg.seq());
+        msgData->set_groupid(msg.groupId());
     }
     return Status::OK;
 }

@@ -119,7 +119,7 @@ public:
     std::vector<std::string> findConversationIds(const std::string &ownerId) {
         odb::transaction t(db->begin());
         auto queryResult(db->query(odb::query<Conversation>(
-            odb::query<Conversation>::conversationKey.ownerId == "123")));
+            odb::query<Conversation>::conversationKey.ownerId == ownerId)));
         std::vector<std::string> result;
         for (auto &item : queryResult) {
             result.push_back(item.conversationKey().conversationId_);

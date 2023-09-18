@@ -5,6 +5,7 @@
 #include <math.h>
 #include <memory>
 #include <stdexcept>
+#include "gateway.pb.h"
 #include "token/jwt_token.h"
 #include <muduo/base/Logging.h>
 #include "rpcService.h"
@@ -46,6 +47,12 @@ ClientPtr ChatServer::registerClient(const TcpConnectionPtr &conn,
         conn->shutdown();
         return nullptr;
     }
+
+    kickUserResp kickUserResp;
+    kickUserReq kickUserReq;
+    kickUserReq.set_userid(userId);
+    kickUserReq.set_platform(platform);
+    gateClient.kickUser(kickUserReq, &kickUserResp);
 
     auto client =
         std::make_shared<Client>(platform, userId, conn, shared_from_this());

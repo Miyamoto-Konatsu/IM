@@ -16,7 +16,16 @@ message onlineBatchPushOneMsgReq {
 message onlineBatchPushOneMsgResp {
 }
 
+message kickUserReq {
+    string userID = 1;
+    int32 platform = 2;
+}
+
+message kickUserResp {
+}
+
 service Gateway {
     rpc onlineBatchPushOneMsg(onlineBatchPushOneMsgReq) returns (onlineBatchPushOneMsgResp);
+    rpc kickUser(kickUserReq) returns (kickUserResp);
 }
 

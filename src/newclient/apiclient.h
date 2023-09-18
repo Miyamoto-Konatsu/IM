@@ -26,12 +26,14 @@ public:
                          const httplib::Headers &headers = {},
                          const std::string &content_type = "application/json");
 
+    // user
     std::string authUserToken(const std::string &userID,
                               const std::string &password, std::string &secret,
                               int platform);
 
-    // conversation
+    json createUser(const std::string &userID, const std::string &password);
 
+    // conversation
     json getConversation(const std::string &userID, const std::string &token,
                          const std::string &conversationID);
 
@@ -70,6 +72,7 @@ public:
     json joinGroup(const std::string &userID, const std::string &token,
                    const std::string &groupId);
 
+    
 private:
     httplib::Client cli_;
 };

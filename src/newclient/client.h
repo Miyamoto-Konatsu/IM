@@ -27,7 +27,9 @@ public:
                    const std::string &message, muduo::Timestamp receiveTime);
 
     // 输入用户名和密码和终端，然后获取token
-    void login();
+    bool login();
+
+    void createUser();
 
     void sendMsg();
 

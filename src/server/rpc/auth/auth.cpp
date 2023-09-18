@@ -4,6 +4,7 @@
 #include "constant.h"
 #include <grpcpp/support/status.h>
 #include "cache/auth.h"
+#include "user.pb.h"
 #include <muduo/base/Logging.h>
 
 using grpc::ServerBuilder;
@@ -57,7 +58,20 @@ Status AuthServiceImp::userToken(ServerContext *context,
     LOG_DEBUG << "start userToken, userID: " << userID
               << " password: " << password << " platform: " << platform
               << " secret: " << secret;
-
+    if (userID.empty() || password.empty() || platform < 0) {
+        return Status(
+            grpc::StatusCode::INVALID_ARGUMENT,
+            "invalid parameter, userID or password or platform is invalid");
+    }
+    ServerRpc::user::checkUserReq checkUserReq;
+    checkUserReq.set_userid(userID);
+    checkUserReq.set_password(password);
+    ServerRpc::user::checkUserResp checkUserResp;
+    auto status = userClient.checkUser(&checkUserReq, &checkUserResp);
+    if (!status.ok() || !checkUserResp.issuccess()) {
+        return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                      " userID or password is uncorrect");
+    }
     // 从redis删除之前已经存在的token
     auto key = getKey(userID, platform);
     authCache.delToken(key);

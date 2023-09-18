@@ -9,6 +9,8 @@ using grpc::ClientContext;
 using grpcChannel = grpc::Channel;
 using ServerRpc::gateway::onlineBatchPushOneMsgReq;
 using ServerRpc::gateway::onlineBatchPushOneMsgResp;
+using ServerRpc::gateway::kickUserResp;
+using ServerRpc::gateway::kickUserReq;
 
 class GatewayClient {
 public:
@@ -22,6 +24,11 @@ public:
         return stub_->onlineBatchPushOneMsg(&context, request, response);
     }
 
+    Status kickUser(const kickUserReq &request, kickUserResp *response) {
+        ClientContext context;
+        return stub_->kickUser(&context, request, response);
+    }
+    
     static GatewayClient getGatewayClient() {
         auto insecureChannelCredentials = grpc::InsecureChannelCredentials();
         auto channel =

@@ -39,6 +39,7 @@ public:
 
     void writeMsg(const std::string &msg);
 
+    void kickUser();
 private:
     int platform_;
     std::shared_ptr<ChatServer> server_;

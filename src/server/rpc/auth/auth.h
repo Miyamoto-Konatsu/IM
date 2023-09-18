@@ -9,6 +9,7 @@
 #include <grpcpp/server_context.h>
 #include <grpcpp/server.h>
 #include "cache/auth.h"
+#include "user/user.h"
 
 using grpc::ServerContext;
 using grpc::Status;
@@ -21,10 +22,20 @@ using ServerRpc::auth::userTokenResp;
 using ServerRpc::auth::Auth;
 
 class AuthServiceImp : public Auth::Service {
-    Status parseToken(ServerContext *context, const parseTokenReq *request, parseTokenResp *response) override;
+public:
+    Status parseToken(ServerContext *context, const parseTokenReq *request,
+                      parseTokenResp *response) override;
 
     Status userToken(ServerContext *context, const userTokenReq *request,
                      userTokenResp *response) override;
+
+    AuthServiceImp() : userClient(UserClient::getUserClient()) {
+    }
+
+    AuthServiceImp(AuthServiceImp const &) = delete;
+    AuthServiceImp &operator=(AuthServiceImp const &) = delete;
+
+    ~AuthServiceImp() = default;
 
 private:
     std::string getKey(std::string userID, int32_t platform) {
@@ -33,6 +44,7 @@ private:
 
 private:
     AuthCache authCache;
+    UserClient userClient;
 };
 
 #endif

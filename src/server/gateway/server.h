@@ -1,6 +1,7 @@
 #ifndef SERVER_GATEWAY_H
 #define SERVER_GATEWAY_H
 
+#include "gateway/gateway.h"
 #include "muduo/base/Logging.h"
 #include "muduo/net/Buffer.h"
 #include "muduo/net/Endian.h"
@@ -22,10 +23,10 @@ using namespace muduo;
 using namespace muduo::net;
 using json = nlohmann::json;
 
-
 class ChatServer : public std::enable_shared_from_this<ChatServer> {
 public:
     ChatServer(muduo::net::EventLoop *loop, const InetAddress &listenAddr) :
+        gateClient(GatewayClient::getGatewayClient()),
         server_(loop, listenAddr, "ChatServer"), msgHandler(),
         clientMap(muduo::Singleton<ClientMap>::instance()),
         codec_(std::bind(&ChatServer::onStringMessage, this, _1, _2, _3)) {
@@ -33,7 +34,6 @@ public:
             std::bind(&ChatServer::onConnection, this, _1));
         server_.setMessageCallback(
             std::bind(&LengthHeaderCodec::onMessage, &codec_, _1, _2, _3));
-        
     }
 
     void setThreadNum(int numThreads) {
@@ -78,6 +78,7 @@ private:
     ClientMap &clientMap;
     AuthCache authCache;
     GateMsgHandler msgHandler;
+    GatewayClient gateClient;
 };
 
 #endif // SERVER_GATEWAY_H

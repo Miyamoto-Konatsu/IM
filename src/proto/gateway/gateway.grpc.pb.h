@@ -43,11 +43,20 @@ class Gateway final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>> PrepareAsynconlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>>(PrepareAsynconlineBatchPushOneMsgRaw(context, request, cq));
     }
+    virtual ::grpc::Status kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::ServerRpc::gateway::kickUserResp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>> AsynckickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>>(AsynckickUserRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>> PrepareAsynckickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>>(PrepareAsynckickUserRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
       virtual void onlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* request, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void onlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* request, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -55,6 +64,8 @@ class Gateway final {
    private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>* AsynconlineBatchPushOneMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>* PrepareAsynconlineBatchPushOneMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>* AsynckickUserRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::ServerRpc::gateway::kickUserResp>* PrepareAsynckickUserRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -66,11 +77,20 @@ class Gateway final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>> PrepareAsynconlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>>(PrepareAsynconlineBatchPushOneMsgRaw(context, request, cq));
     }
+    ::grpc::Status kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::ServerRpc::gateway::kickUserResp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>> AsynckickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>>(AsynckickUserRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>> PrepareAsynckickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>>(PrepareAsynckickUserRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
       void onlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* request, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* response, std::function<void(::grpc::Status)>) override;
       void onlineBatchPushOneMsg(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* request, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response, std::function<void(::grpc::Status)>) override;
+      void kickUser(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -84,7 +104,10 @@ class Gateway final {
     class async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>* AsynconlineBatchPushOneMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::onlineBatchPushOneMsgResp>* PrepareAsynconlineBatchPushOneMsgRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>* AsynckickUserRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::ServerRpc::gateway::kickUserResp>* PrepareAsynckickUserRaw(::grpc::ClientContext* context, const ::ServerRpc::gateway::kickUserReq& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_onlineBatchPushOneMsg_;
+    const ::grpc::internal::RpcMethod rpcmethod_kickUser_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -93,6 +116,7 @@ class Gateway final {
     Service();
     virtual ~Service();
     virtual ::grpc::Status onlineBatchPushOneMsg(::grpc::ServerContext* context, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* request, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* response);
+    virtual ::grpc::Status kickUser(::grpc::ServerContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_onlineBatchPushOneMsg : public BaseClass {
@@ -114,7 +138,27 @@ class Gateway final {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_onlineBatchPushOneMsg<Service > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_kickUser() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestkickUser(::grpc::ServerContext* context, ::ServerRpc::gateway::kickUserReq* request, ::grpc::ServerAsyncResponseWriter< ::ServerRpc::gateway::kickUserResp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_onlineBatchPushOneMsg<WithAsyncMethod_kickUser<Service > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_onlineBatchPushOneMsg : public BaseClass {
    private:
@@ -142,7 +186,34 @@ class Gateway final {
     virtual ::grpc::ServerUnaryReactor* onlineBatchPushOneMsg(
       ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* /*request*/, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_onlineBatchPushOneMsg<Service > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_kickUser() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::ServerRpc::gateway::kickUserReq, ::ServerRpc::gateway::kickUserResp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::ServerRpc::gateway::kickUserReq* request, ::ServerRpc::gateway::kickUserResp* response) { return this->kickUser(context, request, response); }));}
+    void SetMessageAllocatorFor_kickUser(
+        ::grpc::MessageAllocator< ::ServerRpc::gateway::kickUserReq, ::ServerRpc::gateway::kickUserResp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::ServerRpc::gateway::kickUserReq, ::ServerRpc::gateway::kickUserResp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* kickUser(
+      ::grpc::CallbackServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_onlineBatchPushOneMsg<WithCallbackMethod_kickUser<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_onlineBatchPushOneMsg : public BaseClass {
@@ -157,6 +228,23 @@ class Gateway final {
     }
     // disable synchronous version of this method
     ::grpc::Status onlineBatchPushOneMsg(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::onlineBatchPushOneMsgReq* /*request*/, ::ServerRpc::gateway::onlineBatchPushOneMsgResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_kickUser() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -182,6 +270,26 @@ class Gateway final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_kickUser() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestkickUser(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_onlineBatchPushOneMsg : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -201,6 +309,28 @@ class Gateway final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* onlineBatchPushOneMsg(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_kickUser() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->kickUser(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* kickUser(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -230,9 +360,36 @@ class Gateway final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedonlineBatchPushOneMsg(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::gateway::onlineBatchPushOneMsgReq,::ServerRpc::gateway::onlineBatchPushOneMsgResp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_onlineBatchPushOneMsg<Service > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_kickUser : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_kickUser() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::ServerRpc::gateway::kickUserReq, ::ServerRpc::gateway::kickUserResp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::ServerRpc::gateway::kickUserReq, ::ServerRpc::gateway::kickUserResp>* streamer) {
+                       return this->StreamedkickUser(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_kickUser() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status kickUser(::grpc::ServerContext* /*context*/, const ::ServerRpc::gateway::kickUserReq* /*request*/, ::ServerRpc::gateway::kickUserResp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedkickUser(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::ServerRpc::gateway::kickUserReq,::ServerRpc::gateway::kickUserResp>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_onlineBatchPushOneMsg<WithStreamedUnaryMethod_kickUser<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_onlineBatchPushOneMsg<Service > StreamedService;
+  typedef WithStreamedUnaryMethod_onlineBatchPushOneMsg<WithStreamedUnaryMethod_kickUser<Service > > StreamedService;
 };
 
 }  // namespace gateway

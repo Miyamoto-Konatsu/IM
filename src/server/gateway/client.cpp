@@ -28,7 +28,8 @@ void Client::handlerMsg(const std::string &msg) {
     json retData;
     switch (type) {
     case TCP_MSG_OP_TYPE_SEND_MSG: {
-        retData = server_->getMsgHandler().sendMsg(data.dump());
+        retData["type"] = TCP_MSG_OP_TYPE_SEND_MSG_REPLY;
+        retData["data"] = server_->getMsgHandler().sendMsg(data.dump());
         break;
     }
     default: break;
@@ -37,21 +38,33 @@ void Client::handlerMsg(const std::string &msg) {
 }
 
 void Client::pushMsg(const msg *msg) {
-    pushMessage pushMsg;
+    // pushMessage pushMsg;
     pullMsgs pullMsg;
     pullMsg.add_msgs()->CopyFrom(*msg);
 
-    auto conversationId = getConversationId(*msg);
-    auto p = std::make_pair(conversationId, pullMsg);
-    pushMsg.mutable_msgs()->insert(p);
+    // auto conversationId = getConversationId(*msg);
+    // auto p = std::make_pair(conversationId, pullMsg);
+    // pushMsg.mutable_msgs()->insert(p);
     static JsonPrintOptions options;
     options.always_print_primitive_fields = true;
     std::string msgStr;
-    auto status = MessageToJsonString(pushMsg, &msgStr, options);
+    auto status = MessageToJsonString(pullMsg, &msgStr, options);
     if (!status.ok()) { LOG_DEBUG << "MessageToJsonString failed: "; }
-    writeMsg(msgStr);
+    json retData;
+    retData["type"] = TCP_MSG_OP_TYPE_PUSH_MSG;
+    retData["data"] = msgStr;
+    writeMsg(retData.dump());
 }
 
 void Client::writeMsg(const std::string &msg) {
     server_->send(conn_.get(), msg);
+}
+
+void Client::kickUser() {
+    json retData;
+    retData["type"] = TCP_MSG_OP_KICK_USER;
+    retData["data"] = "kick user";
+    writeMsg(retData.dump());
+    server_->getClientMap().erase(conn_);
+    conn_->shutdown();
 }

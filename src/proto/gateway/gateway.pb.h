@@ -57,6 +57,12 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable
     descriptor_table_gateway_2eproto;
 namespace ServerRpc {
 namespace gateway {
+class kickUserReq;
+struct kickUserReqDefaultTypeInternal;
+extern kickUserReqDefaultTypeInternal _kickUserReq_default_instance_;
+class kickUserResp;
+struct kickUserRespDefaultTypeInternal;
+extern kickUserRespDefaultTypeInternal _kickUserResp_default_instance_;
 class onlineBatchPushOneMsgReq;
 struct onlineBatchPushOneMsgReqDefaultTypeInternal;
 extern onlineBatchPushOneMsgReqDefaultTypeInternal _onlineBatchPushOneMsgReq_default_instance_;
@@ -72,6 +78,10 @@ extern pushMessage_MsgsEntry_DoNotUseDefaultTypeInternal _pushMessage_MsgsEntry_
 }  // namespace gateway
 }  // namespace ServerRpc
 PROTOBUF_NAMESPACE_OPEN
+template <>
+::ServerRpc::gateway::kickUserReq* Arena::CreateMaybeMessage<::ServerRpc::gateway::kickUserReq>(Arena*);
+template <>
+::ServerRpc::gateway::kickUserResp* Arena::CreateMaybeMessage<::ServerRpc::gateway::kickUserResp>(Arena*);
 template <>
 ::ServerRpc::gateway::onlineBatchPushOneMsgReq* Arena::CreateMaybeMessage<::ServerRpc::gateway::onlineBatchPushOneMsgReq>(Arena*);
 template <>
@@ -597,6 +607,307 @@ class onlineBatchPushOneMsgResp final :
   struct Impl_ {
   };
   friend struct ::TableStruct_gateway_2eproto;
+};// -------------------------------------------------------------------
+
+class kickUserReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerRpc.gateway.kickUserReq) */ {
+ public:
+  inline kickUserReq() : kickUserReq(nullptr) {}
+  ~kickUserReq() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR kickUserReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  kickUserReq(const kickUserReq& from);
+  kickUserReq(kickUserReq&& from) noexcept
+    : kickUserReq() {
+    *this = ::std::move(from);
+  }
+
+  inline kickUserReq& operator=(const kickUserReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline kickUserReq& operator=(kickUserReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const kickUserReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const kickUserReq* internal_default_instance() {
+    return reinterpret_cast<const kickUserReq*>(
+               &_kickUserReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(kickUserReq& a, kickUserReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(kickUserReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(kickUserReq* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  kickUserReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<kickUserReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const kickUserReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const kickUserReq& from) {
+    kickUserReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(kickUserReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.gateway.kickUserReq";
+  }
+  protected:
+  explicit kickUserReq(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUserIDFieldNumber = 1,
+    kPlatformFieldNumber = 2,
+  };
+  // string userID = 1;
+  void clear_userid() ;
+  const std::string& userid() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_userid(Arg_&& arg, Args_... args);
+  std::string* mutable_userid();
+  PROTOBUF_NODISCARD std::string* release_userid();
+  void set_allocated_userid(std::string* ptr);
+
+  private:
+  const std::string& _internal_userid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(
+      const std::string& value);
+  std::string* _internal_mutable_userid();
+
+  public:
+  // int32 platform = 2;
+  void clear_platform() ;
+  ::int32_t platform() const;
+  void set_platform(::int32_t value);
+
+  private:
+  ::int32_t _internal_platform() const;
+  void _internal_set_platform(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:ServerRpc.gateway.kickUserReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+    ::int32_t platform_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_gateway_2eproto;
+};// -------------------------------------------------------------------
+
+class kickUserResp final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:ServerRpc.gateway.kickUserResp) */ {
+ public:
+  inline kickUserResp() : kickUserResp(nullptr) {}
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR kickUserResp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  kickUserResp(const kickUserResp& from);
+  kickUserResp(kickUserResp&& from) noexcept
+    : kickUserResp() {
+    *this = ::std::move(from);
+  }
+
+  inline kickUserResp& operator=(const kickUserResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline kickUserResp& operator=(kickUserResp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const kickUserResp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const kickUserResp* internal_default_instance() {
+    return reinterpret_cast<const kickUserResp*>(
+               &_kickUserResp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(kickUserResp& a, kickUserResp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(kickUserResp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(kickUserResp* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  kickUserResp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<kickUserResp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const kickUserResp& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const kickUserResp& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "ServerRpc.gateway.kickUserResp";
+  }
+  protected:
+  explicit kickUserResp(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:ServerRpc.gateway.kickUserResp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+  };
+  friend struct ::TableStruct_gateway_2eproto;
 };
 
 // ===================================================================
@@ -827,6 +1138,81 @@ onlineBatchPushOneMsgReq::_internal_mutable_pushtouserids() {
 // -------------------------------------------------------------------
 
 // onlineBatchPushOneMsgResp
+
+// -------------------------------------------------------------------
+
+// kickUserReq
+
+// string userID = 1;
+inline void kickUserReq::clear_userid() {
+  _impl_.userid_.ClearToEmpty();
+}
+inline const std::string& kickUserReq::userid() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.gateway.kickUserReq.userID)
+  return _internal_userid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void kickUserReq::set_userid(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.userid_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerRpc.gateway.kickUserReq.userID)
+}
+inline std::string* kickUserReq::mutable_userid() {
+  std::string* _s = _internal_mutable_userid();
+  // @@protoc_insertion_point(field_mutable:ServerRpc.gateway.kickUserReq.userID)
+  return _s;
+}
+inline const std::string& kickUserReq::_internal_userid() const {
+  return _impl_.userid_.Get();
+}
+inline void kickUserReq::_internal_set_userid(const std::string& value) {
+  ;
+
+
+  _impl_.userid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* kickUserReq::_internal_mutable_userid() {
+  ;
+  return _impl_.userid_.Mutable( GetArenaForAllocation());
+}
+inline std::string* kickUserReq::release_userid() {
+  // @@protoc_insertion_point(field_release:ServerRpc.gateway.kickUserReq.userID)
+  return _impl_.userid_.Release();
+}
+inline void kickUserReq::set_allocated_userid(std::string* value) {
+  _impl_.userid_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.userid_.IsDefault()) {
+          _impl_.userid_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerRpc.gateway.kickUserReq.userID)
+}
+
+// int32 platform = 2;
+inline void kickUserReq::clear_platform() {
+  _impl_.platform_ = 0;
+}
+inline ::int32_t kickUserReq::platform() const {
+  // @@protoc_insertion_point(field_get:ServerRpc.gateway.kickUserReq.platform)
+  return _internal_platform();
+}
+inline void kickUserReq::set_platform(::int32_t value) {
+  _internal_set_platform(value);
+  // @@protoc_insertion_point(field_set:ServerRpc.gateway.kickUserReq.platform)
+}
+inline ::int32_t kickUserReq::_internal_platform() const {
+  return _impl_.platform_;
+}
+inline void kickUserReq::_internal_set_platform(::int32_t value) {
+  ;
+  _impl_.platform_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// kickUserResp
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

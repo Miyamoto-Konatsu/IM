@@ -4,6 +4,8 @@
 #include "gateway.grpc.pb.h"
 #include "gateway.pb.h"
 #include <grpcpp/grpcpp.h>
+#include <grpcpp/server_context.h>
+#include <grpcpp/support/status.h>
 #include <memory>
 class ChatServer;
 using grpc::ServerContext;
@@ -19,6 +21,9 @@ public:
     Status onlineBatchPushOneMsg(ServerContext *context,
                                  const onlineBatchPushOneMsgReq *request,
                                  onlineBatchPushOneMsgResp *response) override;
+
+    Status kickUser(ServerContext* context, const kickUserReq* request,
+                    kickUserResp* response) override;
 
     static void startServer(std::shared_ptr<ChatServer> chatServer);
     

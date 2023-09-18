@@ -3,6 +3,7 @@
 #include <chrono>
 #include <csignal>
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <thread>
 #include <tuple>
@@ -25,9 +26,41 @@ void Client::onConnection(const muduo::net::TcpConnectionPtr &conn) {
 void Client::onMessage(const muduo::net::TcpConnectionPtr &conn,
                        const std::string &message,
                        muduo::Timestamp receiveTime) {
-    std::cout << "receive message: " << message << std::endl;
-    std::cout << "receive time: " << receiveTime.toFormattedString()
-              << std::endl;
+    //std::cout << "receive message: " << message << std::endl;
+    //std::cout << "receive time: " << receiveTime.toFormattedString()
+     //         << std::endl;
+    json msg = json::parse(message);
+    if (msg.contains("type")) {
+        int type = msg["type"];
+        switch (type) {
+        case TCP_MSG_OP_KICK_USER: {
+            std::cout << "Kick!" << std::endl;
+            exit(0);
+            break;
+        }
+        case TCP_MSG_OP_TYPE_SEND_MSG_REPLY: {
+            auto data = msg["data"];
+            //std::cout << data << std::endl;
+            break;
+        }
+        case TCP_MSG_OP_TYPE_PUSH_MSG: {
+            std::string data = msg["data"];
+        //auto datajson = json::parse(data);
+          json msgs = json::parse(data)["msgs"];
+            for ( json msg : msgs) {
+                std::cout << "[from: " << msg["fromUserID"] << "]->";
+                if (msg["msgType"] == TCP_MSG_GROUP_CHAT_TYPE) {
+                    std::cout << "[to: " << msg["groupID"] << "]: " ;
+                } else {
+                    std::cout << "[to: " << msg["toUserID"] << "]: " ;
+                }
+                std::cout << msg["content"] << std::endl;
+            }
+            break;
+        }
+        default: break;
+        }
+    }
 }
 
 void Client::registerClient() {
@@ -38,7 +71,7 @@ void Client::registerClient() {
     connClient_->send(data.dump());
 }
 
-void Client::login() {
+bool Client::login() {
     std::string userID, password, secret = "secret";
     int platform;
     std::cout << "userID: ";
@@ -47,14 +80,36 @@ void Client::login() {
     std::cin >> password;
     std::cout << "platform: ";
     std::cin >> platform;
-    std::string token =
-        apiClient_->authUserToken(userID, password, secret, platform);
+    std::string token;
+    try {
+        token = apiClient_->authUserToken(userID, password, secret, platform);
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+        return false;
+    }
     std::cout << "token: " << token << std::endl;
     user_.setUserID(userID);
     user_.setSecret(secret);
     user_.setToken(token);
     platform_ = platform;
     registerClient();
+    return true;
+}
+
+void Client::createUser() {
+    std::string userID, password;
+    std::cout << "userID: ";
+    std::cin >> userID;
+    std::cout << "password: ";
+    std::cin >> password;
+    try {
+        json data = apiClient_->createUser(userID, password);
+        if (data["isSuccess"]) {
+            std::cout << "create user success" << std::endl;
+        } else {
+            std::cout << "create user failed" << std::endl;
+        }
+    } catch (std::exception &e) { std::cout << e.what() << std::endl; }
 }
 
 void Client::sendMsg() {
@@ -77,6 +132,7 @@ void Client::sendMsg() {
         data["content"] = content;
         data["msgType"] = TCP_MSG_SINGLE_CHAT_TYPE;
         data["fromUserID"] = user_.getUserID();
+        data["platformID"] = platform_;
         msgSend["data"] = data;
         connClient_->send(msgSend.dump());
         break;
@@ -149,13 +205,13 @@ void Client::main() {
     mainThread_ = std::thread([this]() {
         std::string message;
         while (true) {
-            std::cout << "input message: "
-                         "login,send,sync,exit,createGroup,joinGroup,showConversation"
-                      << std::endl;
+            std::cout
+                << "input message: "
+                   "login,send,sync,exit,createGroup,joinGroup,showConversation,createUser"
+                << std::endl;
             std::cin >> message;
             if (message == "login") {
-                login();
-                getAllUnreadConversations();
+                if (login()) getAllUnreadConversations();
             } else if (message == "exit") {
                 exit(0);
             } else if (message == "send") {
@@ -166,8 +222,11 @@ void Client::main() {
                 createGroup();
             } else if (message == "joinGroup") {
                 joinGroup();
-            }else if(message == "showConversation"){
-                getAllUnreadConversations();}
+            } else if (message == "showConversation") {
+                getAllUnreadConversations();
+            } else if (message == "createUser") {
+                createUser();
+            }
         }
     });
 }
@@ -221,11 +280,11 @@ void Client::syncMsgsHelper(const std::string &fromUserID,
                              toUserID, msgType, startSeq, endSeq);
     auto msgs = data["msgs"];
     for (auto msg : msgs["msgs"]) {
-        std::cout << "[from: " << msg["fromUserID"] << "]";
+        std::cout << "[from: " << msg["fromUserID"] << "]->";
         if (msgType == TCP_MSG_GROUP_CHAT_TYPE) {
-            std::cout << "[to: " << msg["toUserID"] << "]" << std::endl;
+            std::cout << "[to: " << msg["groupID"] << "]: ";
         } else {
-            std::cout << "[to: " << msg["groupID"] << "]" << std::endl;
+            std::cout << "[to: " << msg["toUserID"] << "]: " ;
         }
         std::cout << msg["content"] << std::endl;
     }

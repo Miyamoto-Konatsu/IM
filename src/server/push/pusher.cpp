@@ -14,7 +14,8 @@ Pusher::~Pusher() {
 bool Pusher::pushMsg2User(const msg &msg) {
     std::vector<std::string> userIds;
     userIds.push_back(msg.touserid());
-    userIds.push_back(msg.fromuserid());
+    if(msg.fromuserid() != msg.touserid())
+        userIds.push_back(msg.fromuserid());
     getConnsAndOnlinePush(userIds, msg);
     return true;
 }

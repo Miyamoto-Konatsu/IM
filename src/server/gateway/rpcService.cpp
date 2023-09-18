@@ -4,6 +4,7 @@
 #include <google/protobuf/util/json_util.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
+#include <grpcpp/support/status.h>
 #include <muduo/base/Logging.h>
 #include <thread>
 
@@ -16,9 +17,22 @@ Status GatewayServiceImpl::onlineBatchPushOneMsg(
     for (auto pushToUserId : request->pushtouserids()) {
         auto clients = chatServer_->getClientMap().find(pushToUserId);
         for (auto client : clients) {
-            if (client->getPlatform() == request->msg_data().platformid())
-                continue;
+            // if (client->getPlatform() == request->msg_data().platformid())
+            //     continue;
             client->pushMsg(&request->msg_data());
+        }
+    }
+    return Status::OK;
+}
+
+Status GatewayServiceImpl::kickUser(ServerContext *context,
+                                    const kickUserReq *request,
+                                    kickUserResp *response) {
+    auto clients = chatServer_->getClientMap().find(request->userid());
+    for (auto client : clients) {
+        if (client->getPlatform() == request->platform()) {
+            client->kickUser();
+            break;
         }
     }
     return Status::OK;

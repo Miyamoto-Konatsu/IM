@@ -12,11 +12,14 @@
 // ********  TCP  ******
 // client operation type
 #define TCP_MSG_OP_TYPE_SEND_MSG 1
-
+#define TCP_MSG_OP_TYPE_SEND_MSG_REPLY 2
+#define TCP_MSG_OP_TYPE_PUSH_MSG 3
+#define TCP_MSG_OP_KICK_USER 4
 
 // msg type
 #define TCP_MSG_SINGLE_CHAT_TYPE 1
 #define TCP_MSG_GROUP_CHAT_TYPE 2
+
 
 
 // msg success code

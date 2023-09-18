@@ -78,9 +78,42 @@ struct onlineBatchPushOneMsgRespDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 onlineBatchPushOneMsgRespDefaultTypeInternal _onlineBatchPushOneMsgResp_default_instance_;
+template <typename>
+PROTOBUF_CONSTEXPR kickUserReq::kickUserReq(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.userid_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
+  , /*decltype(_impl_.platform_)*/ 0
+
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct kickUserReqDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR kickUserReqDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~kickUserReqDefaultTypeInternal() {}
+  union {
+    kickUserReq _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 kickUserReqDefaultTypeInternal _kickUserReq_default_instance_;
+template <typename>
+PROTOBUF_CONSTEXPR kickUserResp::kickUserResp(
+    ::_pbi::ConstantInitialized) {}
+struct kickUserRespDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR kickUserRespDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~kickUserRespDefaultTypeInternal() {}
+  union {
+    kickUserResp _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 kickUserRespDefaultTypeInternal _kickUserResp_default_instance_;
 }  // namespace gateway
 }  // namespace ServerRpc
-static ::_pb::Metadata file_level_metadata_gateway_2eproto[4];
+static ::_pb::Metadata file_level_metadata_gateway_2eproto[6];
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_gateway_2eproto = nullptr;
 static constexpr const ::_pb::ServiceDescriptor**
@@ -128,6 +161,24 @@ const ::uint32_t TableStruct_gateway_2eproto::offsets[] PROTOBUF_SECTION_VARIABL
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::gateway::kickUserReq, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::gateway::kickUserReq, _impl_.userid_),
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::gateway::kickUserReq, _impl_.platform_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::ServerRpc::gateway::kickUserResp, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
 };
 
 static const ::_pbi::MigrationSchema
@@ -136,6 +187,8 @@ static const ::_pbi::MigrationSchema
         { 12, -1, -1, sizeof(::ServerRpc::gateway::pushMessage)},
         { 21, 31, -1, sizeof(::ServerRpc::gateway::onlineBatchPushOneMsgReq)},
         { 33, -1, -1, sizeof(::ServerRpc::gateway::onlineBatchPushOneMsgResp)},
+        { 41, -1, -1, sizeof(::ServerRpc::gateway::kickUserReq)},
+        { 51, -1, -1, sizeof(::ServerRpc::gateway::kickUserResp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -143,6 +196,8 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::ServerRpc::gateway::_pushMessage_default_instance_._instance,
     &::ServerRpc::gateway::_onlineBatchPushOneMsgReq_default_instance_._instance,
     &::ServerRpc::gateway::_onlineBatchPushOneMsgResp_default_instance_._instance,
+    &::ServerRpc::gateway::_kickUserReq_default_instance_._instance,
+    &::ServerRpc::gateway::_kickUserResp_default_instance_._instance,
 };
 const char descriptor_table_protodef_gateway_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n\rgateway.proto\022\021ServerRpc.gateway\032\tmsg."
@@ -152,10 +207,14 @@ const char descriptor_table_protodef_gateway_2eproto[] PROTOBUF_SECTION_VARIABLE
     ".ServerRpc.msg.pullMsgs:\0028\001\"W\n\030onlineBat"
     "chPushOneMsgReq\022$\n\010msg_data\030\001 \001(\0132\022.Serv"
     "erRpc.msg.msg\022\025\n\rpushToUserIDs\030\002 \003(\t\"\033\n\031"
-    "onlineBatchPushOneMsgResp2}\n\007Gateway\022r\n\025"
-    "onlineBatchPushOneMsg\022+.ServerRpc.gatewa"
-    "y.onlineBatchPushOneMsgReq\032,.ServerRpc.g"
-    "ateway.onlineBatchPushOneMsgRespb\006proto3"
+    "onlineBatchPushOneMsgResp\"/\n\013kickUserReq"
+    "\022\016\n\006userID\030\001 \001(\t\022\020\n\010platform\030\002 \001(\005\"\016\n\014ki"
+    "ckUserResp2\312\001\n\007Gateway\022r\n\025onlineBatchPus"
+    "hOneMsg\022+.ServerRpc.gateway.onlineBatchP"
+    "ushOneMsgReq\032,.ServerRpc.gateway.onlineB"
+    "atchPushOneMsgResp\022K\n\010kickUser\022\036.ServerR"
+    "pc.gateway.kickUserReq\032\037.ServerRpc.gatew"
+    "ay.kickUserRespb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_gateway_2eproto_deps[1] =
     {
@@ -165,13 +224,13 @@ static ::absl::once_flag descriptor_table_gateway_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_gateway_2eproto = {
     false,
     false,
-    440,
+    583,
     descriptor_table_protodef_gateway_2eproto,
     "gateway.proto",
     &descriptor_table_gateway_2eproto_once,
     descriptor_table_gateway_2eproto_deps,
     1,
-    4,
+    6,
     schemas,
     file_default_instances,
     TableStruct_gateway_2eproto::offsets,
@@ -702,6 +761,273 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*onlineBatchPushOneMsgResp::Get
       &descriptor_table_gateway_2eproto_getter, &descriptor_table_gateway_2eproto_once,
       file_level_metadata_gateway_2eproto[3]);
 }
+// ===================================================================
+
+class kickUserReq::_Internal {
+ public:
+};
+
+kickUserReq::kickUserReq(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:ServerRpc.gateway.kickUserReq)
+}
+kickUserReq::kickUserReq(const kickUserReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  kickUserReq* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.userid_) {}
+
+    , decltype(_impl_.platform_) {}
+
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.userid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.userid_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_userid().empty()) {
+    _this->_impl_.userid_.Set(from._internal_userid(), _this->GetArenaForAllocation());
+  }
+  _this->_impl_.platform_ = from._impl_.platform_;
+  // @@protoc_insertion_point(copy_constructor:ServerRpc.gateway.kickUserReq)
+}
+
+inline void kickUserReq::SharedCtor(::_pb::Arena* arena) {
+  (void)arena;
+  new (&_impl_) Impl_{
+      decltype(_impl_.userid_) {}
+
+    , decltype(_impl_.platform_) { 0 }
+
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.userid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.userid_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+kickUserReq::~kickUserReq() {
+  // @@protoc_insertion_point(destructor:ServerRpc.gateway.kickUserReq)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void kickUserReq::SharedDtor() {
+  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.userid_.Destroy();
+}
+
+void kickUserReq::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void kickUserReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerRpc.gateway.kickUserReq)
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.userid_.ClearToEmpty();
+  _impl_.platform_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* kickUserReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string userID = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_userid();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "ServerRpc.gateway.kickUserReq.userID"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // int32 platform = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+          _impl_.platform_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+::uint8_t* kickUserReq::_InternalSerialize(
+    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerRpc.gateway.kickUserReq)
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string userID = 1;
+  if (!this->_internal_userid().empty()) {
+    const std::string& _s = this->_internal_userid();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "ServerRpc.gateway.kickUserReq.userID");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // int32 platform = 2;
+  if (this->_internal_platform() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+        2, this->_internal_platform(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerRpc.gateway.kickUserReq)
+  return target;
+}
+
+::size_t kickUserReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerRpc.gateway.kickUserReq)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string userID = 1;
+  if (!this->_internal_userid().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_userid());
+  }
+
+  // int32 platform = 2;
+  if (this->_internal_platform() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_platform());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData kickUserReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    kickUserReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*kickUserReq::GetClassData() const { return &_class_data_; }
+
+
+void kickUserReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<kickUserReq*>(&to_msg);
+  auto& from = static_cast<const kickUserReq&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:ServerRpc.gateway.kickUserReq)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_userid().empty()) {
+    _this->_internal_set_userid(from._internal_userid());
+  }
+  if (from._internal_platform() != 0) {
+    _this->_internal_set_platform(from._internal_platform());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void kickUserReq::CopyFrom(const kickUserReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerRpc.gateway.kickUserReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool kickUserReq::IsInitialized() const {
+  return true;
+}
+
+void kickUserReq::InternalSwap(kickUserReq* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.userid_, lhs_arena,
+                                       &other->_impl_.userid_, rhs_arena);
+
+  swap(_impl_.platform_, other->_impl_.platform_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata kickUserReq::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_gateway_2eproto_getter, &descriptor_table_gateway_2eproto_once,
+      file_level_metadata_gateway_2eproto[4]);
+}
+// ===================================================================
+
+class kickUserResp::_Internal {
+ public:
+};
+
+kickUserResp::kickUserResp(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena) {
+  // @@protoc_insertion_point(arena_constructor:ServerRpc.gateway.kickUserResp)
+}
+kickUserResp::kickUserResp(const kickUserResp& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  kickUserResp* const _this = this; (void)_this;
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ServerRpc.gateway.kickUserResp)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData kickUserResp::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*kickUserResp::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata kickUserResp::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_gateway_2eproto_getter, &descriptor_table_gateway_2eproto_once,
+      file_level_metadata_gateway_2eproto[5]);
+}
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace gateway
 }  // namespace ServerRpc
@@ -721,6 +1047,14 @@ Arena::CreateMaybeMessage< ::ServerRpc::gateway::onlineBatchPushOneMsgReq >(Aren
 template<> PROTOBUF_NOINLINE ::ServerRpc::gateway::onlineBatchPushOneMsgResp*
 Arena::CreateMaybeMessage< ::ServerRpc::gateway::onlineBatchPushOneMsgResp >(Arena* arena) {
   return Arena::CreateMessageInternal< ::ServerRpc::gateway::onlineBatchPushOneMsgResp >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerRpc::gateway::kickUserReq*
+Arena::CreateMaybeMessage< ::ServerRpc::gateway::kickUserReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerRpc::gateway::kickUserReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerRpc::gateway::kickUserResp*
+Arena::CreateMaybeMessage< ::ServerRpc::gateway::kickUserResp >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerRpc::gateway::kickUserResp >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 // @@protoc_insertion_point(global_scope)
